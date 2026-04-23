@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PTabs, PTabsItem, PHeading, PText, PSpinner } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import type { DayStats } from '../lib/types';
-import { getLast7Days, formatDateLabel, getDateString } from '../lib/calculations';
+import { getLast7Days, getDateString } from '../lib/calculations';
 import { storage } from '../lib/storage';
 import { WeeklyChart } from '../components/WeeklyChart';
 import { FoodCard } from '../components/FoodCard';

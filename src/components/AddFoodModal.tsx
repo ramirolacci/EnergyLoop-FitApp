@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
 import {
-  PModal, PHeading, PButton, PText, PInlineNotification, PDivider, PButtonPure
+  PModal, PHeading, PButton, PText, PInlineNotification, PButtonPure
 } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { recalcFoodEntry } from '../lib/calculations';
 import { storage } from '../lib/storage';
 import { COMMON_FOODS } from '../lib/foodLibrary';
-import type { FoodEntry } from '../lib/types';
+import type { ScannedNutrition } from '../lib/types';
 
 interface Props {
   open: boolean;
@@ -39,7 +39,7 @@ interface FormState {
 }
 
 export function AddFoodModal({ open, onDismiss, prefill }: Props) {
-  const { addFoodEntry, theme, toast } = useApp();
+  const { addFoodEntry, theme } = useApp();
   const [step, setStep] = useState<'search' | 'form'>(prefill ? 'form' : 'search');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
