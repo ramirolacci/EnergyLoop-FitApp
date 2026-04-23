@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext';
 import { recalcFoodEntry } from '../lib/calculations';
 import { storage } from '../lib/storage';
 import { COMMON_FOODS } from '../lib/foodLibrary';
-import type { ScannedNutrition } from '../lib/types';
+
 
 interface Props {
   open: boolean;
