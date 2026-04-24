@@ -15,9 +15,18 @@
   100% { top: 100%; opacity: 0; }
 }
 
-body {
-  @apply antialiased transition-colors duration-300;
+html, body {
+  @apply antialiased transition-colors duration-300 m-0 p-0 overflow-x-hidden;
   -webkit-tap-highlight-color: transparent;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+}
+
+#root {
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
 }
 
 ::-webkit-scrollbar {

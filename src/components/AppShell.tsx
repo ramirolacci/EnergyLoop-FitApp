@@ -28,7 +28,7 @@ export function AppShell({ children }: Props) {
 
   return (
     <div
-      className="min-h-screen flex flex-col transition-colors duration-300"
+      className="min-h-[100dvh] flex flex-col transition-colors duration-300"
       style={{ 
         background: bgColor,
         paddingTop: 'env(safe-area-inset-top)',
@@ -48,7 +48,10 @@ export function AppShell({ children }: Props) {
       {/* Floating bottom navigation */}
       <div 
         className="fixed bottom-0 left-0 right-0 px-6 z-50 pointer-events-none"
-        style={{ paddingBottom: 'calc(24px + env(safe-area-inset-bottom))' }}
+        style={{ 
+          paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
+          bottom: 0 
+        }}
       >
         <nav
           className="max-w-md mx-auto flex items-center justify-around p-2 rounded-2xl backdrop-blur-xl pointer-events-auto transition-all"

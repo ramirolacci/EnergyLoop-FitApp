@@ -11,7 +11,7 @@ function AppContent() {
   if (loading) {
     return (
       <div
-        className="min-h-screen flex flex-col items-center justify-center gap-4"
+        className="min-h-[100dvh] flex flex-col items-center justify-center gap-4"
         style={{ background: theme === 'dark' ? '#0e0e12' : '#f2f2f5' }}
       >
         <span className="text-4xl">🥗</span>
