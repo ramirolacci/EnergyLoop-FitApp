@@ -2,6 +2,64 @@ import { useRef, useState } from 'react';
 import { PModal, PHeading, PButton, PText, PSpinner, PTag, PInlineNotification } from '@porsche-design-system/components-react';
 import type { ScannedNutrition } from '../lib/types';
 import { AddFoodModal } from './AddFoodModal';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const genAI = API_KEY && API_KEY !== 'YOUR_GEMINI_API_KEY_HERE' ? new GoogleGenerativeAI(API_KEY) : null;
+
+async function analyzeImageWithGemini(file: File): Promise<ScannedNutrition> {
+  if (!genAI) {
+    // Fallback to simulation if no API key is provided, but with more randomness
+    await new Promise(r => setTimeout(r, 2000));
+    const samples: ScannedNutrition[] = [
+      { name: 'Producto Escaneado A', calories_per_serving: 150, protein_g: 5, carbs_g: 27, fat_g: 2.5, sodium_mg: 0, serving_size_g: 40, servings_per_package: 10, confidence: 0.7 },
+      { name: 'Producto Escaneado B', calories_per_serving: 100, protein_g: 17, carbs_g: 6, fat_g: 0.7, sodium_mg: 55, serving_size_g: 170, servings_per_package: 1, confidence: 0.75 },
+    ];
+    return samples[Math.floor(Math.random() * samples.length)];
+  }
+
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const base64 = await new Promise<string>((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.readAsDataURL(file);
+  });
+  
+  const imageData = base64.split(',')[1];
+
+  const prompt = `
+    Analyze this nutrition label image and extract the nutritional information. 
+    Return ONLY a JSON object with this exact structure:
+    {
+      "name": "Name of the food in Spanish",
+      "calories_per_serving": number,
+      "protein_g": number,
+      "carbs_g": number,
+      "fat_g": number,
+      "sodium_mg": number,
+      "serving_size_g": number,
+      "servings_per_package": number,
+      "confidence": number (between 0 and 1, estimation of how clear the image is)
+    }
+    If a value is not found, use 0. If serving size is in ml, treat as g.
+  `;
+
+  const result = await model.generateContent([
+    prompt,
+    {
+      inlineData: {
+        data: imageData,
+        mimeType: file.type
+      }
+    }
+  ]);
+
+  const response = await result.response;
+  const text = response.text();
+  const jsonStr = text.match(/\{[\s\S]*\}/)?.[0] || text;
+  return JSON.parse(jsonStr);
+}
 
 interface Props {
   open: boolean;
@@ -10,21 +68,6 @@ interface Props {
 }
 
 type ScanState = 'idle' | 'scanning' | 'result' | 'error';
-
-// Simulated OCR parser — in production, replace with real OCR API call
-async function simulateOCR(file: File): Promise<ScannedNutrition> {
-  await new Promise(r => setTimeout(r, 1800));
-  // Simulate different results based on file name for demo
-  const seed = file.name.length % 5;
-  const samples: ScannedNutrition[] = [
-    { name: 'Avena Integral', calories_per_serving: 150, protein_g: 5, carbs_g: 27, fat_g: 2.5, sodium_mg: 0, serving_size_g: 40, servings_per_package: 10, confidence: 0.92 },
-    { name: 'Yogur Griego', calories_per_serving: 100, protein_g: 17, carbs_g: 6, fat_g: 0.7, sodium_mg: 55, serving_size_g: 170, servings_per_package: 1, confidence: 0.88 },
-    { name: 'Barra de Proteína', calories_per_serving: 220, protein_g: 20, carbs_g: 25, fat_g: 7, sodium_mg: 180, serving_size_g: 60, servings_per_package: 1, confidence: 0.76 },
-    { name: 'Arroz Integral', calories_per_serving: 160, protein_g: 3, carbs_g: 34, fat_g: 1, sodium_mg: 5, serving_size_g: 45, servings_per_package: 20, confidence: 0.95 },
-    { name: 'Leche Entera', calories_per_serving: 120, protein_g: 8, carbs_g: 12, fat_g: 5, sodium_mg: 110, serving_size_g: 240, servings_per_package: 4, confidence: 0.84 },
-  ];
-  return samples[seed];
-}
 
 export function ScanModal({ open, onDismiss, theme }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -45,10 +88,11 @@ export function ScanModal({ open, onDismiss, theme }: Props) {
 
     setScanState('scanning');
     try {
-      const result = await simulateOCR(file);
+      const result = await analyzeImageWithGemini(file);
       setScanned(result);
       setScanState('result');
-    } catch {
+    } catch (error) {
+      console.error('Scan error:', error);
       setScanState('error');
     }
   }
