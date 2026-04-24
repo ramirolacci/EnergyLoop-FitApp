@@ -28,10 +28,10 @@
   --surface-dark-brighter: #212225;
   --border-dark: rgba(255, 255, 255, 0.08);
   
-  /* Modern Light Mode Palette */
-  --bg-light: #f8f9fc;
-  --surface-light: #ffffff;
-  --border-light: rgba(0, 0, 0, 0.06);
+  /* Modern Light Mode Palette (Warm / Organic) */
+  --bg-light: #f4efe6;
+  --surface-light: #fcfbf8;
+  --border-light: rgba(139, 115, 85, 0.25);
 }
 
 * {

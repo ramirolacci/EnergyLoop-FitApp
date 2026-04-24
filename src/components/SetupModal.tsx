@@ -106,9 +106,11 @@ export function SetupModal({ open, onDismiss }: Props) {
                 Para darte resultados precisos, necesitamos conocerte un poco mejor.
               </PText>
             </div>
-            <PButton variant="primary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%' }}>
-              Comenzar configuración
-            </PButton>
+            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)' }}>
+              <PButton variant="primary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%', margin: 0 }}>
+                Comenzar configuración
+              </PButton>
+            </div>
           </div>
         )}
 
@@ -152,7 +154,9 @@ export function SetupModal({ open, onDismiss }: Props) {
               <label htmlFor="setup-age" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>EDAD</label>
               <input id="setup-age" name="age" className={inputCls} type="number" value={age} onChange={e => setAge(e.target.value)} />
             </div>
-            <PButton variant="primary" onClick={() => setStep('activity')} theme={theme} style={{ width: '100%' }}>Siguiente</PButton>
+            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)' }}>
+              <PButton variant="primary" onClick={() => setStep('activity')} theme={theme} style={{ width: '100%', margin: 0 }}>Siguiente</PButton>
+            </div>
           </div>
         )}
 
@@ -178,7 +182,9 @@ export function SetupModal({ open, onDismiss }: Props) {
                 </div>
               </button>
             ))}
-            <PButton variant="primary" onClick={() => setStep('goal')} theme={theme} style={{ width: '100%', marginTop: 8 }}>Siguiente</PButton>
+            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', marginTop: 8, transform: 'translateZ(0)' }}>
+              <PButton variant="primary" onClick={() => setStep('goal')} theme={theme} style={{ width: '100%', margin: 0 }}>Siguiente</PButton>
+            </div>
           </div>
         )}
 
@@ -203,7 +209,9 @@ export function SetupModal({ open, onDismiss }: Props) {
                 </div>
               </button>
             ))}
-            <PButton variant="primary" onClick={calculateTDEE} theme={theme} style={{ width: '100%', marginTop: 8 }}>Ver mi plan</PButton>
+            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', marginTop: 8, transform: 'translateZ(0)' }}>
+              <PButton variant="primary" onClick={calculateTDEE} theme={theme} style={{ width: '100%', margin: 0 }}>Ver mi plan</PButton>
+            </div>
           </div>
         )}
 
@@ -226,8 +234,12 @@ export function SetupModal({ open, onDismiss }: Props) {
             </div>
 
             <div className="flex gap-2 w-full">
-              <PButton variant="secondary" onClick={() => setStep('physical')} theme={theme} style={{ flex: 1 }}>Corregir</PButton>
-              <PButton variant="primary" onClick={handleFinish} theme={theme} style={{ flex: 2 }}>¡Comenzar!</PButton>
+              <div style={{ flex: 1, borderRadius: '9999px', overflow: 'hidden', transform: 'translateZ(0)' }}>
+                <PButton variant="secondary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%', margin: 0 }}>Corregir</PButton>
+              </div>
+              <div style={{ flex: 2, borderRadius: '9999px', overflow: 'hidden', transform: 'translateZ(0)' }}>
+                <PButton variant="primary" onClick={handleFinish} theme={theme} style={{ width: '100%', margin: 0 }}>¡Comenzar!</PButton>
+              </div>
             </div>
           </div>
         )}

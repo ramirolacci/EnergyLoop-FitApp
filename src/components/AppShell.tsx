@@ -22,7 +22,7 @@ interface Props {
 export function AppShell({ children }: Props) {
   const { activePage, setActivePage, theme, toastRef } = useApp();
 
-  const bgColor = theme === 'dark' ? '#0e0e12' : '#f2f2f5';
+  const bgColor = theme === 'dark' ? '#0e0e12' : 'var(--bg-light)';
   const navBg = theme === 'dark' ? 'rgba(26, 26, 30, 0.85)' : 'rgba(255, 255, 255, 0.85)';
   const borderColor = theme === 'dark' ? 'rgba(42, 42, 46, 0.5)' : 'rgba(216, 216, 219, 0.5)';
 

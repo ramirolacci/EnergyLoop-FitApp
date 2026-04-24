@@ -85,12 +85,17 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   const inputCls = `w-full rounded-2xl px-4 py-3 text-sm outline-none transition-all duration-300 ${
     theme === 'dark'
       ? 'bg-[#0e0e12] border border-[#2a2a2e] text-[#fbfcff] focus:border-[#018a16] focus:ring-1 focus:ring-[#018a16]'
-      : 'bg-[#f8f9fc] border border-[#d8d8db] text-[#010205] focus:border-[#018a16] focus:ring-1 focus:ring-[#018a16]'
+      : 'bg-[#fdfaf6] border border-[#d8d8db] text-[#010205] focus:border-[#018a16] focus:ring-1 focus:ring-[#018a16]'
   }`;
   
   const labelCls = `text-[10px] font-black uppercase tracking-widest mb-2 block ${theme === 'dark' ? 'text-[#afb0b3]' : 'text-[#535457]'}`;
 
   const CALORIE_PRESETS = [1500, 1800, 2000, 2200, 2500, 3000];
+
+  const formatThousands = (val: string) => {
+    if (!val) return '';
+    return val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
 
   return (
     <div ref={containerRef} className="flex flex-col gap-8 pb-24">
@@ -181,9 +186,13 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             <input
               id="calorie-goal"
               className={inputCls}
-              type="number"
-              value={calorieGoal}
-              onChange={e => setCalorieGoal(e.target.value)}
+              type="text"
+              inputMode="numeric"
+              value={formatThousands(calorieGoal)}
+              onChange={e => {
+                const raw = e.target.value.replace(/\D/g, '');
+                setCalorieGoal(raw);
+              }}
             />
             <div className="flex gap-2 mt-3 flex-wrap">
               {CALORIE_PRESETS.map(p => (
@@ -197,7 +206,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                     border: `1px solid ${calorieGoal === String(p) ? '#018a16' : borderColor}`,
                   }}
                 >
-                  {p}
+                  {formatThousands(String(p))}
                 </button>
               ))}
             </div>
@@ -208,10 +217,14 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             <input
               id="protein-goal"
               className={inputCls}
-              type="number"
+              type="text"
+              inputMode="numeric"
               placeholder="Ej: 150"
-              value={proteinGoal}
-              onChange={e => setProteinGoal(e.target.value)}
+              value={formatThousands(proteinGoal)}
+              onChange={e => {
+                const raw = e.target.value.replace(/\D/g, '');
+                setProteinGoal(raw);
+              }}
             />
           </div>
 
@@ -227,16 +240,18 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             />
           </div>
 
-          <PButton
-            variant="primary"
-            onClick={handleSave}
-            loading={saving}
-            icon="check"
-            theme={theme}
-            style={{ borderRadius: '1rem', height: '3.5rem' }}
-          >
-            Guardar Cambios
-          </PButton>
+          <div style={{ borderRadius: '9999px', overflow: 'hidden', height: '3.5rem', width: '100%', transform: 'translateZ(0)' }}>
+            <PButton
+              variant="primary"
+              onClick={handleSave}
+              loading={saving}
+              icon="check"
+              theme={theme}
+              style={{ width: '100%', height: '100%', margin: 0, padding: 0 }}
+            >
+              Guardar Cambios
+            </PButton>
+          </div>
         </div>
       </section>
 
@@ -271,22 +286,22 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
       <section className="settings-item">
         <div
           className="rounded-[2.5rem] p-8 flex flex-col gap-6 shadow-xl"
-          style={{ background: 'linear-gradient(135deg, #1a1a1e 0%, #0e0e12 100%)', color: '#fff', border: '1px solid rgba(255,255,255,0.05)' }}
+          style={{ background: 'linear-gradient(135deg, #1a1a1e 0%, #0e0e12 100%)', border: '1px solid rgba(255,255,255,0.05)' }}
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-[#018a16]/20 border border-[#018a16]/30 flex items-center justify-center text-2xl">
               🧬
             </div>
             <div>
-              <PText size="xx-small" weight="bold" style={{ color: '#018a16', letterSpacing: '0.1em' }}>PRECISIÓN CIENTÍFICA</PText>
-              <PHeading size="small" style={{ color: '#fff' }}>Metodología METs</PHeading>
+              <PText size="xx-small" weight="bold" theme="dark" style={{ color: '#018a16', letterSpacing: '0.1em' }}>PRECISIÓN CIENTÍFICA</PText>
+              <PHeading size="small" theme="dark">Metodología METs</PHeading>
             </div>
           </div>
-          <PText size="small" style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+          <PText size="small" theme="dark" style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
             Tus calorías quemadas se calculan bajo el estándar de oro de la medicina deportiva, ajustado a tus <span className="text-white font-bold">{weight}kg</span>.
           </PText>
           <PDivider theme="dark" />
-          <PText size="xx-small" style={{ color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>
+          <PText size="xx-small" theme="dark" style={{ color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>
             FitApp Premium v1.5 · Hecho para tu salud
           </PText>
         </div>
