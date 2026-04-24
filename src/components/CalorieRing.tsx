@@ -1,3 +1,5 @@
+import { CountUp } from './CountUp';
+
 interface Props {
   consumed: number;
   burned: number;
@@ -14,8 +16,8 @@ export function CalorieRing({ consumed, burned, goal, theme }: Props) {
   const innerRadius = radius - strokeWidth - 6;
   const innerCircumference = 2 * Math.PI * innerRadius;
 
-  const consumedPct = Math.min(consumed / goal, 1);
-  const burnedPct = Math.min(burned / goal, 1);
+  const consumedPct = goal > 0 ? Math.min(consumed / goal, 1) : 0;
+  const burnedPct = goal > 0 ? Math.min(burned / goal, 1) : 0;
 
   const consumedOffset = circumference * (1 - consumedPct);
   const burnedOffset = innerCircumference * (1 - burnedPct);
@@ -83,12 +85,12 @@ export function CalorieRing({ consumed, burned, goal, theme }: Props) {
 
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-0">
-        <span
+        <div
           className="font-black tracking-tighter"
           style={{ fontSize: 48, color: theme === 'dark' ? '#fbfcff' : '#010205', lineHeight: 1 }}
         >
-          {Math.round(net).toLocaleString()}
-        </span>
+          <CountUp value={net} />
+        </div>
         <span
           className="text-[10px] font-bold uppercase tracking-[0.2em] mt-1"
           style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}
@@ -99,16 +101,19 @@ export function CalorieRing({ consumed, burned, goal, theme }: Props) {
         <div className="flex items-center gap-4 mt-4">
           <div className="flex flex-col items-center">
             <span className="text-[10px] font-bold opacity-50" style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>CONS.</span>
-            <span className="text-xs font-bold" style={{ color: consumedColor }}>{Math.round(consumed)}</span>
+            <div className="text-xs font-bold" style={{ color: consumedColor }}>
+              <CountUp value={consumed} />
+            </div>
           </div>
           <div className="h-4 w-px bg-current opacity-10" />
           <div className="flex flex-col items-center">
             <span className="text-[10px] font-bold opacity-50" style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>QUEM.</span>
-            <span className="text-xs font-bold" style={{ color: burnedColor }}>{Math.round(burned)}</span>
+            <div className="text-xs font-bold" style={{ color: burnedColor }}>
+              <CountUp value={burned} />
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

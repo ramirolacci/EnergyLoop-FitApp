@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PModal, PHeading, PText, PButton, PDivider, PTag } from '@porsche-design-system/components-react';
+import { PModal, PHeading, PText, PButton, PDivider } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 
 interface Props {
@@ -18,7 +18,7 @@ export function SetupModal({ open, onDismiss }: Props) {
   const [height, setHeight] = useState('170');
   const [age, setAge] = useState('25');
   const [gender, setGender] = useState<'male' | 'female'>('male');
-  const [activity, setActivity] = useState<number>(1.2); // Sedentary
+  const [activity, setActivity] = useState<number>(1.2); 
   const [objective, setObjective] = useState<'lose' | 'maintain' | 'gain'>('maintain');
   
   const [calculatedGoal, setCalculatedGoal] = useState(2000);
@@ -28,7 +28,6 @@ export function SetupModal({ open, onDismiss }: Props) {
     const h = parseFloat(height);
     const a = parseInt(age);
     
-    // Harris-Benedict Formula
     let bmr = 0;
     if (gender === 'male') {
       bmr = 88.362 + (13.397 * w) + (4.799 * h) - (5.677 * a);
@@ -68,31 +67,37 @@ export function SetupModal({ open, onDismiss }: Props) {
       open={open}
       onDismiss={onDismiss}
       theme={theme}
-      disableCloseButton={step === 'welcome'}
+      dismissButton={step !== 'welcome'}
       fullscreen={{ base: true, s: false }}
     >
+      <PHeading slot="header" size="medium" tag="h2" theme={theme}>
+        {step === 'welcome' ? 'Bienvenido' : 
+         step === 'physical' ? 'Tus datos' : 
+         step === 'activity' ? 'Actividad' : 
+         step === 'goal' ? 'Objetivo' : 'Tu Plan'}
+      </PHeading>
+
       <div className="flex flex-col gap-6 py-4">
         
         {step === 'welcome' && (
-          <div className="flex flex-col items-center text-center gap-6 animate-in fade-in zoom-in duration-500">
+          <div className="flex flex-col items-center text-center gap-6">
             <div className="w-24 h-24 rounded-full bg-[#018a16] flex items-center justify-center text-5xl shadow-2xl shadow-[#018a1666]">
               🥗
             </div>
             <div className="space-y-2">
-              <PHeading size="large" theme={theme}>¡Bienvenido a CalorAPP!</PHeading>
+              <PHeading size="large" theme={theme}>¡Personaliza tu meta!</PHeading>
               <PText theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                Tu compañero inteligente para el balance nutricional. Primero, vamos a configurar tu meta personalizada.
+                Para darte resultados precisos, necesitamos conocerte un poco mejor.
               </PText>
             </div>
             <PButton variant="primary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%' }}>
-              Empezar configuración
+              Comenzar configuración
             </PButton>
           </div>
         )}
 
         {step === 'physical' && (
-          <div className="flex flex-col gap-5 animate-in slide-in-from-right duration-300">
-            <PHeading size="small" theme={theme}>Tus datos básicos</PHeading>
+          <div className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => setGender('male')}
@@ -113,30 +118,30 @@ export function SetupModal({ open, onDismiss }: Props) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <PText size="xx-small" weight="bold" theme={theme} style={{ marginLeft: 8, marginBottom: 4 }}>PESO (KG)</PText>
-                <input className={inputCls} type="number" value={weight} onChange={e => setWeight(e.target.value)} />
+                <label htmlFor="setup-weight" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>PESO (KG)</label>
+                <input id="setup-weight" name="weight" className={inputCls} type="number" value={weight} onChange={e => setWeight(e.target.value)} />
               </div>
               <div>
-                <PText size="xx-small" weight="bold" theme={theme} style={{ marginLeft: 8, marginBottom: 4 }}>ALTURA (CM)</PText>
-                <input className={inputCls} type="number" value={height} onChange={e => setHeight(e.target.value)} />
+                <label htmlFor="setup-height" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>ALTURA (CM)</label>
+                <input id="setup-height" name="height" className={inputCls} type="number" value={height} onChange={e => setHeight(e.target.value)} />
               </div>
             </div>
             <div>
-              <PText size="xx-small" weight="bold" theme={theme} style={{ marginLeft: 8, marginBottom: 4 }}>EDAD</PText>
-              <input className={inputCls} type="number" value={age} onChange={e => setAge(e.target.value)} />
+              <label htmlFor="setup-age" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>EDAD</label>
+              <input id="setup-age" name="age" className={inputCls} type="number" value={age} onChange={e => setAge(e.target.value)} />
             </div>
-            <PButton variant="primary" onClick={() => setStep('activity')} theme={theme}>Siguiente</PButton>
+            <PButton variant="primary" onClick={() => setStep('activity')} theme={theme} style={{ width: '100%' }}>Siguiente</PButton>
           </div>
         )}
 
         {step === 'activity' && (
-          <div className="flex flex-col gap-4 animate-in slide-in-from-right duration-300">
-            <PHeading size="small" theme={theme}>Nivel de actividad</PHeading>
+          <div className="flex flex-col gap-4">
+            <PHeading size="small" theme={theme}>¿Qué tan activo eres?</PHeading>
             {[
-              { label: 'Sedentario', desc: 'Poco o nada de ejercicio', val: 1.2, icon: '🛋️' },
-              { label: 'Ligero', desc: 'Ejercicio 1-3 días/semana', val: 1.375, icon: '🚶' },
-              { label: 'Moderado', desc: 'Ejercicio 3-5 días/semana', val: 1.55, icon: '🏃' },
-              { label: 'Muy Activo', desc: 'Ejercicio diario intenso', val: 1.725, icon: '🏋️' },
+              { label: 'Sedentario', desc: 'Trabajo de oficina, poco movimiento', val: 1.2, icon: '🛋️' },
+              { label: 'Ligero', desc: 'Actividad física 1-3 veces/semana', val: 1.375, icon: '🚶' },
+              { label: 'Moderado', desc: 'Actividad física 3-5 veces/semana', val: 1.55, icon: '🏃' },
+              { label: 'Muy Activo', desc: 'Entrenamiento diario intenso', val: 1.725, icon: '🏋️' },
             ].map(a => (
               <button 
                 key={a.val}
@@ -151,17 +156,17 @@ export function SetupModal({ open, onDismiss }: Props) {
                 </div>
               </button>
             ))}
-            <PButton variant="primary" onClick={() => setStep('goal')} theme={theme}>Siguiente</PButton>
+            <PButton variant="primary" onClick={() => setStep('goal')} theme={theme} style={{ width: '100%', marginTop: 8 }}>Siguiente</PButton>
           </div>
         )}
 
         {step === 'goal' && (
-          <div className="flex flex-col gap-4 animate-in slide-in-from-right duration-300">
-            <PHeading size="small" theme={theme}>¿Cuál es tu objetivo?</PHeading>
+          <div className="flex flex-col gap-4">
+            <PHeading size="small" theme={theme}>¿Cuál es tu meta?</PHeading>
             {[
-              { label: 'Perder peso', desc: 'Déficit calórico suave', val: 'lose', icon: '📉' },
-              { label: 'Mantener', desc: 'Equilibrio energético', val: 'maintain', icon: '⚖️' },
-              { label: 'Ganar músculo', desc: 'Superávit controlado', val: 'gain', icon: '📈' },
+              { label: 'Perder peso', desc: 'Déficit calórico saludable', val: 'lose', icon: '📉' },
+              { label: 'Mantener peso', desc: 'Equilibrio de energía', val: 'maintain', icon: '⚖️' },
+              { label: 'Ganar músculo', desc: 'Superávit para fuerza', val: 'gain', icon: '📈' },
             ].map(o => (
               <button 
                 key={o.val}
@@ -176,29 +181,29 @@ export function SetupModal({ open, onDismiss }: Props) {
                 </div>
               </button>
             ))}
-            <PButton variant="primary" onClick={calculateTDEE} theme={theme}>Ver mi resultado</PButton>
+            <PButton variant="primary" onClick={calculateTDEE} theme={theme} style={{ width: '100%', marginTop: 8 }}>Ver mi plan</PButton>
           </div>
         )}
 
         {step === 'result' && (
-          <div className="flex flex-col items-center text-center gap-6 animate-in fade-in zoom-in duration-500">
+          <div className="flex flex-col items-center text-center gap-6">
             <div className="w-full rounded-3xl p-8 flex flex-col items-center gap-2" style={{ background: '#018a16', color: '#fff' }}>
-              <PText size="small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>TU META DIARIA</PText>
+              <PText size="small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>OBJETIVO DIARIO</PText>
               <div className="text-6xl font-black">{calculatedGoal}</div>
-              <PText size="large" weight="bold" style={{ color: '#fff' }}>kcal / día</PText>
+              <PText size="large" weight="bold" style={{ color: '#fff' }}>kcal</PText>
             </div>
             
             <div className="w-full text-left p-4 rounded-2xl border" style={{ borderColor }}>
               <PText size="small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                Según tus datos, este es el balance óptimo para alcanzar tu objetivo de <span className="font-bold text-[#018a16]">
-                  {objective === 'lose' ? 'pérdida de peso' : objective === 'gain' ? 'ganancia muscular' : 'mantenimiento'}
-                </span>.
+                Tu plan ha sido calculado con éxito. Para <span className="font-bold text-[#018a16]">
+                  {objective === 'lose' ? 'bajar de peso' : objective === 'gain' ? 'ganar músculo' : 'mantenerte'}
+                </span> de forma saludable, esta es tu meta recomendada.
               </PText>
             </div>
 
             <div className="flex gap-2 w-full">
-              <PButton variant="secondary" onClick={() => setStep('physical')} theme={theme} style={{ flex: 1 }}>Corregir datos</PButton>
-              <PButton variant="primary" onClick={handleFinish} theme={theme} style={{ flex: 2 }}>¡Empezar ahora!</PButton>
+              <PButton variant="secondary" onClick={() => setStep('physical')} theme={theme} style={{ flex: 1 }}>Corregir</PButton>
+              <PButton variant="primary" onClick={handleFinish} theme={theme} style={{ flex: 2 }}>¡Comenzar!</PButton>
             </div>
           </div>
         )}

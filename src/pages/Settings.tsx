@@ -73,9 +73,9 @@ export function Settings() {
         <PHeading size="small" tag="h2" theme={theme}>Objetivos diarios</PHeading>
 
         <div className="flex justify-between items-end">
-          <label className={labelCls}>Objetivo calórico diario (kcal)</label>
+          <label htmlFor="calorie-goal" className={labelCls}>Objetivo calórico diario (kcal)</label>
           <PButtonPure 
-            icon="tools" 
+            icon="configurate" 
             size="x-small" 
             theme={theme} 
             onClick={() => setShowSetup(true)}
@@ -86,6 +86,8 @@ export function Settings() {
         </div>
         <div>
           <input
+            id="calorie-goal"
+            name="calorie-goal"
             className={inputCls}
             type="number"
             min="500"
@@ -113,8 +115,10 @@ export function Settings() {
         </div>
 
         <div>
-          <label className={labelCls}>Objetivo de proteína diaria (g) — opcional</label>
+          <label htmlFor="protein-goal" className={labelCls}>Objetivo de proteína diaria (g) — opcional</label>
           <input
+            id="protein-goal"
+            name="protein-goal"
             className={inputCls}
             type="number"
             min="0"
@@ -131,8 +135,10 @@ export function Settings() {
         <PDivider theme={theme} />
 
         <div>
-          <label className={labelCls}>Peso corporal (kg)</label>
+          <label htmlFor="body-weight" className={labelCls}>Peso corporal (kg)</label>
           <input
+            id="body-weight"
+            name="body-weight"
             className={inputCls}
             type="number"
             min="20"

@@ -111,7 +111,10 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
         {step === 'search' && (
           <>
             <div className="relative">
+              <label htmlFor="exercise-search" className="sr-only">Buscar ejercicio</label>
               <input
+                id="exercise-search"
+                name="exercise-search"
                 className={`${inputCls} w-full`}
                 placeholder="Buscar ejercicio (ej: Correr, Yoga...)"
                 value={search}
@@ -211,7 +214,10 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                   </button>
                 ))}
               </div>
+              <label htmlFor="custom-duration" className="sr-only">Duración manual</label>
               <input
+                id="custom-duration"
+                name="custom-duration"
                 className={`${inputCls} w-full`}
                 type="number"
                 inputMode="numeric"
@@ -224,12 +230,12 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
             {selected.category === 'strength' && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <PText size="x-small" weight="bold" theme={theme} style={{ marginBottom: 8, marginLeft: 4 }}>Series</PText>
-                  <input className={`${inputCls} w-full`} type="number" inputMode="numeric" placeholder="3" value={sets} onChange={e => setSets(e.target.value)} />
+                  <label htmlFor="exercise-sets" style={{ fontSize: '12px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginBottom: 8, marginLeft: 4, display: 'block' }}>Series</label>
+                  <input id="exercise-sets" name="sets" className={`${inputCls} w-full`} type="number" inputMode="numeric" placeholder="3" value={sets} onChange={e => setSets(e.target.value)} />
                 </div>
                 <div>
-                  <PText size="x-small" weight="bold" theme={theme} style={{ marginBottom: 8, marginLeft: 4 }}>Reps</PText>
-                  <input className={`${inputCls} w-full`} type="number" inputMode="numeric" placeholder="10" value={reps} onChange={e => setReps(e.target.value)} />
+                  <label htmlFor="exercise-reps" style={{ fontSize: '12px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginBottom: 8, marginLeft: 4, display: 'block' }}>Reps</label>
+                  <input id="exercise-reps" name="reps" className={`${inputCls} w-full`} type="number" inputMode="numeric" placeholder="10" value={reps} onChange={e => setReps(e.target.value)} />
                 </div>
               </div>
             )}

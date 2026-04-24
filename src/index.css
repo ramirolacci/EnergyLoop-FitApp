@@ -46,3 +46,19 @@ html, body {
   background: #3a3a3e;
 }
 
+.dash-header, .dash-stats-card, .dash-action, .dash-section, .dash-item {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+}
+
+@keyframes pulse-subtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 0.3s ease-out;
+}
+

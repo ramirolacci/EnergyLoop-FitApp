@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PTabs, PTabsItem, PHeading, PText, PSpinner } from '@porsche-design-system/components-react';
+import { PHeading, PText, PSpinner } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import type { DayStats } from '../lib/types';
 import { getLast7Days, getDateString } from '../lib/calculations';
@@ -16,8 +16,9 @@ export function History() {
   const [dayFoods, setDayFoods] = useState<FoodEntry[]>([]);
   const [dayExercises, setDayExercises] = useState<ExerciseEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'foods' | 'exercises'>('foods');
 
-  const goal = profile?.daily_calorie_goal ?? 2000;
+  const goal = profile?.daily_calorie_goal ?? 0;
 
   useEffect(() => {
     void loadData();
@@ -227,9 +228,28 @@ export function History() {
               </div>
             </div>
 
-            <PTabs activeTabIndex={0} theme={theme}>
-              <PTabsItem label={`Comidas (${dayFoods.length})`}>
-                <div className="flex flex-col gap-2 mt-4">
+            <div className="flex border-b" style={{ borderColor }}>
+              <button
+                onClick={() => setTab('foods')}
+                className="flex-1 py-3 text-sm font-bold transition-all relative"
+                style={{ color: tab === 'foods' ? (theme === 'dark' ? '#fbfcff' : '#010205') : (theme === 'dark' ? '#535457' : '#afb0b3') }}
+              >
+                Comidas ({dayFoods.length})
+                {tab === 'foods' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#018a16]" />}
+              </button>
+              <button
+                onClick={() => setTab('exercises')}
+                className="flex-1 py-3 text-sm font-bold transition-all relative"
+                style={{ color: tab === 'exercises' ? (theme === 'dark' ? '#fbfcff' : '#010205') : (theme === 'dark' ? '#535457' : '#afb0b3') }}
+              >
+                Ejercicios ({dayExercises.length})
+                {tab === 'exercises' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#018a16]" />}
+              </button>
+            </div>
+
+            <div className="mt-4">
+              {tab === 'foods' ? (
+                <div className="flex flex-col gap-2">
                   {dayFoods.length === 0 ? (
                     <div className="py-10 text-center opacity-50">
                       <span className="text-4xl block mb-2">🍽️</span>
@@ -239,9 +259,8 @@ export function History() {
                     dayFoods.map(food => <FoodCard key={food.id} entry={food} theme={theme} />)
                   )}
                 </div>
-              </PTabsItem>
-              <PTabsItem label={`Ejercicios (${dayExercises.length})`}>
-                <div className="flex flex-col gap-2 mt-4">
+              ) : (
+                <div className="flex flex-col gap-2">
                   {dayExercises.length === 0 ? (
                     <div className="py-10 text-center opacity-50">
                       <span className="text-4xl block mb-2">🏃</span>
@@ -251,8 +270,8 @@ export function History() {
                     dayExercises.map(ex => <ExerciseCard key={ex.id} entry={ex} theme={theme} />)
                   )}
                 </div>
-              </PTabsItem>
-            </PTabs>
+              )}
+            </div>
           </div>
         </>
       )}
