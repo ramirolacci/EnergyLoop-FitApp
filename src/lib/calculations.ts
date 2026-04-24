@@ -19,12 +19,21 @@ export function calcProgressPercent(current: number, goal: number): number {
   return Math.min((current / goal) * 100, 100);
 }
 
+export function formatNumber(num: number, decimals: number = 0): string {
+  return num.toLocaleString('es-AR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
 export function formatCalories(cal: number): string {
-  return Math.round(cal).toLocaleString();
+  return formatNumber(Math.round(cal), 0);
 }
 
 export function formatMacro(grams: number): string {
-  return Math.round(grams * 10) / 10 + 'g';
+  // Show 1 decimal if there is a fractional part, otherwise none
+  const decimals = grams % 1 === 0 ? 0 : 1;
+  return formatNumber(grams, decimals) + 'g';
 }
 
 export function getDateString(date: Date = new Date()): string {

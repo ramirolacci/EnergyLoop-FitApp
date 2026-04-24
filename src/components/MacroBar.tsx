@@ -1,4 +1,5 @@
 import { PText } from '@porsche-design-system/components-react';
+import { formatNumber } from '../lib/calculations';
 
 interface MacroBarItemProps {
   label: string;
@@ -20,7 +21,7 @@ function MacroBarItem({ label, current, goal, unit, color, theme }: MacroBarItem
           {label}
         </PText>
         <PText size="x-small" theme={theme}>
-          {Math.round(current)}{unit}{goal ? ` / ${goal}${unit}` : ''}
+          {formatNumber(current, 1)}{unit}{goal ? ` / ${formatNumber(goal, 0)}${unit}` : ''}
         </PText>
       </div>
       <div
@@ -70,7 +71,7 @@ export function MacroBar({ protein, carbs, fat, proteinGoal, theme }: Props) {
                 {label}
               </PText>
               <PText size="x-small" weight="semi-bold" theme={theme}>
-                {Math.round(value)}g
+                {formatNumber(value, 1)}g
               </PText>
               <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
                 {pct}%

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PButtonPure, PTag, PText } from '@porsche-design-system/components-react';
 import type { FoodEntry } from '../lib/types';
 import { useApp } from '../context/AppContext';
+import { formatNumber } from '../lib/calculations';
 
 interface Props {
   entry: FoodEntry;
@@ -48,7 +49,7 @@ export function FoodCard({ entry, theme }: Props) {
           </PText>
           {entry.scan_confidence !== null && entry.scan_confidence !== undefined && (
             <PTag compact variant={entry.scan_confidence >= 0.8 ? 'success' : 'warning'} theme={theme}>
-              {Math.round(entry.scan_confidence * 100)}%
+              {formatNumber(entry.scan_confidence * 100, 0)}%
             </PTag>
           )}
         </div>
@@ -58,17 +59,17 @@ export function FoodCard({ entry, theme }: Props) {
           </PText>
           {entry.protein_g > 0 && (
             <PText size="xx-small" theme={theme} style={{ color: '#ff6b00' }}>
-              P: {Math.round(entry.protein_g)}g
+              P: {formatNumber(entry.protein_g, 1)}g
             </PText>
           )}
           {entry.carbs_g > 0 && (
             <PText size="xx-small" theme={theme} style={{ color: '#0076ff' }}>
-              C: {Math.round(entry.carbs_g)}g
+              C: {formatNumber(entry.carbs_g, 1)}g
             </PText>
           )}
           {entry.fat_g > 0 && (
             <PText size="xx-small" theme={theme} style={{ color: '#b8960c' }}>
-              G: {Math.round(entry.fat_g)}g
+              G: {formatNumber(entry.fat_g, 1)}g
             </PText>
           )}
         </div>
@@ -77,7 +78,7 @@ export function FoodCard({ entry, theme }: Props) {
       {/* Calories + delete */}
       <div className="flex flex-col items-end gap-1 flex-shrink-0">
         <PText weight="semi-bold" theme={theme}>
-          {Math.round(entry.calories)}
+          {formatNumber(entry.calories)}
         </PText>
         <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
           kcal

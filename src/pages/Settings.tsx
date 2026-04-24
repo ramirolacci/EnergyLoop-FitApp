@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { PHeading, PText, PButton, PSwitch, PDivider, PInlineNotification } from '@porsche-design-system/components-react';
+import { PHeading, PText, PButton, PSwitch, PDivider, PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
+import { SetupModal } from '../components/SetupModal';
 
 export function Settings() {
   const { profile, updateProfile, toggleTheme, theme, toast } = useApp();
+  const [showSetup, setShowSetup] = useState(false);
   const [calorieGoal, setCalorieGoal] = useState(String(profile?.daily_calorie_goal ?? 2000));
   const [proteinGoal, setProteinGoal] = useState(String(profile?.daily_protein_goal ?? ''));
   const [weight, setWeight] = useState(String(profile?.weight_kg ?? 70));
@@ -70,8 +72,19 @@ export function Settings() {
       >
         <PHeading size="small" tag="h2" theme={theme}>Objetivos diarios</PHeading>
 
-        <div>
+        <div className="flex justify-between items-end">
           <label className={labelCls}>Objetivo calórico diario (kcal)</label>
+          <PButtonPure 
+            icon="tools" 
+            size="x-small" 
+            theme={theme} 
+            onClick={() => setShowSetup(true)}
+            style={{ marginBottom: 6 }}
+          >
+            Usar asistente
+          </PButtonPure>
+        </div>
+        <div>
           <input
             className={inputCls}
             type="number"
@@ -264,6 +277,7 @@ export function Settings() {
       </div>
 
 
+    <SetupModal open={showSetup} onDismiss={() => setShowSetup(false)} />
     </div>
   );
 }

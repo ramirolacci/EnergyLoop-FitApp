@@ -7,12 +7,12 @@ const KEYS = {
   EXERCISES: 'calorapp_exercises',
 };
 
-// Default profile for new users
+// Default profile for new users - initialized as empty to force configuration
 const DEFAULT_PROFILE: UserProfile = {
   id: 'local-user',
-  daily_calorie_goal: 2200,
-  daily_protein_goal: 150,
-  weight_kg: 80,
+  daily_calorie_goal: 0,
+  daily_protein_goal: 0,
+  weight_kg: 0,
   theme: 'dark',
 };
 

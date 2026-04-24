@@ -3,19 +3,14 @@ import { PModal, PHeading, PButton, PText, PSpinner, PTag, PInlineNotification }
 import type { ScannedNutrition } from '../lib/types';
 import { AddFoodModal } from './AddFoodModal';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { formatNumber } from '../lib/calculations';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = API_KEY && API_KEY !== 'YOUR_GEMINI_API_KEY_HERE' ? new GoogleGenerativeAI(API_KEY) : null;
 
 async function analyzeImageWithGemini(file: File): Promise<ScannedNutrition> {
   if (!genAI) {
-    // Fallback to simulation if no API key is provided, but with more randomness
-    await new Promise(r => setTimeout(r, 2000));
-    const samples: ScannedNutrition[] = [
-      { name: 'Producto Escaneado A', calories_per_serving: 150, protein_g: 5, carbs_g: 27, fat_g: 2.5, sodium_mg: 0, serving_size_g: 40, servings_per_package: 10, confidence: 0.7 },
-      { name: 'Producto Escaneado B', calories_per_serving: 100, protein_g: 17, carbs_g: 6, fat_g: 0.7, sodium_mg: 55, serving_size_g: 170, servings_per_package: 1, confidence: 0.75 },
-    ];
-    return samples[Math.floor(Math.random() * samples.length)];
+    throw new Error('API Key de Gemini no configurada o inválida. Por favor, revisá tu archivo .env');
   }
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -174,8 +169,8 @@ export function ScanModal({ open, onDismiss, theme }: Props) {
 
             <PInlineNotification
               state="info"
-              heading="Funcionalidad OCR"
-              description="En esta demo se simulan los datos del escaneo. Para producción, conectar con una API de OCR nutricional real."
+              heading="Escaneo por IA"
+              description="La aplicación utiliza inteligencia artificial para analizar la etiqueta nutricional en tiempo real y extraer los datos."
               dismissButton={false}
               theme={theme}
             />
@@ -233,14 +228,14 @@ export function ScanModal({ open, onDismiss, theme }: Props) {
 
               <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {[
-                  { label: 'Cal/porción', value: `${scanned.calories_per_serving} kcal` },
-                  { label: 'Tamaño porción', value: `${scanned.serving_size_g}g` },
-                  { label: 'Porciones/paquete', value: String(scanned.servings_per_package) },
-                  { label: 'Paquete completo', value: `${Math.round(scanned.calories_per_serving * scanned.servings_per_package)} kcal` },
-                  { label: 'Proteína', value: `${scanned.protein_g}g` },
-                  { label: 'Carbos', value: `${scanned.carbs_g}g` },
-                  { label: 'Grasa', value: `${scanned.fat_g}g` },
-                  { label: 'Sodio', value: `${scanned.sodium_mg}mg` },
+                  { label: 'Cal/porción', value: `${formatNumber(scanned.calories_per_serving)} kcal` },
+                  { label: 'Tamaño porción', value: `${formatNumber(scanned.serving_size_g)}g` },
+                  { label: 'Porciones/paquete', value: formatNumber(scanned.servings_per_package, 1) },
+                  { label: 'Paquete completo', value: `${formatNumber(scanned.calories_per_serving * scanned.servings_per_package)} kcal` },
+                  { label: 'Proteína', value: `${formatNumber(scanned.protein_g, 1)}g` },
+                  { label: 'Carbos', value: `${formatNumber(scanned.carbs_g, 1)}g` },
+                  { label: 'Grasa', value: `${formatNumber(scanned.fat_g, 1)}g` },
+                  { label: 'Sodio', value: `${formatNumber(scanned.sodium_mg)}mg` },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>

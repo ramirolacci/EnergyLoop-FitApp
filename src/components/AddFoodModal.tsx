@@ -3,7 +3,7 @@ import {
   PModal, PHeading, PButton, PText, PInlineNotification, PButtonPure
 } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
-import { recalcFoodEntry } from '../lib/calculations';
+import { recalcFoodEntry, formatNumber, formatMacro } from '../lib/calculations';
 import { storage } from '../lib/storage';
 import { COMMON_FOODS } from '../lib/foodLibrary';
 
@@ -195,7 +195,7 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                         <div className="flex-1">
                           <PText size="small" weight="semi-bold" theme={theme}>{f.name}</PText>
                           <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                            {f.calories_per_serving} kcal · {f.protein_g}g P
+                            {formatNumber(f.calories_per_serving)} kcal · {formatNumber(f.protein_g, 1)}g P
                           </PText>
                         </div>
                         <PButtonPure icon="add" hideLabel theme={theme} />
@@ -231,7 +231,7 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                         <div className="flex-1">
                           <PText size="small" weight="semi-bold" theme={theme}>{f.name}</PText>
                           <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                            {f.calories_per_serving} kcal · {f.protein_g}g P
+                            {formatNumber(f.calories_per_serving)} kcal · {formatNumber(f.protein_g, 1)}g P
                           </PText>
                         </div>
                         <PButtonPure icon="add" hideLabel theme={theme} />
@@ -254,7 +254,7 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                       >
                         <span className="text-2xl">{f.icon}</span>
                         <PText size="xx-small" weight="bold" theme={theme}>{f.name}</PText>
-                        <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>{f.calories_per_serving} kcal</PText>
+                        <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>{formatNumber(f.calories_per_serving)} kcal</PText>
                       </button>
                     ))}
                   </div>
@@ -365,11 +365,11 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
             <div className="rounded-2xl p-4 flex items-center justify-between mt-2" style={{ background: '#018a16', color: '#fff' }}>
               <div>
                 <PText size="xx-small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)' }}>TOTAL A REGISTRAR</PText>
-                <PText size="large" weight="bold" style={{ color: '#fff' }}>{totalCalConsumed} kcal</PText>
+                <PText size="large" weight="bold" style={{ color: '#fff' }}>{formatNumber(totalCalConsumed)} kcal</PText>
               </div>
               <div className="text-right">
                 <PText size="xx-small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)' }}>PROTEÍNA</PText>
-                <PText size="medium" weight="bold" style={{ color: '#fff' }}>{computed.protein_g}g</PText>
+                <PText size="medium" weight="bold" style={{ color: '#fff' }}>{formatMacro(computed.protein_g)}</PText>
               </div>
             </div>
           </>

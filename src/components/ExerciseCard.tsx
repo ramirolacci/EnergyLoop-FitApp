@@ -3,6 +3,7 @@ import { PButtonPure, PTag, PText } from '@porsche-design-system/components-reac
 import type { ExerciseEntry } from '../lib/types';
 import { useApp } from '../context/AppContext';
 import { CATEGORY_LABELS } from '../lib/exercises';
+import { formatNumber } from '../lib/calculations';
 
 const INTENSITY_LABELS: Record<string, string> = { low: 'Baja', medium: 'Media', high: 'Alta' };
 const INTENSITY_COLORS: Record<string, 'info' | 'warning' | 'error'> = { low: 'info', medium: 'warning', high: 'error' };
@@ -72,7 +73,7 @@ export function ExerciseCard({ entry, theme }: Props) {
       {/* Calories burned + delete */}
       <div className="flex flex-col items-end gap-1 flex-shrink-0">
         <PText weight="semi-bold" theme={theme} style={{ color: '#018a16' }}>
-          -{Math.round(entry.calories_burned)}
+          -{formatNumber(entry.calories_burned)}
         </PText>
         <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
           kcal

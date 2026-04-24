@@ -8,8 +8,10 @@ import { ExerciseCard } from '../components/ExerciseCard';
 import { AddFoodModal } from '../components/AddFoodModal';
 import { ScanModal } from '../components/ScanModal';
 import { AddExerciseModal } from '../components/AddExerciseModal';
+import { SetupModal } from '../components/SetupModal';
+import { formatNumber } from '../lib/calculations';
 
-type ModalType = 'none' | 'addFood' | 'scan' | 'addExercise';
+type ModalType = 'none' | 'addFood' | 'scan' | 'addExercise' | 'setup';
 
 export function Dashboard() {
   const { profile, todayFoods, todayExercises, theme } = useApp();
@@ -17,7 +19,8 @@ export function Dashboard() {
   const [showAllFood, setShowAllFood] = useState(false);
   const [showAllExercise, setShowAllExercise] = useState(false);
 
-  const goal = profile?.daily_calorie_goal ?? 2000;
+  const goal = profile?.daily_calorie_goal ?? 0;
+  const isConfigured = goal > 0;
   const consumed = todayFoods.reduce((s, f) => s + f.calories, 0);
   const burned = todayExercises.reduce((s, e) => s + e.calories_burned, 0);
   const net = consumed - burned;
@@ -68,18 +71,18 @@ export function Dashboard() {
           <div className="flex items-center justify-between px-2">
             <div className="text-center">
               <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457', marginBottom: 4 }}>CONSUMIDAS</PText>
-              <div style={{ fontSize: 22, fontWeight: 800, color: theme === 'dark' ? '#fbfcff' : '#010205' }}>{Math.round(consumed).toLocaleString()}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: theme === 'dark' ? '#fbfcff' : '#010205' }}>{formatNumber(consumed)}</div>
             </div>
             <div className="h-8 w-px bg-current opacity-10" />
             <div className="text-center">
               <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457', marginBottom: 4 }}>QUEMADAS</PText>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#018a16' }}>{Math.round(burned).toLocaleString()}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#018a16' }}>{formatNumber(burned)}</div>
             </div>
             <div className="h-8 w-px bg-current opacity-10" />
             <div className="text-center">
               <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457', marginBottom: 4 }}>RESTANTES</PText>
               <div style={{ fontSize: 22, fontWeight: 800, color: remaining < 0 ? '#e00000' : '#ff6b00' }}>
-                {Math.abs(Math.round(remaining)).toLocaleString()}
+                {formatNumber(Math.abs(remaining))}
               </div>
             </div>
           </div>
@@ -91,7 +94,7 @@ export function Dashboard() {
              <div className="flex justify-between items-center mb-2">
                 <PText size="xx-small" weight="semi-bold" theme={theme}>MACRONUTRIENTES</PText>
                 <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                  {Math.round(protein)}g P · {Math.round(carbs)}g C · {Math.round(fat)}g G
+                  {formatNumber(protein, 1)}g P · {formatNumber(carbs, 1)}g C · {formatNumber(fat, 1)}g G
                 </PText>
              </div>
              <MacroBar
@@ -144,7 +147,7 @@ export function Dashboard() {
           <div className="flex items-center justify-between mb-2">
             <PHeading size="small" tag="h2" theme={theme}>Comidas de hoy</PHeading>
             <PText size="small" theme={theme} style={{ color: '#018a16' }}>
-              {Math.round(consumed)} kcal
+              {formatNumber(consumed)} kcal
             </PText>
           </div>
           <div className="flex flex-col gap-2">
@@ -181,7 +184,7 @@ export function Dashboard() {
           <div className="flex items-center justify-between mb-2">
             <PHeading size="small" tag="h2" theme={theme}>Ejercicios de hoy</PHeading>
             <PText size="small" theme={theme} style={{ color: '#018a16' }}>
-              -{Math.round(burned)} kcal
+              -{formatNumber(burned)} kcal
             </PText>
           </div>
           <div className="flex flex-col gap-2">
@@ -214,13 +217,14 @@ export function Dashboard() {
 
       <PDivider theme={theme} />
       <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#535457' : '#afb0b3', textAlign: 'center' }}>
-        Balance neto hoy: {overGoal ? '+' : ''}{Math.round(net)} kcal · Peso: {profile?.weight_kg ?? 70} kg
+        Balance neto hoy: {overGoal ? '+' : ''}{formatNumber(net)} kcal · Peso: {formatNumber(profile?.weight_kg ?? 70, 1)} kg
       </PText>
 
       {/* Modals */}
       <AddFoodModal open={modal === 'addFood'} onDismiss={() => setModal('none')} />
       <ScanModal open={modal === 'scan'} onDismiss={() => setModal('none')} theme={theme} />
       <AddExerciseModal open={modal === 'addExercise'} onDismiss={() => setModal('none')} />
+      <SetupModal open={modal === 'setup' || (!isConfigured && modal === 'none')} onDismiss={() => setModal('none')} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import {
 } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { EXERCISE_TEMPLATES, CATEGORY_LABELS, getMET } from '../lib/exercises';
-import { calcCaloriesBurned } from '../lib/calculations';
+import { calcCaloriesBurned, formatNumber } from '../lib/calculations';
 import { storage } from '../lib/storage';
 import type { ExerciseEntry } from '../lib/types';
 
@@ -237,7 +237,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
             <div className="rounded-2xl p-5 flex items-center justify-between mt-2" style={{ background: '#018a16', color: '#fff' }}>
               <div>
                 <PText size="xx-small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)' }}>QUEMARÁS APROX.</PText>
-                <PText size="large" weight="bold" style={{ color: '#fff' }}>{Math.round(caloriesBurned)} kcal</PText>
+                <PText size="large" weight="bold" style={{ color: '#fff' }}>{formatNumber(caloriesBurned)} kcal</PText>
               </div>
               <div className="h-8 w-px bg-white opacity-20" />
               <div className="text-right">
