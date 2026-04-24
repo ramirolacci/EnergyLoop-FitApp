@@ -5,8 +5,23 @@ import { Dashboard } from './pages/Dashboard';
 import { History } from './pages/History';
 import { Settings } from './pages/Settings';
 
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
 function AppContent() {
   const { activePage, loading, theme } = useApp();
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (pageRef.current) {
+      gsap.killTweensOf(pageRef.current);
+      gsap.fromTo(pageRef.current, 
+        { opacity: 0 }, 
+        { opacity: 1, duration: 0.3, ease: 'power2.out', clearProps: 'all' }
+      );
+    }
+  }, { dependencies: [activePage] });
 
   if (loading) {
     return (
@@ -22,9 +37,11 @@ function AppContent() {
 
   return (
     <AppShell>
-      {activePage === 'dashboard' && <Dashboard />}
-      {activePage === 'history' && <History />}
-      {activePage === 'settings' && <Settings />}
+      <div ref={pageRef}>
+        {activePage === 'dashboard' && <Dashboard />}
+        {activePage === 'history' && <History />}
+        {activePage === 'settings' && <Settings />}
+      </div>
     </AppShell>
   );
 }

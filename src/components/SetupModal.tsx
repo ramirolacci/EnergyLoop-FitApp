@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { PModal, PHeading, PText, PButton, PDivider } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { CountUp } from './CountUp';
 
 interface Props {
   open: boolean;
@@ -12,6 +15,19 @@ type Step = 'welcome' | 'physical' | 'activity' | 'goal' | 'result';
 export function SetupModal({ open, onDismiss }: Props) {
   const { updateProfile, theme } = useApp();
   const [step, setStep] = useState<Step>('welcome');
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (contentRef.current) {
+      // Clear any ongoing animations to prevent DOM conflicts
+      gsap.killTweensOf(contentRef.current);
+      
+      gsap.fromTo(contentRef.current, 
+        { opacity: 0, y: 10 }, 
+        { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'all' }
+      );
+    }
+  }, { dependencies: [step] });
   
   // Form State
   const [weight, setWeight] = useState('70');
@@ -77,7 +93,7 @@ export function SetupModal({ open, onDismiss }: Props) {
          step === 'goal' ? 'Objetivo' : 'Tu Plan'}
       </PHeading>
 
-      <div className="flex flex-col gap-6 py-4">
+      <div className="flex flex-col gap-6 py-4" ref={contentRef} key={step}>
         
         {step === 'welcome' && (
           <div className="flex flex-col items-center text-center gap-6">
@@ -101,16 +117,22 @@ export function SetupModal({ open, onDismiss }: Props) {
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => setGender('male')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${gender === 'male' ? 'border-[#018a16] bg-[#018a1611]' : 'border-transparent bg-current opacity-5'}`}
-                style={{ background: gender === 'male' ? undefined : surfaceColor, borderColor: gender === 'male' ? undefined : borderColor }}
+                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'male' ? 'border-[#018a16] bg-[#018a1622]' : 'border-transparent'}`}
+                style={{ 
+                  background: gender === 'male' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
+                  borderColor: gender === 'male' ? undefined : borderColor 
+                }}
               >
                 <span className="text-3xl">👨</span>
                 <PText weight="bold" theme={theme}>Hombre</PText>
               </button>
               <button 
                 onClick={() => setGender('female')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${gender === 'female' ? 'border-[#018a16] bg-[#018a1611]' : 'border-transparent bg-current opacity-5'}`}
-                style={{ background: gender === 'female' ? undefined : surfaceColor, borderColor: gender === 'female' ? undefined : borderColor }}
+                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'female' ? 'border-[#018a16] bg-[#018a1622]' : 'border-transparent'}`}
+                style={{ 
+                  background: gender === 'female' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
+                  borderColor: gender === 'female' ? undefined : borderColor 
+                }}
               >
                 <span className="text-3xl">👩</span>
                 <PText weight="bold" theme={theme}>Mujer</PText>
@@ -189,7 +211,9 @@ export function SetupModal({ open, onDismiss }: Props) {
           <div className="flex flex-col items-center text-center gap-6">
             <div className="w-full rounded-3xl p-8 flex flex-col items-center gap-2" style={{ background: '#018a16', color: '#fff' }}>
               <PText size="small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>OBJETIVO DIARIO</PText>
-              <div className="text-6xl font-black">{calculatedGoal}</div>
+              <div className="text-6xl font-black">
+                <CountUp value={calculatedGoal} />
+              </div>
               <PText size="large" weight="bold" style={{ color: '#fff' }}>kcal</PText>
             </div>
             

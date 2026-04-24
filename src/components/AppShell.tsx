@@ -71,15 +71,16 @@ export function AppShell({ children }: Props) {
               : (theme === 'dark' ? '#535457' : '#afb0b3');
 
             return (
-              <button
+              <div
                 key={id}
                 onClick={() => setActivePage(id)}
-                className="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-xl transition-all duration-200"
+                className="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-xl transition-all duration-200 cursor-pointer"
                 style={{ 
                   background: isActive ? (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)') : 'transparent'
                 }}
               >
                 <PButtonPure
+                  id={`nav-btn-${id}`}
                   icon={icon}
                   hideLabel
                   theme={theme}
@@ -107,7 +108,7 @@ export function AppShell({ children }: Props) {
                 >
                   {label}
                 </PText>
-              </button>
+              </div>
             );
           })}
         </nav>
