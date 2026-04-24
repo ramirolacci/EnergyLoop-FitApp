@@ -1,5 +1,7 @@
 export interface UserProfile {
   id: string;
+  name?: string;
+  avatar?: string | null;
   daily_calorie_goal: number;
   daily_protein_goal: number | null;
   weight_kg: number;

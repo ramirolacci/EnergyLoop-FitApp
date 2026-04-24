@@ -54,13 +54,10 @@ export function AppShell({ children }: Props) {
         }}
       >
         <nav
-          className="max-w-md mx-auto flex items-center justify-around p-2 rounded-2xl backdrop-blur-xl pointer-events-auto transition-all"
+          className="max-w-md mx-auto flex items-center justify-around p-2 rounded-[2rem] glass pointer-events-auto transition-all shadow-2xl"
           style={{
-            background: navBg,
+            background: theme === 'dark' ? 'rgba(26, 26, 30, 0.7)' : 'rgba(255, 255, 255, 0.75)',
             border: `1px solid ${borderColor}`,
-            boxShadow: theme === 'dark' 
-              ? '0 10px 25px -5px rgba(0, 0, 0, 0.5)' 
-              : '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
           }}
         >
 

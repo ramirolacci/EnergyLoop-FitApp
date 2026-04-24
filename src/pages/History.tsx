@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { PHeading, PText, PSpinner } from '@porsche-design-system/components-react';
+import { useEffect, useState, useRef } from 'react';
+import { PHeading, PText, PSpinner, PButtonPure, PTag } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import type { DayStats } from '../lib/types';
 import { getLast7Days, getDateString } from '../lib/calculations';
@@ -8,6 +8,8 @@ import { WeeklyChart } from '../components/WeeklyChart';
 import { FoodCard } from '../components/FoodCard';
 import { ExerciseCard } from '../components/ExerciseCard';
 import type { FoodEntry, ExerciseEntry } from '../lib/types';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 export function History() {
   const { profile, theme } = useApp();
@@ -17,8 +19,18 @@ export function History() {
   const [dayExercises, setDayExercises] = useState<ExerciseEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<'foods' | 'exercises'>('foods');
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const goal = profile?.daily_calorie_goal ?? 0;
+
+  useGSAP(() => {
+    if (!loading && containerRef.current) {
+      gsap.fromTo('.history-item', 
+        { opacity: 0, y: 20 }, 
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+      );
+    }
+  }, { dependencies: [loading], scope: containerRef });
 
   useEffect(() => {
     void loadData();
@@ -30,7 +42,6 @@ export function History() {
 
   async function loadData() {
     setLoading(true);
-    // Simulate loading for better UX
     await new Promise(r => setTimeout(r, 400));
     
     const days = getLast7Days();
@@ -61,8 +72,9 @@ export function History() {
     setDayExercises(exercises);
   }
 
-  const surfaceColor = theme === 'dark' ? '#212225' : '#fff';
-  const borderColor = theme === 'dark' ? '#2a2a2e' : '#d8d8db';
+  const surfaceColor = theme === 'dark' ? 'var(--surface-dark)' : 'var(--surface-light)';
+  const borderColor = theme === 'dark' ? 'var(--border-dark)' : 'var(--border-light)';
+  const secondaryText = theme === 'dark' ? '#afb0b3' : '#535457';
 
   const selected7Days = getLast7Days();
   const isToday = selectedDate === getDateString();
@@ -77,205 +89,168 @@ export function History() {
     fat_g: 0,
   };
 
-  // Weekly totals
   const weekTotalConsumed = weekStats.reduce((s, d) => s + d.calories_consumed, 0);
-  const weekTotalBurned = weekStats.reduce((s, d) => s + d.calories_burned, 0);
   const weekAvgConsumed = weekStats.filter(d => d.calories_consumed > 0).length > 0
     ? Math.round(weekTotalConsumed / weekStats.filter(d => d.calories_consumed > 0).length)
     : 0;
 
   return (
-    <div className="flex flex-col gap-4 pb-24">
-      <div className="flex items-center justify-between pt-2">
-        <PHeading size="large" tag="h1" theme={theme}>Historial</PHeading>
-      </div>
+    <div ref={containerRef} className="flex flex-col gap-8 pb-24">
+      <header className="history-item flex items-center justify-between mt-2">
+        <div>
+          <PHeading size="large" theme={theme} style={{ fontWeight: 900 }}>Historial 📊</PHeading>
+          <PText size="small" theme={theme} style={{ color: secondaryText }}>Tus progresos semanales</PText>
+        </div>
+      </header>
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <PSpinner theme={theme} size="medium" aria={{ 'aria-label': 'Cargando historial...' }} />
-          <PText theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>Recuperando registros...</PText>
+          <PSpinner theme={theme} size="medium" />
+          <PText theme={theme} style={{ color: secondaryText }}>Recuperando registros...</PText>
         </div>
       ) : (
         <>
           {/* Weekly chart */}
           <div
-            className="rounded-2xl p-4 shadow-sm"
+            className="history-item rounded-[2.5rem] p-6 card-shadow"
             style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
           >
-            <PHeading size="small" tag="h2" theme={theme} style={{ marginBottom: 12 }}>Últimos 7 días</PHeading>
+            <PHeading size="small" theme={theme} style={{ marginBottom: 20 }}>Últimos 7 días</PHeading>
             <WeeklyChart days={weekStats} goal={goal} theme={theme} />
           </div>
 
-          {/* Week summary */}
-          <div
-            className="rounded-2xl p-4 grid grid-cols-3 gap-2 shadow-sm"
-            style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
-          >
-            {[
-              { label: 'Promedio', value: weekAvgConsumed, unit: 'kcal', color: theme === 'dark' ? '#fbfcff' : '#010205' },
-              { label: 'Total', value: Math.round(weekTotalConsumed), unit: 'kcal', color: theme === 'dark' ? '#fbfcff' : '#010205' },
-              { label: 'Quemado', value: Math.round(weekTotalBurned), unit: 'kcal', color: '#018a16' },
-            ].map(({ label, value, unit, color }) => (
-              <div key={label} className="text-center">
-                <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                  {label}
-                </PText>
-                <div style={{ fontSize: 18, fontWeight: 700, color, lineHeight: '1.2', margin: '4px 0' }}>
-                  {value.toLocaleString()}
-                </div>
-                <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                  {unit}
-                </PText>
+          {/* Week summary pills */}
+          <div className="history-item grid grid-cols-2 gap-4">
+            <div className="p-5 rounded-[2rem] card-shadow flex flex-col gap-1" style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}>
+              <PText size="xx-small" weight="bold" theme={theme} style={{ color: secondaryText }}>PROMEDIO DIARIO</PText>
+              <div className="text-2xl font-black" style={{ color: theme === 'dark' ? '#fbfcff' : '#010205' }}>
+                {weekAvgConsumed.toLocaleString()} <span className="text-sm font-normal opacity-50">kcal</span>
               </div>
-            ))}
+            </div>
+            <div className="p-5 rounded-[2rem] card-shadow flex flex-col gap-1" style={{ background: '#018a16', color: '#fff' }}>
+              <PText size="xx-small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)' }}>TOTAL SEMANA</PText>
+              <div className="text-2xl font-black">
+                {Math.round(weekTotalConsumed).toLocaleString()} <span className="text-sm font-normal opacity-70">kcal</span>
+              </div>
+            </div>
           </div>
 
           {/* Day selector */}
-          <div className="py-2">
-            <PText size="x-small" weight="semi-bold" theme={theme} style={{ marginBottom: 12, color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-              Seleccionar día
-            </PText>
-            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 no-scrollbar">
+          <div className="history-item">
+            <PHeading size="small" theme={theme} style={{ marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: 8 }}>Seleccionar día</PHeading>
+            <div className="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
               {selected7Days.map(date => {
-                const stat = weekStats.find(s => s.date === date);
                 const isSelected = date === selectedDate;
-                const isT = date === getDateString();
                 const d = new Date(date + 'T00:00:00');
                 
                 return (
                   <button
                     key={date}
                     onClick={() => setSelectedDate(date)}
-                    className="flex-shrink-0 flex flex-col items-center gap-1 rounded-2xl p-3 min-w-[64px] transition-all duration-200"
+                    className="flex-shrink-0 flex flex-col items-center gap-1 rounded-[1.5rem] p-4 min-w-[70px] transition-all duration-300"
                     style={{
-                      background: isSelected ? (theme === 'dark' ? '#fbfcff' : '#010205') : surfaceColor,
+                      background: isSelected ? '#018a16' : surfaceColor,
                       border: `1px solid ${isSelected ? 'transparent' : borderColor}`,
-                      boxShadow: isSelected ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none',
+                      boxShadow: isSelected ? '0 10px 20px -5px rgba(1, 138, 22, 0.4)' : 'none',
                       transform: isSelected ? 'scale(1.05)' : 'scale(1)',
                     }}
                   >
                     <span
                       className="text-[10px] font-bold uppercase tracking-wider"
-                      style={{ color: isSelected ? (theme === 'dark' ? '#010205' : '#fbfcff') : (theme === 'dark' ? '#afb0b3' : '#535457') }}
+                      style={{ color: isSelected ? 'rgba(255,255,255,0.8)' : secondaryText }}
                     >
                       {d.toLocaleDateString('es', { weekday: 'short' })}
                     </span>
                     <span
-                      className="text-lg font-black"
-                      style={{ color: isSelected ? (theme === 'dark' ? '#010205' : '#fbfcff') : (theme === 'dark' ? '#fbfcff' : '#010205') }}
+                      className="text-xl font-black"
+                      style={{ color: isSelected ? '#fff' : (theme === 'dark' ? '#fbfcff' : '#010205') }}
                     >
                       {d.getDate()}
                     </span>
-                    {stat && stat.calories_consumed > 0 && (
-                      <span
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ background: isSelected ? (theme === 'dark' ? '#010205' : '#fbfcff') : '#018a16' }}
-                      />
-                    )}
-                    {isT && !isSelected && (
-                      <span className="text-[10px] font-bold" style={{ color: '#018a16' }}>HOY</span>
-                    )}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Selected day detail */}
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-center justify-between mb-4">
-              <PHeading size="small" tag="h2" theme={theme}>
-                {isToday ? 'Hoy' : new Date(selectedDate + 'T00:00:00').toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })}
-              </PHeading>
-            </div>
+          {/* Day Detail Header */}
+          <div className="history-item flex items-center justify-between">
+             <PHeading size="small" theme={theme}>
+                {isToday ? 'Hoy' : new Date(selectedDate + 'T00:00:00').toLocaleDateString('es', { weekday: 'long', day: 'numeric' })}
+             </PHeading>
+             <div className="h-10 w-10 rounded-xl bg-current opacity-5 flex items-center justify-center text-xl">
+               📅
+             </div>
+          </div>
 
-
-            {/* Day stats cards */}
-            <div className="grid grid-cols-1 gap-3 mb-4">
-               <div
-                className="rounded-2xl p-4 flex items-center justify-between shadow-sm"
-                style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
-              >
-                <div>
-                  <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>Calorías consumidas</PText>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: selectedStats.calories_consumed > goal ? '#e00000' : (theme === 'dark' ? '#fbfcff' : '#010205') }}>
-                    {Math.round(selectedStats.calories_consumed).toLocaleString()} <span className="text-sm font-normal">kcal</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>Quemadas</PText>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: '#018a16' }}>
-                    -{Math.round(selectedStats.calories_burned).toLocaleString()} <span className="text-sm font-normal">kcal</span>
-                  </div>
+          {/* Selected day summary */}
+          <div className="history-item grid grid-cols-1 gap-4">
+             <div
+              className="rounded-[2rem] p-6 flex items-center justify-between card-shadow"
+              style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
+            >
+              <div>
+                <PText size="xx-small" weight="bold" theme={theme} style={{ color: secondaryText, marginBottom: 4 }}>CONSUMO NETO</PText>
+                <div className="text-3xl font-black" style={{ color: selectedStats.net_calories > goal ? 'var(--danger)' : (theme === 'dark' ? '#fbfcff' : '#010205') }}>
+                  {Math.round(selectedStats.net_calories).toLocaleString()} <span className="text-base font-normal opacity-50">kcal</span>
                 </div>
               </div>
-
-              {/* Macros pills */}
-              <div
-                className="rounded-2xl p-4 flex items-center justify-around shadow-sm"
-                style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
-              >
-                {[
-                  { label: 'Proteína', value: Math.round(selectedStats.protein_g), color: '#ff6b00' },
-                  { label: 'Carbos', value: Math.round(selectedStats.carbs_g), color: '#0076ff' },
-                  { label: 'Grasa', value: Math.round(selectedStats.fat_g), color: '#b8960c' },
-                ].map(({ label, value, color }) => (
-                  <div key={label} className="text-center">
-                    <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>{label}</PText>
-                    <div style={{ color, fontWeight: 700, fontSize: 16 }}>{value}g</div>
-                  </div>
-                ))}
+              <div className="flex flex-col items-end gap-1">
+                <PTag variant="success" theme={theme}>
+                  {Math.round(selectedStats.calories_burned)} kcal quemadas
+                </PTag>
               </div>
             </div>
+          </div>
 
-            <div className="flex border-b" style={{ borderColor }}>
-              <button
-                onClick={() => setTab('foods')}
-                className="flex-1 py-3 text-sm font-bold transition-all relative"
-                style={{ color: tab === 'foods' ? (theme === 'dark' ? '#fbfcff' : '#010205') : (theme === 'dark' ? '#535457' : '#afb0b3') }}
-              >
-                Comidas ({dayFoods.length})
-                {tab === 'foods' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#018a16]" />}
-              </button>
-              <button
-                onClick={() => setTab('exercises')}
-                className="flex-1 py-3 text-sm font-bold transition-all relative"
-                style={{ color: tab === 'exercises' ? (theme === 'dark' ? '#fbfcff' : '#010205') : (theme === 'dark' ? '#535457' : '#afb0b3') }}
-              >
-                Ejercicios ({dayExercises.length})
-                {tab === 'exercises' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#018a16]" />}
-              </button>
-            </div>
+          {/* Tabs */}
+          <div className="history-item flex p-1.5 rounded-2xl bg-current opacity-5 glass" style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}>
+            <button
+              onClick={() => setTab('foods')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${tab === 'foods' ? 'shadow-sm translate-y-[-1px]' : ''}`}
+              style={{ 
+                background: tab === 'foods' ? (theme === 'dark' ? '#fbfcff' : '#010205') : 'transparent',
+                color: tab === 'foods' ? (theme === 'dark' ? '#010205' : '#fbfcff') : secondaryText
+              }}
+            >
+              COMIDAS ({dayFoods.length})
+            </button>
+            <button
+              onClick={() => setTab('exercises')}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${tab === 'exercises' ? 'shadow-sm translate-y-[-1px]' : ''}`}
+              style={{ 
+                background: tab === 'exercises' ? (theme === 'dark' ? '#fbfcff' : '#010205') : 'transparent',
+                color: tab === 'exercises' ? (theme === 'dark' ? '#010205' : '#fbfcff') : secondaryText
+              }}
+            >
+              EJERCICIOS ({dayExercises.length})
+            </button>
+          </div>
 
-            <div className="mt-4">
-              {tab === 'foods' ? (
-                <div className="flex flex-col gap-2">
-                  {dayFoods.length === 0 ? (
-                    <div className="py-10 text-center opacity-50">
-                      <span className="text-4xl block mb-2">🍽️</span>
-                      <PText size="small" theme={theme}>Sin registros</PText>
-                    </div>
-                  ) : (
-                    dayFoods.map(food => <FoodCard key={food.id} entry={food} theme={theme} />)
-                  )}
+          {/* List */}
+          <div className="history-item flex flex-col gap-3">
+            {tab === 'foods' ? (
+              dayFoods.length === 0 ? (
+                <div className="py-12 text-center opacity-30">
+                  <span className="text-5xl block mb-3">🍽️</span>
+                  <PText weight="bold" theme={theme}>Sin registros para este día</PText>
                 </div>
               ) : (
-                <div className="flex flex-col gap-2">
-                  {dayExercises.length === 0 ? (
-                    <div className="py-10 text-center opacity-50">
-                      <span className="text-4xl block mb-2">🏃</span>
-                      <PText size="small" theme={theme}>Sin registros</PText>
-                    </div>
-                  ) : (
-                    dayExercises.map(ex => <ExerciseCard key={ex.id} entry={ex} theme={theme} />)
-                  )}
+                dayFoods.map(food => <FoodCard key={food.id} entry={food} theme={theme} />)
+              )
+            ) : (
+              dayExercises.length === 0 ? (
+                <div className="py-12 text-center opacity-30">
+                  <span className="text-5xl block mb-3">🏃</span>
+                  <PText weight="bold" theme={theme}>Sin actividad física</PText>
                 </div>
-              )}
-            </div>
+              ) : (
+                dayExercises.map(ex => <ExerciseCard key={ex.id} entry={ex} theme={theme} />)
+              )
+            )}
           </div>
         </>
       )}
     </div>
   );
 }
-

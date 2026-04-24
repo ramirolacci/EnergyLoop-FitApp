@@ -15,51 +15,79 @@
   100% { top: 100%; opacity: 0; }
 }
 
-html, body {
-  @apply antialiased transition-colors duration-300 m-0 p-0 overflow-x-hidden;
+:root {
+  --primary: #018a16;
+  --primary-glow: rgba(1, 138, 22, 0.2);
+  --danger: #e00000;
+  --warning: #ff6b00;
+  --info: #0076ff;
+  
+  /* Modern Dark Mode Palette */
+  --bg-dark: #0e0e12;
+  --surface-dark: #1a1a1e;
+  --surface-dark-brighter: #212225;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  
+  /* Modern Light Mode Palette */
+  --bg-light: #f8f9fc;
+  --surface-light: #ffffff;
+  --border-light: rgba(0, 0, 0, 0.06);
+}
+
+* {
   -webkit-tap-highlight-color: transparent;
-  min-height: 100dvh;
-  min-height: -webkit-fill-available;
+  outline: none !important;
 }
 
-#root {
-  min-height: 100dvh;
-  min-height: -webkit-fill-available;
-  display: flex;
-  flex-direction: column;
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+.glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-::-webkit-scrollbar-thumb {
-  @apply rounded-full;
-  background: #535457;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #3a3a3e;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .dash-header, .dash-stats-card, .dash-action, .dash-section, .dash-item {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(15px);
   will-change: transform, opacity;
 }
 
 @keyframes pulse-subtle {
   0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
 
 .animate-pulse-subtle {
-  animation: pulse-subtle 0.3s ease-out;
+  animation: pulse-subtle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.3);
 }
 
 /* Hide spin buttons in number inputs */
@@ -73,3 +101,10 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.card-shadow {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-shadow {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
