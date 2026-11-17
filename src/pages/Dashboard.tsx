@@ -351,7 +351,7 @@ export function Dashboard() {
           </div>
 
           <div className="p-5 rounded-3xl border border-current opacity-100" style={{ borderColor: borderColor }}>
-            <PHeading size="x-small" theme={theme} style={{ marginBottom: 4 }}>🎯 El Objetivo</PHeading>
+            <PHeading size="small" theme={theme} style={{ marginBottom: 4 }}>🎯 El Objetivo</PHeading>
             <PText size="small" theme={theme}>
               Tu meta es llegar a <b>0</b> al final del día. Si llegas a 0, habrás cumplido tu plan nutricional a la perfección.
             </PText>

@@ -82,7 +82,16 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
     setError('');
   }
 
-  function handleSelectFromLibrary(item: Record<string, unknown>) {
+  function handleSelectFromLibrary(item: {
+    name?: string;
+    calories_per_serving?: number;
+    protein_g?: number;
+    carbs_g?: number;
+    fat_g?: number;
+    sodium_mg?: number;
+    serving_size_g?: number;
+    servings_per_package?: number;
+  }) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const i = item as any; 
     setForm({

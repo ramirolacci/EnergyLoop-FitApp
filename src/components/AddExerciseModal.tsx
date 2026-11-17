@@ -46,9 +46,16 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
   const met = selected ? getMET(selected, intensity) : 0;
   const caloriesBurned = calcCaloriesBurned(met, weight, actualDuration);
 
-  function handleSelect(template: { name: string; category: ExerciseEntry['category']; icon: string; metLow: number; metMedium: number; metHigh: number }) {
-    const idx = filteredTemplates.findIndex(t => t.name === template.name);
-    setSelectedIdx(idx >= 0 ? idx : null);
+  function handleSelect(item: { name: string }) {
+    const idx = filteredTemplates.findIndex(t => t.name === item.name);
+    if (idx >= 0) {
+      setSelectedIdx(idx);
+    } else {
+      const foundIdx = EXERCISE_TEMPLATES.findIndex(t => t.name === item.name);
+      if (foundIdx >= 0) {
+        setSelectedIdx(foundIdx);
+      }
+    }
     setStep('details');
   }
 
