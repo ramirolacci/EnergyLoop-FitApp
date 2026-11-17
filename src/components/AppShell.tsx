@@ -111,3 +111,5 @@ export function AppShell({ children }: Props) {
     </div>
   );
 }
+
+export default AppShell;
