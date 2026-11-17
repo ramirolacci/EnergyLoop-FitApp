@@ -7,7 +7,8 @@
     <a href="#-acerca-de-energyloop">Acerca de</a> •
     <a href="#-características-principales">Características</a> •
     <a href="#-stack-tecnológico">Tecnología</a> •
-    <a href="#-pilares-de-experiencia">Experiencia</a>
+    <a href="#-pilares-de-experiencia">Experiencia</a> •
+    <a href="#-instalación-y-configuración">Instalación</a>
   </p>
 
   <div>
@@ -74,6 +75,75 @@ Permite a los usuarios tomar control total sobre sus objetivos metabólicos, reg
 * **Diseño Premium & Moderno:** Interfaz pulida con soporte nativo para **Modo Oscuro** y **Modo Claro**, cuidando cada detalle tipográfico y espacial.
 * **Feedback Háptico Visual:** Respuestas dinámicas ante cada interacción mediante componentes interactivos y animaciones fluidas.
 * **Precisión Biométrica:** Ajustes personalizados basados en TMB (Tasa Metabólica Basal) y nivel de actividad física del usuario.
+
+---
+
+## 🚀 Instalación y Configuración
+
+Sigue estos pasos para ejecutar el proyecto en tu entorno local:
+
+### 📋 Prerrequisitos
+
+* [Node.js](https://nodejs.org/) (versión 18.0 o superior recomendada)
+* [npm](https://www.npmjs.com/) (o gestor compatible como `pnpm` o `yarn`)
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/tu-usuario/EnergyLoop-FitApp.git
+cd EnergyLoop-FitApp
+```
+
+### 2. Instalar Dependencias
+
+```bash
+npm install
+```
+
+### 3. Configurar Variables de Entorno
+
+Copia el archivo de plantilla `.env.example` para crear tu `.env` local:
+
+```bash
+cp .env.example .env
+```
+*(En Windows PowerShell puedes usar `Copy-Item .env.example .env`)*
+
+Luego, abre el archivo `.env` y completa tus credenciales:
+
+```env
+# Conexión con Supabase
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-supabase-anon-key
+
+# API de Google Gemini (Visión y Reconocimiento de Alimentos con IA)
+VITE_GEMINI_API_KEY=tu-gemini-api-key
+```
+
+> **Nota:**
+> * Puedes obtener las credenciales de Supabase creando un proyecto en [Supabase](https://supabase.com).
+> * La clave de Google Gemini se obtiene en [Google AI Studio](https://aistudio.google.com/).
+
+### 4. Ejecutar la Aplicación
+
+Inicia el entorno de desarrollo local con Vite:
+
+```bash
+npm run dev
+```
+
+Abre tu navegador en la URL indicada en consola (usualmente `http://localhost:5173`).
+
+---
+
+### 📜 Scripts Disponibles
+
+| Comando | Descripción |
+| :--- | :--- |
+| `npm run dev` | Inicia el servidor de desarrollo en tiempo real. |
+| `npm run build` | Chequea tipos TypeScript y compila la app optimizada para producción. |
+| `npm run preview` | Previsualiza el build de producción en un servidor local. |
+| `npm run lint` | Ejecuta ESLint para verificar buenas prácticas y estilo de código. |
 
 ---
 
