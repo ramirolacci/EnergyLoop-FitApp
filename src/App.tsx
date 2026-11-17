@@ -1,10 +1,12 @@
 import { PSpinner } from '@porsche-design-system/components-react';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppProvider, useApp } from './context/AppContext';
 import { AppShell } from './components/AppShell';
 import { Dashboard } from './pages/Dashboard';
 import { History } from './pages/History';
 import { Settings } from './pages/Settings';
 import { SetupModal } from './components/SetupModal';
+import { AuthModal } from './components/AuthModal';
 
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
@@ -15,6 +17,7 @@ gsap.config({ nullTargetWarn: false });
 
 function AppContent() {
   const { activePage, loading, theme, profile } = useApp();
+  const { isAuthModalOpen, closeAuthModal } = useAuth();
   const pageRef = useRef<HTMLDivElement>(null);
   
   // Manage global SetupModal state
@@ -59,14 +62,22 @@ function AppContent() {
         open={shouldShowSetup} 
         onDismiss={() => setShowGlobalSetup(false)} 
       />
+
+      {/* Global Auth Modal */}
+      <AuthModal
+        open={isAuthModalOpen}
+        onDismiss={closeAuthModal}
+      />
     </AppShell>
   );
 }
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <AuthProvider>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </AuthProvider>
   );
 }

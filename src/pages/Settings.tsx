@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
 import { PHeading, PText, PButton, PSwitch, PDivider, PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   const { profile, updateProfile, toggleTheme, theme, toast } = useApp();
+  const { user, openAuthModal, signOut } = useAuth();
   const [calorieGoal, setCalorieGoal] = useState(String(profile?.daily_calorie_goal ?? 2000));
   const [proteinGoal, setProteinGoal] = useState(String(profile?.daily_protein_goal ?? ''));
   const [weight, setWeight] = useState(String(profile?.weight_kg ?? 70));
@@ -150,16 +152,55 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <PHeading size="small" theme={theme}>{profile?.name || 'Usuario'}</PHeading>
+                    <PHeading size="small" theme={theme}>{profile?.name || (user?.email?.split('@')[0] ?? 'Usuario')}</PHeading>
                     <button onClick={() => setIsEditingProfile(true)} className="text-[#018a16] text-sm opacity-70 hover:opacity-100">
                       ✏️
                     </button>
                   </div>
-                  <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>Miembro desde 2024</PText>
+                  <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>
+                    {user?.email || 'Modo local (Sin cuenta)'}
+                  </PText>
                 </div>
               </div>
             )}
           </div>
+        </div>
+
+        {/* Cloud Sync Status & Auth Action */}
+        <div 
+          className="pt-3 mt-1 border-t flex items-center justify-between"
+          style={{ borderColor: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }}
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-base">{user ? '☁️' : '💾'}</span>
+            <div>
+              <PText size="x-small" weight="bold" theme={theme}>
+                {user ? 'Sincronizado en Supabase' : 'Almacenamiento Local'}
+              </PText>
+              <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>
+                {user ? 'Tus datos se guardan en la nube' : 'Inicia sesión para respaldar tus datos'}
+              </PText>
+            </div>
+          </div>
+
+          {user ? (
+            <button
+              onClick={async () => {
+                await signOut();
+                toast('Sesión cerrada', 'info');
+              }}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-[#e00000] hover:bg-[#e0000015]"
+            >
+              Cerrar Sesión
+            </button>
+          ) : (
+            <button
+              onClick={openAuthModal}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#018a16] text-white shadow-md hover:bg-[#017012] transition-all"
+            >
+              Conectar Cuenta
+            </button>
+          )}
         </div>
       </div>
 

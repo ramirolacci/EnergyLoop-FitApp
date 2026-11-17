@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from 'react';
 import { PHeading, PText, PDivider, PButtonPure, PModal, PButton, PIcon } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { CalorieRing } from '../components/CalorieRing';
 import { FoodCard } from '../components/FoodCard';
 import { ExerciseCard } from '../components/ExerciseCard';
@@ -15,6 +16,7 @@ import { useGSAP } from '@gsap/react';
 
 export function Dashboard() {
   const { profile, todayFoods, todayExercises, theme, refreshCount } = useApp();
+  const { user, openAuthModal } = useAuth();
   const [modal, setModal] = useState<'none' | 'addFood' | 'scan' | 'addExercise' | 'setup'>('none');
   const [showAllFood, setShowAllFood] = useState(false);
   const [showAllExercise, setShowAllExercise] = useState(false);
@@ -73,15 +75,29 @@ export function Dashboard() {
           <PHeading size="large" theme={theme} style={{ fontWeight: 900 }}>
             {hour < 12 ? 'Buenos días' : hour < 20 ? 'Buenas tardes' : 'Buenas noches'}, {profile?.name ? profile.name.split(' ')[0] : 'Campeón'} ⚡
           </PHeading>
-          <PText size="small" theme={theme} style={{ color: secondaryText }}>Hoy es un buen día para entrenar</PText>
+          <div className="flex items-center gap-2 mt-0.5">
+            <PText size="small" theme={theme} style={{ color: secondaryText }}>Hoy es un buen día para entrenar</PText>
+            {!user && (
+              <button
+                onClick={openAuthModal}
+                className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#018a16]/15 text-[#018a16] border border-[#018a16]/30 hover:bg-[#018a16]/25 transition-all"
+              >
+                Conectar ☁️
+              </button>
+            )}
+          </div>
         </div>
-        <div className="h-12 w-12 rounded-2xl bg-[#018a16] flex items-center justify-center text-2xl shadow-lg shadow-[#018a1644] overflow-hidden">
+        <button 
+          onClick={!user ? openAuthModal : undefined}
+          title={!user ? 'Conectar cuenta en la nube' : profile?.name || 'Perfil'}
+          className="h-12 w-12 rounded-2xl bg-[#018a16] flex items-center justify-center text-2xl shadow-lg shadow-[#018a1644] overflow-hidden transition-transform hover:scale-105 active:scale-95"
+        >
           {profile?.avatar ? (
             <img src={profile.avatar} alt="Avatar" className="w-full h-full object-cover" />
           ) : (
-            <span>🥗</span>
+            <span>{user ? '👤' : '🥗'}</span>
           )}
-        </div>
+        </button>
       </header>
 
       {/* Main Stats Card */}

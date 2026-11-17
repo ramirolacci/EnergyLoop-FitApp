@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { FoodEntry, ExerciseEntry, UserProfile, ActivePage } from '../lib/types';
 import { getDateString } from '../lib/calculations';
 import { storage } from '../lib/storage';
+import { useAuth } from './AuthContext';
 
 interface AppState {
   profile: UserProfile | null;
@@ -30,6 +31,7 @@ interface AppState {
 const AppContext = createContext<AppState | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [todayFoods, setTodayFoods] = useState<FoodEntry[]>([]);
   const [todayExercises, setTodayExercises] = useState<ExerciseEntry[]>([]);
@@ -38,7 +40,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toastRef = useRef<any>(null);
-
   const [refreshCount, setRefreshCount] = useState(0);
 
   const refreshToday = useCallback(async () => {
@@ -52,28 +53,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const init = useCallback(async () => {
     setLoading(true);
-    const p = storage.getProfile();
-    setProfile(p);
-    setTheme(p.theme);
+    let currentProfile = storage.getProfile();
+
+    if (user?.id) {
+      currentProfile = await storage.syncAllFromCloud(user.id);
+    }
+
+    setProfile(currentProfile);
+    setTheme(currentProfile.theme || 'dark');
     await refreshToday();
     setLoading(false);
-  }, [refreshToday]);
+  }, [user?.id, refreshToday]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     void init();
   }, [init]);
 
   useEffect(() => {
     try {
       document.documentElement.className = theme;
+      localStorage.setItem('pds-theme', theme);
     } catch {
       // ignore
     }
   }, [theme]);
 
   async function updateProfile(data: Partial<UserProfile>) {
-    const updated = storage.updateProfile(data);
+    const updated = await storage.updateProfile(data, user?.id);
     setProfile(updated);
     if (data.theme) {
       setTheme(data.theme);
@@ -86,39 +92,39 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   async function addFoodEntry(entry: Omit<FoodEntry, 'id' | 'created_at'>) {
-    const newEntry = storage.addFood(entry);
+    const newEntry = await storage.addFood(entry, user?.id);
     setTodayFoods(prev => [newEntry, ...prev]);
     setRefreshCount(prev => prev + 1);
     toast('Comida registrada');
   }
 
   async function updateFoodEntry(id: string, data: Partial<FoodEntry>) {
-    storage.updateFood(id, data);
+    await storage.updateFood(id, data, user?.id);
     await refreshToday();
     toast('Comida actualizada');
   }
 
   async function deleteFoodEntry(id: string) {
-    storage.deleteFood(id);
+    await storage.deleteFood(id, user?.id);
     await refreshToday();
     toast('Comida eliminada', 'info');
   }
 
   async function addExerciseEntry(entry: Omit<ExerciseEntry, 'id' | 'created_at'>) {
-    const newEntry = storage.addExercise(entry);
+    const newEntry = await storage.addExercise(entry, user?.id);
     setTodayExercises(prev => [newEntry, ...prev]);
     setRefreshCount(prev => prev + 1);
     toast('Ejercicio registrado');
   }
 
   async function updateExerciseEntry(id: string, data: Partial<ExerciseEntry>) {
-    storage.updateExercise(id, data);
+    await storage.updateExercise(id, data, user?.id);
     await refreshToday();
     toast('Ejercicio actualizado');
   }
 
   async function deleteExerciseEntry(id: string) {
-    storage.deleteExercise(id);
+    await storage.deleteExercise(id, user?.id);
     await refreshToday();
     toast('Ejercicio eliminado', 'info');
   }
@@ -146,4 +152,3 @@ export function useApp(): AppState {
   if (!ctx) throw new Error('useApp must be used inside AppProvider');
   return ctx;
 }
-
