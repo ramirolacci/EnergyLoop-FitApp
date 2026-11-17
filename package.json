@@ -1,7 +1,8 @@
 {
-  "name": "template",
+  "name": "energyloop-fitapp",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "packageManager": "pnpm@11.1.3",
   "type": "module",
   "scripts": {
     "dev": "vite",

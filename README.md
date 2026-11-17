@@ -85,7 +85,7 @@ Sigue estos pasos para ejecutar el proyecto en tu entorno local:
 ### 📋 Prerrequisitos
 
 * [Node.js](https://nodejs.org/) (versión 18.0 o superior recomendada)
-* [npm](https://www.npmjs.com/) (o gestor compatible como `pnpm` o `yarn`)
+* [pnpm](https://pnpm.io/) (`npm install -g pnpm`)
 
 ### 1. Clonar el Repositorio
 
@@ -97,7 +97,7 @@ cd EnergyLoop-FitApp
 ### 2. Instalar Dependencias
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 3. Configurar Variables de Entorno
@@ -114,7 +114,7 @@ Luego, abre el archivo `.env` y completa tus credenciales:
 ```env
 # Conexión con Supabase
 VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-VITE_SUPABASE_ANON_KEY=tu-supabase-anon-key
+VITE_SUPABASE_PUBLISHABLE_KEY=tu-supabase-publishable-key
 
 # API de Google Gemini (Visión y Reconocimiento de Alimentos con IA)
 VITE_GEMINI_API_KEY=tu-gemini-api-key
@@ -129,7 +129,7 @@ VITE_GEMINI_API_KEY=tu-gemini-api-key
 Inicia el entorno de desarrollo local con Vite:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Abre tu navegador en la URL indicada en consola (usualmente `http://localhost:5173`).
@@ -140,10 +140,10 @@ Abre tu navegador en la URL indicada en consola (usualmente `http://localhost:51
 
 | Comando | Descripción |
 | :--- | :--- |
-| `npm run dev` | Inicia el servidor de desarrollo en tiempo real. |
-| `npm run build` | Chequea tipos TypeScript y compila la app optimizada para producción. |
-| `npm run preview` | Previsualiza el build de producción en un servidor local. |
-| `npm run lint` | Ejecuta ESLint para verificar buenas prácticas y estilo de código. |
+| `pnpm dev` | Inicia el servidor de desarrollo en tiempo real. |
+| `pnpm build` | Chequea tipos TypeScript y compila la app optimizada para producción. |
+| `pnpm preview` | Previsualiza el build de producción en un servidor local. |
+| `pnpm lint` | Ejecuta ESLint para verificar buenas prácticas y estilo de código. |
 
 ---
 
