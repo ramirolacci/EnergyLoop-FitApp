@@ -1,4 +1,3 @@
-import { PText } from '@porsche-design-system/components-react';
 import type { DayStats } from '../lib/types';
 import { formatDateLabel } from '../lib/calculations';
 
@@ -9,23 +8,22 @@ interface Props {
 }
 
 export function WeeklyChart({ days, goal, theme }: Props) {
-  const chartH = 120;
+  const chartH = 110;
   const chartW = 100;
-  const barW = 10;
+  const barW = 8;
   const gap = (chartW - days.length * barW) / (days.length + 1);
-  const maxVal = Math.max(goal * 1.2, ...days.map(d => d.calories_consumed), 100);
+  const maxVal = Math.max(goal * 1.25, ...days.map(d => d.calories_consumed), 100);
 
-  const textColor = theme === 'dark' ? '#afb0b3' : '#535457';
-  const goalLineColor = theme === 'dark' ? '#535457' : '#afb0b3';
-  const consumedColor = theme === 'dark' ? '#fbfcff' : '#010205';
-  const burnedColor = '#018a16';
+  const goalLineColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)';
+  const barConsumedColor = theme === 'dark' ? '#34d399' : '#10b981';
+  const barOverGoalColor = '#f87171'; // Pastel Red
 
   const goalY = chartH - (goal / maxVal) * chartH;
 
   return (
     <div className="w-full overflow-hidden">
       <svg
-        viewBox={`0 0 ${chartW} ${chartH + 20}`}
+        viewBox={`0 0 ${chartW} ${chartH + 24}`}
         preserveAspectRatio="xMidYMid meet"
         style={{ width: '100%', overflow: 'visible' }}
       >
@@ -36,72 +34,56 @@ export function WeeklyChart({ days, goal, theme }: Props) {
           x2={chartW}
           y2={goalY}
           stroke={goalLineColor}
-          strokeWidth="0.5"
+          strokeWidth="0.8"
           strokeDasharray="2 2"
         />
 
         {days.map((day, i) => {
           const x = gap + i * (barW + gap);
-          const consumedH = Math.max((day.calories_consumed / maxVal) * chartH, 1);
-          const burnedH = Math.max((day.calories_burned / maxVal) * chartH, 0.5);
+          const consumedH = Math.max((day.calories_consumed / maxVal) * chartH, 2);
           const isToday = i === days.length - 1;
           const overGoal = day.calories_consumed > goal;
 
           return (
             <g key={day.date}>
-              {/* Consumed bar */}
+              {/* Background Track Bar */}
+              <rect
+                x={x}
+                y={0}
+                width={barW}
+                height={chartH}
+                rx={barW / 2}
+                fill={theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f1f5f3'}
+              />
+
+              {/* Consumed Bar */}
               <rect
                 x={x}
                 y={chartH - consumedH}
                 width={barW}
                 height={consumedH}
-                rx="2"
-                fill={overGoal ? '#e00000' : consumedColor}
-                opacity={isToday ? 1 : 0.5}
+                rx={barW / 2}
+                fill={overGoal ? barOverGoalColor : barConsumedColor}
+                opacity={isToday ? 1 : 0.65}
               />
-              {/* Burned bar (overlay, smaller width) */}
-              {day.calories_burned > 0 && (
-                <rect
-                  x={x + barW / 2 - 2}
-                  y={chartH - burnedH}
-                  width={4}
-                  height={burnedH}
-                  rx="1"
-                  fill={burnedColor}
-                  opacity={isToday ? 0.9 : 0.5}
-                />
-              )}
-              {/* Day label */}
+
+              {/* Day Label */}
               <text
                 x={x + barW / 2}
-                y={chartH + 12}
+                y={chartH + 16}
                 textAnchor="middle"
-                fontSize="5"
-                fill={isToday ? (theme === 'dark' ? '#fbfcff' : '#010205') : textColor}
-                fontWeight={isToday ? 'bold' : 'normal'}
+                fontSize="4"
+                fontWeight={isToday ? '800' : '500'}
+                fill={isToday 
+                  ? (theme === 'dark' ? '#34d399' : '#047857') 
+                  : (theme === 'dark' ? '#94a3b8' : '#64748b')}
               >
-                {formatDateLabel(day.date).split(' ')[0]}
+                {formatDateLabel(day.date).split(' ')[0].toUpperCase()}
               </text>
             </g>
           );
         })}
       </svg>
-
-      {/* Legend */}
-      <div className="flex items-center gap-4 mt-2 justify-center">
-        <div className="flex items-center gap-1">
-          <span className="inline-block rounded" style={{ width: 10, height: 6, background: consumedColor, opacity: 0.7 }} />
-          <PText size="xx-small" theme={theme} style={{ color: textColor }}>Consumidas</PText>
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="inline-block rounded" style={{ width: 10, height: 6, background: burnedColor, opacity: 0.7 }} />
-          <PText size="xx-small" theme={theme} style={{ color: textColor }}>Quemadas</PText>
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="inline-block" style={{ width: 10, height: 1, background: goalLineColor, borderTop: `1px dashed ${goalLineColor}` }} />
-          <PText size="xx-small" theme={theme} style={{ color: textColor }}>Objetivo</PText>
-        </div>
-      </div>
     </div>
   );
 }

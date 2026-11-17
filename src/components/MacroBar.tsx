@@ -1,4 +1,3 @@
-import { PText } from '@porsche-design-system/components-react';
 import { formatNumber } from '../lib/calculations';
 
 interface MacroBarItemProps {
@@ -6,37 +5,56 @@ interface MacroBarItemProps {
   current: number;
   goal?: number;
   unit: string;
-  color: string;
+  barColor: string;
+  bgColor: string;
+  textColor: string;
+  icon: string;
   theme: 'light' | 'dark';
 }
 
-function MacroBarItem({ label, current, goal, unit, color, theme }: MacroBarItemProps) {
+function MacroBarItem({ label, current, goal, unit, barColor, bgColor, textColor, icon, theme }: MacroBarItemProps) {
   const pct = goal ? Math.min((current / goal) * 100, 100) : 0;
-  const trackColor = theme === 'dark' ? '#2a2a2e' : '#eeeff2';
+  const trackColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex justify-between items-center">
-        <PText size="x-small" weight="semi-bold" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-          {label}
-        </PText>
-        <PText size="x-small" theme={theme}>
-          {formatNumber(current, 1)}{unit}{goal ? ` / ${formatNumber(goal, 0)}${unit}` : ''}
-        </PText>
+    <div 
+      className="flex-1 p-3 rounded-2xl flex flex-col gap-2 transition-all"
+      style={{ 
+        background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : bgColor,
+        border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'transparent'}`
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm">{icon}</span>
+          <span className="text-[11px] font-bold" style={{ color: theme === 'dark' ? '#94a3b8' : textColor }}>
+            {label}
+          </span>
+        </div>
+        <span className="text-[11px] font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+          {formatNumber(current, 0)}{unit}
+        </span>
       </div>
+
       <div
-        className="rounded-full overflow-hidden"
+        className="w-full rounded-full overflow-hidden"
         style={{ height: 6, background: trackColor }}
       >
         <div
           className="h-full rounded-full"
           style={{
             width: `${pct}%`,
-            background: color,
-            transition: 'width 0.6s cubic-bezier(.25,.1,.25,1)',
+            background: barColor,
+            transition: 'width 0.8s cubic-bezier(.34, 1.56, 0.64, 1)',
           }}
         />
       </div>
+
+      {goal && (
+        <span className="text-[9px] font-medium text-right opacity-60" style={{ color: theme === 'dark' ? '#94a3b8' : textColor }}>
+          de {goal}{unit}
+        </span>
+      )}
     </div>
   );
 }
@@ -50,61 +68,46 @@ interface Props {
 }
 
 export function MacroBar({ protein, carbs, fat, proteinGoal, theme }: Props) {
-  const total = protein * 4 + carbs * 4 + fat * 9;
-
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-2 justify-between">
-        {[
-          { label: 'Proteína', value: protein, color: '#ff6b00', kcal: protein * 4 },
-          { label: 'Carbos', value: carbs, color: '#0076ff', kcal: carbs * 4 },
-          { label: 'Grasa', value: fat, color: '#ffca28', kcal: fat * 9 },
-        ].map(({ label, value, color, kcal }) => {
-          const pct = total > 0 ? Math.round((kcal / total) * 100) : 0;
-          return (
-            <div key={label} className="flex-1 flex flex-col items-center gap-1">
-              <div
-                className="w-2 h-2 rounded-full"
-                style={{ background: color }}
-              />
-              <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                {label}
-              </PText>
-              <PText size="x-small" weight="semi-bold" theme={theme}>
-                {formatNumber(value, 1)}g
-              </PText>
-              <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                {pct}%
-              </PText>
-            </div>
-          );
-        })}
-      </div>
+    <div className="flex gap-2 w-full">
+      {/* Proteína - Pastel Coral */}
+      <MacroBarItem
+        label="Proteína"
+        current={protein}
+        goal={proteinGoal ?? 150}
+        unit="g"
+        icon="🥩"
+        barColor="#ff8596"
+        bgColor="#fff1f2"
+        textColor="#be123c"
+        theme={theme}
+      />
 
-      <div className="flex flex-col gap-2">
-        <MacroBarItem
-          label="Proteína"
-          current={protein}
-          goal={proteinGoal}
-          unit="g"
-          color="#ff6b00"
-          theme={theme}
-        />
-        <MacroBarItem
-          label="Carbohidratos"
-          current={carbs}
-          unit="g"
-          color="#0076ff"
-          theme={theme}
-        />
-        <MacroBarItem
-          label="Grasa"
-          current={fat}
-          unit="g"
-          color="#ffca28"
-          theme={theme}
-        />
-      </div>
+      {/* Carbos - Pastel Trigo / Miel */}
+      <MacroBarItem
+        label="Carbos"
+        current={carbs}
+        goal={250}
+        unit="g"
+        icon="🥖"
+        barColor="#fbbf24"
+        bgColor="#fefce8"
+        textColor="#b45309"
+        theme={theme}
+      />
+
+      {/* Grasas - Pastel Lavanda / Cielo */}
+      <MacroBarItem
+        label="Grasas"
+        current={fat}
+        goal={65}
+        unit="g"
+        icon="🥑"
+        barColor="#818cf8"
+        bgColor="#eff6ff"
+        textColor="#1d4ed8"
+        theme={theme}
+      />
     </div>
   );
 }

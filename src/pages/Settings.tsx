@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { PHeading, PText, PButton, PSwitch, PDivider, PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
+import { PButton, PSwitch, PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
@@ -22,13 +22,12 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   useGSAP(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.settings-item', 
-        { opacity: 0, x: -10 }, 
-        { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out' }
+        { opacity: 0, y: 15 }, 
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
       );
     }, containerRef);
     return () => ctx.revert();
   }, { scope: containerRef });
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -70,18 +69,17 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
     setSaving(false);
   }
 
-  const surfaceColor = theme === 'dark' ? 'var(--surface-dark)' : 'var(--surface-light)';
-  const borderColor = theme === 'dark' ? 'var(--border-dark)' : 'var(--border-light)';
-  const secondaryText = theme === 'dark' ? '#afb0b3' : '#535457';
+  const surfaceColor = theme === 'dark' ? '#171922' : '#ffffff';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
+  const secondaryText = theme === 'dark' ? '#94a3b8' : '#64748b';
   
-  const inputCls = `w-full rounded-2xl px-4 py-3 text-sm outline-none transition-all duration-300 ${
+  const inputCls = `w-full rounded-2xl px-4 py-3 text-sm font-semibold outline-none transition-all duration-200 ${
     theme === 'dark'
-      ? 'bg-[#0e0e12] border border-[#2a2a2e] text-[#fbfcff] focus:border-[#018a16] focus:ring-1 focus:ring-[#018a16]'
-      : 'bg-[#fdfaf6] border border-[#d8d8db] text-[#010205] focus:border-[#018a16] focus:ring-1 focus:ring-[#018a16]'
+      ? 'bg-[#1f222e] border border-white/10 text-slate-100 focus:border-emerald-400'
+      : 'bg-[#f8faf9] border border-black/5 text-slate-900 focus:border-emerald-500'
   }`;
   
-  const labelCls = `text-[10px] font-black uppercase tracking-widest mb-2 block ${theme === 'dark' ? 'text-[#afb0b3]' : 'text-[#535457]'}`;
-
+  const labelCls = `text-[10px] font-bold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`;
   const CALORIE_PRESETS = [1500, 1800, 2000, 2200, 2500, 3000];
 
   const formatThousands = (val: string) => {
@@ -90,12 +88,35 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-8 pb-24">
-      <header className="settings-item flex items-center justify-between mt-2">
+    <div ref={containerRef} className="flex flex-col gap-6 pb-24">
+      {/* Header */}
+      <header className="settings-item flex items-center justify-between pt-1">
         <div>
-          <PHeading size="large" theme={theme} style={{ fontWeight: 900 }}>Ajustes ⚙️</PHeading>
-          <PText size="small" theme={theme} style={{ color: secondaryText }}>Personaliza tu experiencia</PText>
+          <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+            Preferencias & Cuenta
+          </span>
+          <h1 
+            className="text-2xl font-black tracking-tight"
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
+          >
+            Ajustes ⚙️
+          </h1>
         </div>
+
+        {/* Quick Dark Mode Button */}
+        <button
+          onClick={toggleTheme}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
+          style={{
+            background: surfaceColor,
+            border: `1px solid ${borderColor}`,
+            color: theme === 'dark' ? '#fde047' : '#f59e0b',
+          }}
+          title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
+          aria-label="Cambiar tema"
+        >
+          <span className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</span>
+        </button>
       </header>
 
       {success && (
@@ -110,12 +131,15 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       )}
 
-      {/* User Header Section */}
-      <div className="settings-item p-6 rounded-[2.5rem] card-shadow flex flex-col gap-4" style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}>
-        <div className="flex items-center gap-5">
+      {/* User & Cloud Account Section */}
+      <div 
+        className="settings-item p-5 rounded-3xl mobile-card-shadow flex flex-col gap-4" 
+        style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
+      >
+        <div className="flex items-center gap-4">
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="w-20 h-20 rounded-[1.5rem] bg-[#018a16] flex items-center justify-center text-4xl shadow-lg shadow-[#018a1644] overflow-hidden relative group transition-transform hover:scale-105 active:scale-95"
+            className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center text-3xl shadow-sm overflow-hidden relative group transition-transform active:scale-95"
           >
             {avatar ? (
               <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -123,7 +147,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
               <span>👤</span>
             )}
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white text-xl">📸</span>
+              <span className="text-white text-base">📸</span>
             </div>
           </button>
           <input 
@@ -134,33 +158,37 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             className="hidden" 
           />
           
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {isEditingProfile ? (
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="bg-transparent border-b border-[#018a16] text-xl font-black outline-none w-full pb-1"
-                  style={{ color: theme === 'dark' ? '#fbfcff' : '#010205' }}
+                  className="bg-transparent border-b-2 border-emerald-500 text-lg font-black outline-none w-full pb-0.5"
+                  style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
                   autoFocus
                   onBlur={handleNameSave}
                   onKeyDown={e => e.key === 'Enter' && handleNameSave()}
                 />
               </div>
             ) : (
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <PHeading size="small" theme={theme}>{profile?.name || (user?.email?.split('@')[0] ?? 'Usuario')}</PHeading>
-                    <button onClick={() => setIsEditingProfile(true)} className="text-[#018a16] text-sm opacity-70 hover:opacity-100">
-                      ✏️
-                    </button>
-                  </div>
-                  <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>
-                    {user?.email || 'Modo local (Sin cuenta)'}
-                  </PText>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-base font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
+                    {profile?.name || (user?.email?.split('@')[0] ?? 'Usuario')}
+                  </h2>
+                  <button 
+                    onClick={() => setIsEditingProfile(true)} 
+                    className="text-emerald-600 dark:text-emerald-400 text-xs hover:scale-110 transition-transform"
+                    title="Editar nombre"
+                  >
+                    ✏️
+                  </button>
                 </div>
+                <span className="text-xs truncate block mt-0.5" style={{ color: secondaryText }}>
+                  {user?.email || 'Modo local (Sin cuenta)'}
+                </span>
               </div>
             )}
           </div>
@@ -168,18 +196,27 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
 
         {/* Cloud Sync Status & Auth Action */}
         <div 
-          className="pt-3 mt-1 border-t flex items-center justify-between"
-          style={{ borderColor: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }}
+          className="pt-3 border-t flex items-center justify-between"
+          style={{ borderColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)' }}
         >
           <div className="flex items-center gap-2">
-            <span className="text-base">{user ? '☁️' : '💾'}</span>
+            <div 
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+              style={{
+                background: user 
+                  ? (theme === 'dark' ? 'rgba(52, 211, 153, 0.15)' : '#ecfdf5')
+                  : (theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9'),
+              }}
+            >
+              {user ? '☁️' : '💾'}
+            </div>
             <div>
-              <PText size="x-small" weight="bold" theme={theme}>
+              <div className="text-xs font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
                 {user ? 'Sincronizado en Supabase' : 'Almacenamiento Local'}
-              </PText>
-              <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>
-                {user ? 'Tus datos se guardan en la nube' : 'Inicia sesión para respaldar tus datos'}
-              </PText>
+              </div>
+              <div className="text-[10px]" style={{ color: secondaryText }}>
+                {user ? 'Datos respaldados en la nube' : 'Inicia sesión para respaldar'}
+              </div>
             </div>
           </div>
 
@@ -189,31 +226,39 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                 await signOut();
                 toast('Sesión cerrada', 'info');
               }}
-              className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-[#e00000] hover:bg-[#e0000015]"
+              className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30"
             >
-              Cerrar Sesión
+              Cerrar
             </button>
           ) : (
             <button
               onClick={openAuthModal}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#018a16] text-white shadow-md hover:bg-[#017012] transition-all"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white shadow-xs transition-all active:scale-95"
             >
-              Conectar Cuenta
+              Conectar
             </button>
           )}
         </div>
       </div>
 
       {/* Goals section */}
-      <section className="settings-item flex flex-col gap-6">
-        <div className="flex items-center justify-between px-2">
-           <PHeading size="small" theme={theme} style={{ textTransform: 'uppercase', letterSpacing: '0.1em' }}>Mis Objetivos</PHeading>
-           <PButtonPure icon="configurate" theme={theme} size="small" onClick={() => onOpenSetup?.()}>Asistente</PButtonPure>
+      <section className="settings-item flex flex-col gap-3">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+            Metas Nutricionales
+          </span>
+          <PButtonPure icon="configurate" theme={theme} size="small" onClick={() => onOpenSetup?.()}>
+            Asistente TMB
+          </PButtonPure>
         </div>
 
-        <div className="p-6 rounded-[2.5rem] card-shadow flex flex-col gap-6" style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}>
+        <div 
+          className="p-5 rounded-3xl mobile-card-shadow flex flex-col gap-4" 
+          style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
+        >
+          {/* Calorie goal */}
           <div>
-            <label htmlFor="calorie-goal" className={labelCls}>Meta de Calorías (kcal)</label>
+            <label htmlFor="calorie-goal" className={labelCls}>Presupuesto Diario de Calorías (kcal)</label>
             <input
               id="calorie-goal"
               className={inputCls}
@@ -225,16 +270,17 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                 setCalorieGoal(raw);
               }}
             />
-            <div className="flex gap-2 mt-3 flex-wrap">
+            <div className="flex gap-1.5 mt-2.5 flex-wrap">
               {CALORIE_PRESETS.map(p => (
                 <button
                   key={p}
                   onClick={() => setCalorieGoal(String(p))}
-                  className="px-4 py-1.5 rounded-full text-[10px] font-bold transition-all hover:scale-105 active:scale-95"
+                  className="px-3 py-1 rounded-xl text-[11px] font-bold transition-all active:scale-95"
                   style={{
-                    background: calorieGoal === String(p) ? '#018a16' : 'transparent',
-                    color: calorieGoal === String(p) ? '#fff' : secondaryText,
-                    border: `1px solid ${calorieGoal === String(p) ? '#018a16' : borderColor}`,
+                    background: calorieGoal === String(p) 
+                      ? '#10b981' 
+                      : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#f1f5f3'),
+                    color: calorieGoal === String(p) ? '#ffffff' : secondaryText,
                   }}
                 >
                   {formatThousands(String(p))}
@@ -243,6 +289,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             </div>
           </div>
 
+          {/* Protein goal */}
           <div>
             <label htmlFor="protein-goal" className={labelCls}>Meta de Proteína (g)</label>
             <input
@@ -259,8 +306,9 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             />
           </div>
 
+          {/* Weight */}
           <div>
-            <label htmlFor="body-weight" className={labelCls}>Peso Actual (kg)</label>
+            <label htmlFor="body-weight" className={labelCls}>Peso Corporal (kg)</label>
             <input
               id="body-weight"
               className={inputCls}
@@ -271,14 +319,14 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             />
           </div>
 
-          <div style={{ borderRadius: '9999px', overflow: 'hidden', height: '3.5rem', width: '100%', transform: 'translateZ(0)' }}>
+          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)', marginTop: 8 }}>
             <PButton
               variant="primary"
               onClick={handleSave}
               loading={saving}
               icon="check"
               theme={theme}
-              style={{ width: '100%', height: '100%', margin: 0, padding: 0 }}
+              style={{ width: '100%', margin: 0 }}
             >
               Guardar Cambios
             </PButton>
@@ -286,21 +334,30 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       </section>
 
-      {/* Appearance */}
-      <section className="settings-item flex flex-col gap-4">
-        <PHeading size="small" theme={theme} style={{ textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: 8 }}>Preferencias</PHeading>
+      {/* Preferences Section: Dark Mode Option */}
+      <section className="settings-item flex flex-col gap-3">
+        <span className="text-xs font-bold uppercase tracking-wider opacity-60 px-1" style={{ color: secondaryText }}>
+          Apariencia & Tema
+        </span>
         
         <div 
-          className="p-6 rounded-[2rem] card-shadow flex items-center justify-between"
+          className="p-5 rounded-3xl mobile-card-shadow flex items-center justify-between"
           style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
         >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-current opacity-5 flex items-center justify-center text-xl">
-              🌙
+          <div className="flex items-center gap-3.5">
+            <div 
+              className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl"
+              style={{ background: theme === 'dark' ? '#202330' : '#f0fdf4' }}
+            >
+              {theme === 'dark' ? '🌙' : '☀️'}
             </div>
             <div>
-              <PText weight="bold" theme={theme}>Modo Oscuro</PText>
-              <PText size="xx-small" theme={theme} style={{ color: secondaryText }}>Cambiar tema visual</PText>
+              <div className="text-sm font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
+                Modo Oscuro
+              </div>
+              <div className="text-[11px]" style={{ color: secondaryText }}>
+                {theme === 'dark' ? 'Activado (Fondo carbón)' : 'Desactivado (Gama clara pastel)'}
+              </div>
             </div>
           </div>
           <PSwitch
@@ -313,28 +370,31 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       </section>
 
-      {/* Info Section */}
+      {/* Info Card */}
       <section className="settings-item">
         <div
-          className="rounded-[2.5rem] p-8 flex flex-col gap-6 shadow-xl"
-          style={{ background: 'linear-gradient(135deg, #1a1a1e 0%, #0e0e12 100%)', border: '1px solid rgba(255,255,255,0.05)' }}
+          className="rounded-3xl p-5 flex flex-col gap-3 mobile-card-shadow"
+          style={{ 
+            background: theme === 'dark' 
+              ? 'rgba(52, 211, 153, 0.06)' 
+              : '#ecfdf5',
+            border: `1px solid ${theme === 'dark' ? 'rgba(52, 211, 153, 0.15)' : '#d1fae5'}`
+          }}
         >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#018a16]/20 border border-[#018a16]/30 flex items-center justify-center text-2xl">
-              🧬
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🧬</span>
             <div>
-              <PText size="xx-small" weight="bold" theme="dark" style={{ color: '#018a16', letterSpacing: '0.1em' }}>PRECISIÓN CIENTÍFICA</PText>
-              <PHeading size="small" theme="dark">Metodología METs</PHeading>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                Fórmula METs Estándar
+              </span>
+              <h3 className="text-sm font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#065f46' }}>
+                Precisión Metabólica
+              </h3>
             </div>
           </div>
-          <PText size="small" theme="dark" style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
-            Tus calorías quemadas se calculan bajo el estándar de oro de la medicina deportiva, ajustado a tus <span className="text-white font-bold">{weight}kg</span>.
-          </PText>
-          <PDivider theme="dark" />
-          <PText size="xx-small" theme="dark" style={{ color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>
-            FitApp Premium v1.5 · Hecho para tu salud
-          </PText>
+          <p className="text-xs leading-relaxed" style={{ color: theme === 'dark' ? '#cbd5e1' : '#047857' }}>
+            Las calorías quemadas se calculan ajustadas a tu peso de <span className="font-bold">{weight}kg</span> mediante el compendio de actividades físicas de Stanford.
+          </p>
         </div>
       </section>
     </div>

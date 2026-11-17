@@ -3,7 +3,7 @@
 
 @layer components {
   .scan-line {
-    @apply absolute w-full h-[2px] bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)] z-10;
+    @apply absolute w-full h-[2px] bg-[#34d399] shadow-[0_0_12px_rgba(52,211,153,0.8)] z-10;
     animation: scan 2s linear infinite;
   }
 }
@@ -16,39 +16,71 @@
 }
 
 :root {
-  --primary: #018a16;
-  --primary-glow: rgba(1, 138, 22, 0.2);
-  --danger: #e00000;
-  --warning: #ff6b00;
-  --info: #0076ff;
-  
-  /* Modern Dark Mode Palette */
-  --bg-dark: #0e0e12;
-  --surface-dark: #1a1a1e;
-  --surface-dark-brighter: #212225;
-  --border-dark: rgba(255, 255, 255, 0.08);
-  
-  /* Modern Light Mode Palette (Warm / Organic) */
-  --bg-light: #f4efe6;
-  --surface-light: #fcfbf8;
-  --border-light: rgba(139, 115, 85, 0.25);
+  /* Pastel & Modern Mobile Brand Colors */
+  --primary-pastel: #34d399;
+  --primary-pastel-deep: #10b981;
+  --primary-pastel-light: #ecfdf5;
+  --primary-pastel-text: #065f46;
+
+  /* Pastel Nutrients */
+  --protein-pastel: #ff8596;
+  --protein-pastel-bg: #fff1f2;
+  --protein-pastel-text: #e11d48;
+
+  --carbs-pastel: #fbbf24;
+  --carbs-pastel-bg: #fefce8;
+  --carbs-pastel-text: #b45309;
+
+  --fat-pastel: #818cf8;
+  --fat-pastel-bg: #eff6ff;
+  --fat-pastel-text: #2563eb;
+
+  --burn-pastel: #fb923c;
+  --burn-pastel-bg: #fff7ed;
+  --burn-pastel-text: #c2410c;
+
+  /* Clean Light Pastel Palette (Default) */
+  --bg-light: #f6f8f7;
+  --surface-light: #ffffff;
+  --surface-light-soft: #f0f4f2;
+  --border-light: rgba(0, 0, 0, 0.05);
+  --text-primary-light: #18191f;
+  --text-secondary-light: #64748b;
+
+  /* Dark Mode Palette */
+  --bg-dark: #0e1015;
+  --surface-dark: #171922;
+  --surface-dark-soft: #202330;
+  --border-dark: rgba(255, 255, 255, 0.07);
+  --text-primary-dark: #f8fafc;
+  --text-secondary-dark: #94a3b8;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
   outline: none !important;
+  box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-light);
+  color: var(--text-primary-light);
+  overscroll-behavior-y: none;
+}
+
+html.dark, html.dark body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary-dark);
 }
 
 .glass {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -59,52 +91,41 @@ body {
   scrollbar-width: none;
 }
 
-.dash-header, .dash-stats-card, .dash-action, .dash-section {
-  opacity: 0;
-  transform: translateY(15px);
-  will-change: transform, opacity;
+.mobile-card-shadow {
+  box-shadow: 0 8px 30px -4px rgba(24, 39, 75, 0.04), 0 2px 6px -1px rgba(24, 39, 75, 0.02);
 }
 
-@keyframes pulse-subtle {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+.dark .mobile-card-shadow {
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
 }
 
-.animate-pulse-subtle {
-  animation: pulse-subtle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* Native-feel Active Press */
+.active-press {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
+}
+.active-press:active {
+  transform: scale(0.96);
+  opacity: 0.9;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(128, 128, 128, 0.2);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(128, 128, 128, 0.3);
+  border-radius: 9999px;
 }
 
-/* Hide spin buttons in number inputs */
+/* Number input clean */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 input[type=number] {
   -moz-appearance: textfield;
-}
-
-.card-shadow {
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-}
-
-.dark .card-shadow {
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
 }

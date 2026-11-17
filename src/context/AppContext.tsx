@@ -36,7 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [todayFoods, setTodayFoods] = useState<FoodEntry[]>([]);
   const [todayExercises, setTodayExercises] = useState<ExerciseEntry[]>([]);
   const [activePage, setActivePage] = useState<ActivePage>('dashboard');
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('pds-theme') as 'light' | 'dark') ?? 'light');
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toastRef = useRef<any>(null);

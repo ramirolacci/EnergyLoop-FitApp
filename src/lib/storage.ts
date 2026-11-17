@@ -13,7 +13,7 @@ const DEFAULT_PROFILE: UserProfile = {
   daily_calorie_goal: 0,
   daily_protein_goal: 0,
   weight_kg: 0,
-  theme: 'dark',
+  theme: 'light',
 };
 
 export const storage = {
