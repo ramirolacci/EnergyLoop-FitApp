@@ -70,12 +70,12 @@ export function SetupModal({ open, onDismiss }: Props) {
     onDismiss();
   }
 
-  const surfaceColor = theme === 'dark' ? '#212225' : '#fff';
-  const borderColor = theme === 'dark' ? '#2a2a2e' : '#d8d8db';
-  const inputCls = `w-full rounded-xl px-4 py-3 text-lg font-bold outline-none transition-all ${
+  const surfaceColor = theme === 'dark' ? '#202330' : '#f7f4ee';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8';
+  const inputCls = `w-full rounded-2xl px-4 py-3 text-base font-bold outline-none transition-all ${
     theme === 'dark'
-      ? 'bg-[#1a1a1e] border border-[#2a2a2e] text-[#fbfcff] focus:border-[#018a16]'
-      : 'bg-white border border-[#d8d8db] text-[#010205] focus:border-[#018a16]'
+      ? 'bg-[#181b22] border border-white/10 text-slate-100 focus:border-[#4eba87]'
+      : 'bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87]'
   }`;
 
   return (
@@ -97,7 +97,7 @@ export function SetupModal({ open, onDismiss }: Props) {
         
         {step === 'welcome' && (
           <div className="flex flex-col items-center text-center gap-6">
-            <div className="w-24 h-24 rounded-full bg-[#018a16] flex items-center justify-center text-5xl shadow-2xl shadow-[#018a1666]">
+            <div className="w-20 h-20 rounded-full bg-[#4eba87] flex items-center justify-center text-4xl shadow-md">
               🥗
             </div>
             <div className="space-y-2">
@@ -119,7 +119,7 @@ export function SetupModal({ open, onDismiss }: Props) {
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => setGender('male')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'male' ? 'border-[#018a16] bg-[#018a1622]' : 'border-transparent'}`}
+                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'male' ? 'border-[#4eba87] bg-[#4eba8722]' : 'border-transparent'}`}
                 style={{ 
                   background: gender === 'male' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
                   borderColor: gender === 'male' ? undefined : borderColor 
@@ -130,7 +130,7 @@ export function SetupModal({ open, onDismiss }: Props) {
               </button>
               <button 
                 onClick={() => setGender('female')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'female' ? 'border-[#018a16] bg-[#018a1622]' : 'border-transparent'}`}
+                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'female' ? 'border-[#4eba87] bg-[#4eba8722]' : 'border-transparent'}`}
                 style={{ 
                   background: gender === 'female' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
                   borderColor: gender === 'female' ? undefined : borderColor 
@@ -199,7 +199,7 @@ export function SetupModal({ open, onDismiss }: Props) {
               <button 
                 key={o.val}
                 onClick={() => setObjective(o.val as 'lose' | 'maintain' | 'gain')}
-                className={`p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all ${objective === o.val ? 'border-[#018a16] bg-[#018a1611]' : 'border-transparent'}`}
+                className={`p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all ${objective === o.val ? 'border-[#4eba87] bg-[#4eba8711]' : 'border-transparent'}`}
                 style={{ background: objective === o.val ? undefined : surfaceColor, borderColor: objective === o.val ? undefined : borderColor }}
               >
                 <span className="text-3xl">{o.icon}</span>
@@ -217,9 +217,9 @@ export function SetupModal({ open, onDismiss }: Props) {
 
         {step === 'result' && (
           <div className="flex flex-col items-center text-center gap-6">
-            <div className="w-full rounded-3xl p-8 flex flex-col items-center gap-2" style={{ background: '#018a16', color: '#fff' }}>
+            <div className="w-full rounded-3xl p-8 flex flex-col items-center gap-2" style={{ background: '#4eba87', color: '#fff' }}>
               <PText size="small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>OBJETIVO DIARIO</PText>
-              <div className="text-6xl font-black">
+              <div className="text-5xl font-black">
                 <CountUp value={calculatedGoal} />
               </div>
               <PText size="large" weight="bold" style={{ color: '#fff' }}>kcal</PText>
@@ -227,7 +227,7 @@ export function SetupModal({ open, onDismiss }: Props) {
             
             <div className="w-full text-left p-4 rounded-2xl border" style={{ borderColor }}>
               <PText size="small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                Tu plan ha sido calculado con éxito. Para <span className="font-bold text-[#018a16]">
+                Tu plan ha sido calculado con éxito. Para <span className="font-bold text-[#4eba87]">
                   {objective === 'lose' ? 'bajar de peso' : objective === 'gain' ? 'ganar músculo' : 'mantenerte'}
                 </span> de forma saludable, esta es tu meta recomendada.
               </PText>

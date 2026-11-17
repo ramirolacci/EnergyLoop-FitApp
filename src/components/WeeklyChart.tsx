@@ -8,33 +8,33 @@ interface Props {
 }
 
 export function WeeklyChart({ days, goal, theme }: Props) {
-  const chartH = 110;
+  const chartH = 95;
   const chartW = 100;
-  const barW = 8;
+  const barW = 7;
   const gap = (chartW - days.length * barW) / (days.length + 1);
   const maxVal = Math.max(goal * 1.25, ...days.map(d => d.calories_consumed), 100);
 
-  const goalLineColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)';
-  const barConsumedColor = theme === 'dark' ? '#34d399' : '#10b981';
-  const barOverGoalColor = '#f87171'; // Pastel Red
+  const goalLineColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(112, 100, 83, 0.15)';
+  const barConsumedColor = theme === 'dark' ? '#34d399' : '#4eba87';
+  const barOverGoalColor = '#f87171'; // Coral pastel suave
 
   const goalY = chartH - (goal / maxVal) * chartH;
 
   return (
     <div className="w-full overflow-hidden">
       <svg
-        viewBox={`0 0 ${chartW} ${chartH + 24}`}
+        viewBox={`0 0 ${chartW} ${chartH + 20}`}
         preserveAspectRatio="xMidYMid meet"
         style={{ width: '100%', overflow: 'visible' }}
       >
-        {/* Goal line */}
+        {/* Línea de meta */}
         <line
           x1="0"
           y1={goalY}
           x2={chartW}
           y2={goalY}
           stroke={goalLineColor}
-          strokeWidth="0.8"
+          strokeWidth="0.6"
           strokeDasharray="2 2"
         />
 
@@ -46,17 +46,17 @@ export function WeeklyChart({ days, goal, theme }: Props) {
 
           return (
             <g key={day.date}>
-              {/* Background Track Bar */}
+              {/* Pista de fondo - Beige pastel */}
               <rect
                 x={x}
                 y={0}
                 width={barW}
                 height={chartH}
                 rx={barW / 2}
-                fill={theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f1f5f3'}
+                fill={theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f7f4ee'}
               />
 
-              {/* Consumed Bar */}
+              {/* Barra de consumo - Verde pastel */}
               <rect
                 x={x}
                 y={chartH - consumedH}
@@ -64,19 +64,19 @@ export function WeeklyChart({ days, goal, theme }: Props) {
                 height={consumedH}
                 rx={barW / 2}
                 fill={overGoal ? barOverGoalColor : barConsumedColor}
-                opacity={isToday ? 1 : 0.65}
+                opacity={isToday ? 1 : 0.6}
               />
 
-              {/* Day Label */}
+              {/* Etiqueta del día */}
               <text
                 x={x + barW / 2}
-                y={chartH + 16}
+                y={chartH + 13}
                 textAnchor="middle"
-                fontSize="4"
-                fontWeight={isToday ? '800' : '500'}
+                fontSize="3.5"
+                fontWeight={isToday ? '800' : '600'}
                 fill={isToday 
-                  ? (theme === 'dark' ? '#34d399' : '#047857') 
-                  : (theme === 'dark' ? '#94a3b8' : '#64748b')}
+                  ? (theme === 'dark' ? '#34d399' : '#1d5f3f') 
+                  : (theme === 'dark' ? '#94a3b8' : '#78716c')}
               >
                 {formatDateLabel(day.date).split(' ')[0].toUpperCase()}
               </text>

@@ -22,8 +22,8 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   useGSAP(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.settings-item', 
-        { opacity: 0, y: 15 }, 
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+        { opacity: 0, y: 10 }, 
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }
       );
     }, containerRef);
     return () => ctx.revert();
@@ -69,17 +69,18 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
     setSaving(false);
   }
 
-  const surfaceColor = theme === 'dark' ? '#171922' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#64748b';
+  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
+  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
   
-  const inputCls = `w-full rounded-2xl px-4 py-3 text-sm font-semibold outline-none transition-all duration-200 ${
+  // Font-size: 16px para evitar auto-zoom desagradable en iOS Safari
+  const inputCls = `w-full rounded-2xl px-3.5 py-2.5 text-base font-semibold outline-none transition-all duration-200 ${
     theme === 'dark'
-      ? 'bg-[#1f222e] border border-white/10 text-slate-100 focus:border-emerald-400'
-      : 'bg-[#f8faf9] border border-black/5 text-slate-900 focus:border-emerald-500'
+      ? 'bg-[#202330] border border-white/10 text-slate-100 focus:border-emerald-400'
+      : 'bg-[#f7f4ee] border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87]'
   }`;
   
-  const labelCls = `text-[10px] font-bold uppercase tracking-wider mb-2 block ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`;
+  const labelCls = `text-[9px] font-bold uppercase tracking-wider mb-1.5 block ${theme === 'dark' ? 'text-slate-400' : 'text-[#706453]'}`;
   const CALORIE_PRESETS = [1500, 1800, 2000, 2200, 2500, 3000];
 
   const formatThousands = (val: string) => {
@@ -88,16 +89,16 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-6 pb-24">
+    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
       {/* Header */}
       <header className="settings-item flex items-center justify-between pt-1">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
-            Preferencias & Cuenta
+          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+            Perfil & Preferencias
           </span>
           <h1 
-            className="text-2xl font-black tracking-tight"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
+            className="text-lg font-black tracking-tight"
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
           >
             Ajustes ⚙️
           </h1>
@@ -106,7 +107,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         {/* Quick Dark Mode Button */}
         <button
           onClick={toggleTheme}
-          className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
+          className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
           style={{
             background: surfaceColor,
             border: `1px solid ${borderColor}`,
@@ -115,7 +116,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
           title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
           aria-label="Cambiar tema"
         >
-          <span className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</span>
+          <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
         </button>
       </header>
 
@@ -131,15 +132,15 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       )}
 
-      {/* User & Cloud Account Section */}
+      {/* Perfil & Nube (Blanco Pastel, Verde Pastel, Beige) */}
       <div 
-        className="settings-item p-5 rounded-3xl mobile-card-shadow flex flex-col gap-4" 
+        className="settings-item p-4 rounded-3xl mobile-card-shadow flex flex-col gap-3.5" 
         style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3.5">
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center text-3xl shadow-sm overflow-hidden relative group transition-transform active:scale-95"
+            className="w-14 h-14 rounded-2xl bg-[#4eba87] flex items-center justify-center text-2xl shadow-xs overflow-hidden relative group transition-transform active:scale-95 flex-shrink-0"
           >
             {avatar ? (
               <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -147,7 +148,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
               <span>👤</span>
             )}
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white text-base">📸</span>
+              <span className="text-white text-xs">📸</span>
             </div>
           </button>
           <input 
@@ -165,8 +166,8 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="bg-transparent border-b-2 border-emerald-500 text-lg font-black outline-none w-full pb-0.5"
-                  style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
+                  className="bg-transparent border-b-2 border-[#4eba87] text-base font-black outline-none w-full pb-0.5"
+                  style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
                   autoFocus
                   onBlur={handleNameSave}
                   onKeyDown={e => e.key === 'Enter' && handleNameSave()}
@@ -175,12 +176,12 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             ) : (
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h2 className="text-base font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
+                  <h2 className="text-sm font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
                     {profile?.name || (user?.email?.split('@')[0] ?? 'Usuario')}
                   </h2>
                   <button 
                     onClick={() => setIsEditingProfile(true)} 
-                    className="text-emerald-600 dark:text-emerald-400 text-xs hover:scale-110 transition-transform"
+                    className="text-[#4eba87] text-xs hover:scale-110 transition-transform"
                     title="Editar nombre"
                   >
                     ✏️
@@ -194,28 +195,29 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
           </div>
         </div>
 
-        {/* Cloud Sync Status & Auth Action */}
+        {/* Cloud Sync Status */}
         <div 
-          className="pt-3 border-t flex items-center justify-between"
-          style={{ borderColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)' }}
+          className="pt-2.5 border-t flex items-center justify-between"
+          style={{ borderColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#f0ebe1' }}
         >
           <div className="flex items-center gap-2">
             <div 
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-sm"
+              className="w-7 h-7 rounded-xl flex items-center justify-center text-xs"
               style={{
                 background: user 
-                  ? (theme === 'dark' ? 'rgba(52, 211, 153, 0.15)' : '#ecfdf5')
-                  : (theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9'),
+                  ? (theme === 'dark' ? 'rgba(78, 186, 135, 0.15)' : '#e8f5ee')
+                  : (theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f7f4ee'),
+                color: user ? '#1d5f3f' : '#706453',
               }}
             >
               {user ? '☁️' : '💾'}
             </div>
             <div>
-              <div className="text-xs font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
+              <div className="text-xs font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
                 {user ? 'Sincronizado en Supabase' : 'Almacenamiento Local'}
               </div>
               <div className="text-[10px]" style={{ color: secondaryText }}>
-                {user ? 'Datos respaldados en la nube' : 'Inicia sesión para respaldar'}
+                {user ? 'Datos respaldados en la nube' : 'Inicia sesión para sincronizar'}
               </div>
             </div>
           </div>
@@ -226,14 +228,14 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                 await signOut();
                 toast('Sesión cerrada', 'info');
               }}
-              className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+              className="px-2.5 py-1 rounded-xl text-xs font-bold text-[#c2410c] hover:bg-[#fff0e6] dark:hover:bg-rose-950/30 transition-all"
             >
               Cerrar
             </button>
           ) : (
             <button
               onClick={openAuthModal}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white shadow-xs transition-all active:scale-95"
+              className="px-3 py-1 rounded-xl text-xs font-bold bg-[#4eba87] hover:bg-[#38a169] text-white shadow-xs transition-all active:scale-95"
             >
               Conectar
             </button>
@@ -241,10 +243,10 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       </div>
 
-      {/* Goals section */}
-      <section className="settings-item flex flex-col gap-3">
+      {/* Metas Nutricionales */}
+      <section className="settings-item flex flex-col gap-2.5">
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
             Metas Nutricionales
           </span>
           <PButtonPure icon="configurate" theme={theme} size="small" onClick={() => onOpenSetup?.()}>
@@ -253,7 +255,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
 
         <div 
-          className="p-5 rounded-3xl mobile-card-shadow flex flex-col gap-4" 
+          className="p-4 rounded-3xl mobile-card-shadow flex flex-col gap-3" 
           style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
         >
           {/* Calorie goal */}
@@ -270,17 +272,17 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
                 setCalorieGoal(raw);
               }}
             />
-            <div className="flex gap-1.5 mt-2.5 flex-wrap">
+            <div className="flex gap-1.5 mt-2 flex-wrap">
               {CALORIE_PRESETS.map(p => (
                 <button
                   key={p}
                   onClick={() => setCalorieGoal(String(p))}
-                  className="px-3 py-1 rounded-xl text-[11px] font-bold transition-all active:scale-95"
+                  className="px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all active:scale-95"
                   style={{
                     background: calorieGoal === String(p) 
-                      ? '#10b981' 
-                      : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#f1f5f3'),
-                    color: calorieGoal === String(p) ? '#ffffff' : secondaryText,
+                      ? '#4eba87' 
+                      : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#f7f4ee'),
+                    color: calorieGoal === String(p) ? '#ffffff' : (theme === 'dark' ? '#cbd5e1' : '#706453'),
                   }}
                 >
                   {formatThousands(String(p))}
@@ -319,7 +321,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             />
           </div>
 
-          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)', marginTop: 8 }}>
+          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)', marginTop: 4 }}>
             <PButton
               variant="primary"
               onClick={handleSave}
@@ -334,29 +336,29 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       </section>
 
-      {/* Preferences Section: Dark Mode Option */}
-      <section className="settings-item flex flex-col gap-3">
-        <span className="text-xs font-bold uppercase tracking-wider opacity-60 px-1" style={{ color: secondaryText }}>
+      {/* Switch de Dark Mode */}
+      <section className="settings-item flex flex-col gap-2">
+        <span className="text-[10px] font-bold uppercase tracking-wider opacity-60 px-1" style={{ color: secondaryText }}>
           Apariencia & Tema
         </span>
         
         <div 
-          className="p-5 rounded-3xl mobile-card-shadow flex items-center justify-between"
+          className="p-4 rounded-3xl mobile-card-shadow flex items-center justify-between"
           style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
         >
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3">
             <div 
-              className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl"
-              style={{ background: theme === 'dark' ? '#202330' : '#f0fdf4' }}
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg"
+              style={{ background: theme === 'dark' ? '#202330' : '#f7f4ee' }}
             >
               {theme === 'dark' ? '🌙' : '☀️'}
             </div>
             <div>
-              <div className="text-sm font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}>
+              <div className="text-xs font-bold" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
                 Modo Oscuro
               </div>
-              <div className="text-[11px]" style={{ color: secondaryText }}>
-                {theme === 'dark' ? 'Activado (Fondo carbón)' : 'Desactivado (Gama clara pastel)'}
+              <div className="text-[10px]" style={{ color: secondaryText }}>
+                {theme === 'dark' ? 'Activado (Carbón)' : 'Desactivado (Claro Pastel)'}
               </div>
             </div>
           </div>
@@ -370,30 +372,30 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
         </div>
       </section>
 
-      {/* Info Card */}
+      {/* Precisión Científica (Beige & Verde Pastel) */}
       <section className="settings-item">
         <div
-          className="rounded-3xl p-5 flex flex-col gap-3 mobile-card-shadow"
+          className="rounded-3xl p-4 flex flex-col gap-2 mobile-card-shadow"
           style={{ 
             background: theme === 'dark' 
-              ? 'rgba(52, 211, 153, 0.06)' 
-              : '#ecfdf5',
-            border: `1px solid ${theme === 'dark' ? 'rgba(52, 211, 153, 0.15)' : '#d1fae5'}`
+              ? 'rgba(78, 186, 135, 0.08)' 
+              : '#f7f4ee',
+            border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.2)' : '#e9e4d8'}`
           }}
         >
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🧬</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">🧬</span>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Fórmula METs Estándar
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[#1d5f3f] dark:text-[#6ee7b7]">
+                Estándar Stanford
               </span>
-              <h3 className="text-sm font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#065f46' }}>
-                Precisión Metabólica
+              <h3 className="text-xs font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+                Precisión METs
               </h3>
             </div>
           </div>
-          <p className="text-xs leading-relaxed" style={{ color: theme === 'dark' ? '#cbd5e1' : '#047857' }}>
-            Las calorías quemadas se calculan ajustadas a tu peso de <span className="font-bold">{weight}kg</span> mediante el compendio de actividades físicas de Stanford.
+          <p className="text-[11px] leading-relaxed text-[#706453] dark:text-slate-300">
+            Calorías calculadas con base en tu peso de <span className="font-bold">{weight}kg</span>.
           </p>
         </div>
       </section>

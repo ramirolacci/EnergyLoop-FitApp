@@ -19,27 +19,27 @@ export function FoodCard({ entry, theme }: Props) {
     setDeleting(false);
   }
 
-  const surfaceColor = theme === 'dark' ? '#171922' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#64748b';
+  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
+  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
   const timeStr = new Date(entry.logged_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <div
-      className="rounded-2xl p-3.5 flex items-center gap-3.5 mobile-card-shadow active-press transition-all"
+      className="rounded-2xl p-3 flex items-center gap-3 mobile-card-shadow active-press transition-all"
       style={{
         background: surfaceColor,
         border: `1px solid ${borderColor}`,
       }}
     >
-      {/* Icon Badge */}
+      {/* Icon Badge - Verde Pastel Suave */}
       <div
-        className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 text-xl shadow-xs"
+        className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 text-lg shadow-xs"
         style={{
           background: theme === 'dark' 
-            ? 'rgba(52, 211, 153, 0.12)' 
-            : '#ecfdf5',
-          border: `1px solid ${theme === 'dark' ? 'rgba(52, 211, 153, 0.2)' : '#d1fae5'}`,
+            ? 'rgba(78, 186, 135, 0.15)' 
+            : '#e8f5ee',
+          border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.3)' : '#b7e4ce'}`,
         }}
       >
         {entry.icon || (entry.source === 'scan' ? '📷' : '🥗')}
@@ -47,19 +47,19 @@ export function FoodCard({ entry, theme }: Props) {
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
+        <div className="flex items-center gap-1.5 mb-0.5">
           <span 
             className="font-bold text-sm truncate"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
           >
             {entry.name}
           </span>
           {entry.scan_confidence !== null && entry.scan_confidence !== undefined && (
             <span 
-              className="text-[10px] font-bold px-1.5 py-0.2 rounded-md"
+              className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-md"
               style={{
-                background: theme === 'dark' ? 'rgba(52, 211, 153, 0.2)' : '#d1fae5',
-                color: theme === 'dark' ? '#6ee7b7' : '#047857'
+                background: theme === 'dark' ? 'rgba(78, 186, 135, 0.2)' : '#e8f5ee',
+                color: theme === 'dark' ? '#6ee7b7' : '#1d5f3f'
               }}
             >
               IA {formatNumber(entry.scan_confidence * 100, 0)}%
@@ -67,40 +67,43 @@ export function FoodCard({ entry, theme }: Props) {
           )}
         </div>
 
-        {/* Pastel Macros Pills */}
+        {/* Chips en la gama pastel solicitada */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[11px] font-medium" style={{ color: secondaryText }}>
+          <span className="text-[10px] font-medium" style={{ color: secondaryText }}>
             {timeStr}
           </span>
-          <span className="text-[11px] opacity-30">·</span>
+          <span className="text-[10px] opacity-30">·</span>
+          {/* Proteína - Naranja pastel */}
           {entry.protein_g > 0 && (
             <span 
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+              className="text-[9px] font-bold px-1.5 py-0.5 rounded-md"
               style={{
-                background: theme === 'dark' ? 'rgba(255, 133, 150, 0.15)' : '#fff1f2',
-                color: theme === 'dark' ? '#fda4af' : '#e11d48',
+                background: theme === 'dark' ? 'rgba(251, 164, 113, 0.15)' : '#fff0e6',
+                color: theme === 'dark' ? '#fdba74' : '#c2410c',
               }}
             >
               {formatNumber(entry.protein_g, 0)}g P
             </span>
           )}
+          {/* Carbos - Beige pastel */}
           {entry.carbs_g > 0 && (
             <span 
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+              className="text-[9px] font-bold px-1.5 py-0.5 rounded-md"
               style={{
-                background: theme === 'dark' ? 'rgba(251, 191, 36, 0.15)' : '#fefce8',
-                color: theme === 'dark' ? '#fde68a' : '#b45309',
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#f7f4ee',
+                color: theme === 'dark' ? '#cbd5e1' : '#706453',
               }}
             >
               {formatNumber(entry.carbs_g, 0)}g C
             </span>
           )}
+          {/* Grasas - Celeste pastel */}
           {entry.fat_g > 0 && (
             <span 
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+              className="text-[9px] font-bold px-1.5 py-0.5 rounded-md"
               style={{
-                background: theme === 'dark' ? 'rgba(129, 140, 248, 0.15)' : '#eff6ff',
-                color: theme === 'dark' ? '#bfdbfe' : '#2563eb',
+                background: theme === 'dark' ? 'rgba(126, 200, 227, 0.15)' : '#e1f5fe',
+                color: theme === 'dark' ? '#93c5fd' : '#0277bd',
               }}
             >
               {formatNumber(entry.fat_g, 0)}g G
@@ -113,8 +116,8 @@ export function FoodCard({ entry, theme }: Props) {
       <div className="flex items-center gap-2 flex-shrink-0">
         <div className="text-right">
           <div 
-            className="text-base font-black leading-none"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}
+            className="text-sm font-black leading-none"
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
           >
             {formatNumber(entry.calories)}
           </div>
@@ -126,7 +129,7 @@ export function FoodCard({ entry, theme }: Props) {
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="w-8 h-8 rounded-full flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity active:scale-90"
+          className="w-7 h-7 rounded-full flex items-center justify-center opacity-40 hover:opacity-100 transition-opacity active:scale-90"
           style={{ 
             color: '#ef4444', 
             background: theme === 'dark' ? 'rgba(239, 68, 68, 0.1)' : '#fee2e2' 

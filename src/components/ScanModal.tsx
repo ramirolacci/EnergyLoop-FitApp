@@ -81,7 +81,7 @@ export function ScanModal({ open, onDismiss, theme }: Props) {
   const [scanned, setScanned] = useState<ScannedNutrition | null>(null);
   const [showAddFood, setShowAddFood] = useState(false);
 
-  const surfaceColor = theme === 'dark' ? '#212225' : '#f5f5f8';
+  const surfaceColor = theme === 'dark' ? '#202330' : '#f7f4ee';
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

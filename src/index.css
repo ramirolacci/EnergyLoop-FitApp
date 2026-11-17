@@ -3,7 +3,7 @@
 
 @layer components {
   .scan-line {
-    @apply absolute w-full h-[2px] bg-[#34d399] shadow-[0_0_12px_rgba(52,211,153,0.8)] z-10;
+    @apply absolute w-full h-[2px] bg-[#4eba87] shadow-[0_0_12px_rgba(78,186,135,0.8)] z-10;
     animation: scan 2s linear infinite;
   }
 }
@@ -16,44 +16,66 @@
 }
 
 :root {
-  /* Pastel & Modern Mobile Brand Colors */
-  --primary-pastel: #34d399;
-  --primary-pastel-deep: #10b981;
-  --primary-pastel-light: #ecfdf5;
-  --primary-pastel-text: #065f46;
+  /* ========================================================
+     GAMA PASTEL ENERGYLOOP (Light Mode Predeterminado)
+     - Verde pastel: Salud, Energía y Calorie Ring
+     - Beige pastel: Fondo cálido, textura orgánica y avena
+     - Blanco pastel: Tarjetas y elevación
+     - Celeste pastel: Hidratación, grasas y balance
+     - Naranja pastel: Ejercicio, calorías quemadas y proteínas
+  ======================================================== */
+  --pastel-green: #4eba87;
+  --pastel-green-light: #e8f5ee;
+  --pastel-green-border: #b7e4ce;
+  --pastel-green-text: #1d5f3f;
 
-  /* Pastel Nutrients */
-  --protein-pastel: #ff8596;
-  --protein-pastel-bg: #fff1f2;
-  --protein-pastel-text: #e11d48;
+  --pastel-beige: #f7f4ee;
+  --pastel-beige-card: #fcfbfa;
+  --pastel-beige-border: #e9e4d8;
+  --pastel-beige-text: #706453;
 
-  --carbs-pastel: #fbbf24;
-  --carbs-pastel-bg: #fefce8;
-  --carbs-pastel-text: #b45309;
+  --pastel-white: #ffffff;
+  --pastel-white-soft: #faf9f6;
 
-  --fat-pastel: #818cf8;
-  --fat-pastel-bg: #eff6ff;
-  --fat-pastel-text: #2563eb;
+  --pastel-blue: #7ec8e3;
+  --pastel-blue-light: #e1f5fe;
+  --pastel-blue-border: #b3e5fc;
+  --pastel-blue-text: #0277bd;
 
-  --burn-pastel: #fb923c;
-  --burn-pastel-bg: #fff7ed;
-  --burn-pastel-text: #c2410c;
+  --pastel-orange: #fba471;
+  --pastel-orange-light: #fff0e6;
+  --pastel-orange-border: #fed7aa;
+  --pastel-orange-text: #c2410c;
 
-  /* Clean Light Pastel Palette (Default) */
-  --bg-light: #f6f8f7;
-  --surface-light: #ffffff;
-  --surface-light-soft: #f0f4f2;
-  --border-light: rgba(0, 0, 0, 0.05);
-  --text-primary-light: #18191f;
-  --text-secondary-light: #64748b;
+  /* App Theme Variables (Light) */
+  --app-bg: #f7f4ee;
+  --app-surface: #ffffff;
+  --app-surface-secondary: #fcfbfa;
+  --app-border: rgba(112, 100, 83, 0.08);
+  --app-text: #1a1e24;
+  --app-text-muted: #78716c;
+}
 
-  /* Dark Mode Palette */
-  --bg-dark: #0e1015;
-  --surface-dark: #171922;
-  --surface-dark-soft: #202330;
-  --border-dark: rgba(255, 255, 255, 0.07);
-  --text-primary-dark: #f8fafc;
-  --text-secondary-dark: #94a3b8;
+html.dark {
+  /* Dark Mode Palette (Armonizado con toques pasteles luminosos) */
+  --app-bg: #111317;
+  --app-surface: #181b22;
+  --app-surface-secondary: #222631;
+  --app-border: rgba(255, 255, 255, 0.07);
+  --app-text: #f8fafc;
+  --app-text-muted: #94a3b8;
+
+  --pastel-green-light: rgba(78, 186, 135, 0.15);
+  --pastel-green-border: rgba(78, 186, 135, 0.3);
+  --pastel-green-text: #6ee7b7;
+
+  --pastel-blue-light: rgba(126, 200, 227, 0.15);
+  --pastel-blue-border: rgba(126, 200, 227, 0.3);
+  --pastel-blue-text: #93c5fd;
+
+  --pastel-orange-light: rgba(251, 164, 113, 0.15);
+  --pastel-orange-border: rgba(251, 164, 113, 0.3);
+  --pastel-orange-text: #fdba74;
 }
 
 * {
@@ -65,22 +87,25 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', Roboto, Helvetica, Arial, sans-serif;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-light);
-  color: var(--text-primary-light);
-  overscroll-behavior-y: none;
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--app-bg);
+  color: var(--app-text);
 }
 
-html.dark, html.dark body {
-  background-color: var(--bg-dark);
-  color: var(--text-primary-dark);
+/* Evitar zoom automático desagradable en inputs de iOS */
+input, select, textarea {
+  font-size: 16px !important;
 }
 
 .glass {
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -91,24 +116,25 @@ html.dark, html.dark body {
   scrollbar-width: none;
 }
 
+/* Sombra suave y limpia típica de apps de iOS y Play Store */
 .mobile-card-shadow {
-  box-shadow: 0 8px 30px -4px rgba(24, 39, 75, 0.04), 0 2px 6px -1px rgba(24, 39, 75, 0.02);
+  box-shadow: 0 4px 20px -2px rgba(112, 100, 83, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .dark .mobile-card-shadow {
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Native-feel Active Press */
+/* Animación elástica táctil */
 .active-press {
   transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
 }
 .active-press:active {
-  transform: scale(0.96);
-  opacity: 0.9;
+  transform: scale(0.97);
+  opacity: 0.92;
 }
 
-/* Custom Scrollbar */
+/* Scrollbar fina */
 ::-webkit-scrollbar {
   width: 4px;
 }

@@ -146,12 +146,12 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
     handleDismiss();
   }
 
-  const surfaceColor = theme === 'dark' ? '#212225' : '#f5f5f8';
-  const borderColor = theme === 'dark' ? '#2a2a2e' : '#d8d8db';
-  const inputCls = `w-full rounded-xl px-4 py-3 text-sm outline-none transition-all ${
+  const surfaceColor = theme === 'dark' ? '#202330' : '#f7f4ee';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8';
+  const inputCls = `w-full rounded-xl px-4 py-3 text-base outline-none transition-all ${
     theme === 'dark'
-      ? 'bg-[#1a1a1e] border border-[#2a2a2e] text-[#fbfcff] focus:border-[#535457] focus:bg-[#212225]'
-      : 'bg-white border border-[#d8d8db] text-[#010205] focus:border-[#afb0b3] focus:shadow-sm'
+      ? 'bg-[#181b22] border border-white/10 text-slate-100 focus:border-[#4eba87]'
+      : 'bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87] focus:shadow-xs'
   }`;
 
   const labelCls = `text-xs font-bold mb-1.5 ml-1 block ${theme === 'dark' ? 'text-[#afb0b3]' : 'text-[#535457]'}`;

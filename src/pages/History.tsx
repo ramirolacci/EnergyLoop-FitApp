@@ -24,8 +24,8 @@ export function History() {
   useGSAP(() => {
     if (!loading && containerRef.current) {
       gsap.fromTo('.history-item', 
-        { opacity: 0, y: 15 }, 
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+        { opacity: 0, y: 10 }, 
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }
       );
     }
   }, { dependencies: [loading], scope: containerRef });
@@ -69,9 +69,9 @@ export function History() {
   const dayFoods = useMemo(() => storage.getFoods(selectedDate), [selectedDate, todayFoods]);
   const dayExercises = useMemo(() => storage.getExercises(selectedDate), [selectedDate, todayExercises]);
 
-  const surfaceColor = theme === 'dark' ? '#171922' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#64748b';
+  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
+  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
 
   const selected7Days = getLast7Days();
   const isToday = selectedDate === getDateString();
@@ -92,16 +92,16 @@ export function History() {
     : 0;
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-6 pb-24">
-      {/* Mobile Header with Dark Mode Toggle */}
+    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
+      {/* Mobile Header */}
       <header className="history-item flex items-center justify-between pt-1">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
             Métricas & Progreso
           </span>
           <h1 
-            className="text-2xl font-black tracking-tight"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
+            className="text-lg font-black tracking-tight"
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
           >
             Historial 📊
           </h1>
@@ -110,7 +110,7 @@ export function History() {
         {/* Quick Dark Mode Button */}
         <button
           onClick={toggleTheme}
-          className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
+          className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
           style={{
             background: surfaceColor,
             border: `1px solid ${borderColor}`,
@@ -119,74 +119,77 @@ export function History() {
           title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
           aria-label="Cambiar tema"
         >
-          <span className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</span>
+          <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
         </button>
       </header>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
+        <div className="flex flex-col items-center justify-center py-16 gap-2">
           <PSpinner theme={theme} size="medium" />
           <span className="text-xs font-semibold" style={{ color: secondaryText }}>
-            Cargando tus métricas...
+            Cargando métricas...
           </span>
         </div>
       ) : (
         <>
           {/* Weekly chart card */}
           <div
-            className="history-item rounded-3xl p-5 mobile-card-shadow"
+            className="history-item rounded-3xl p-4 mobile-card-shadow"
             style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
           >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
                 Últimos 7 días
               </span>
-              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-extrabold text-[#1d5f3f] dark:text-[#6ee7b7] bg-[#e8f5ee] dark:bg-emerald-950/40 border border-[#b7e4ce] dark:border-emerald-800/40 px-2 py-0.5 rounded-full">
                 Meta: {goal} kcal
               </span>
             </div>
             <WeeklyChart days={weekStats} goal={goal} theme={theme} />
           </div>
 
-          {/* Week summary pills */}
-          <div className="history-item grid grid-cols-2 gap-3">
-            {/* Promedio */}
+          {/* Week summary pills (Beige Pastel & Verde Pastel) */}
+          <div className="history-item grid grid-cols-2 gap-2.5">
+            {/* Promedio - Beige Pastel */}
             <div 
-              className="p-4 rounded-2xl mobile-card-shadow flex flex-col gap-1" 
-              style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
+              className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
+              style={{ 
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f7f4ee', 
+                border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#e9e4d8'}` 
+              }}
             >
-              <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: theme === 'dark' ? secondaryText : '#706453' }}>
                 Promedio Diario
               </span>
-              <div className="text-xl font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+              <div className="text-lg font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
                 {weekAvgConsumed.toLocaleString()} <span className="text-xs font-normal opacity-50">kcal</span>
               </div>
             </div>
 
-            {/* Total Semana - Pastel Menta */}
+            {/* Total Semana - Verde Pastel */}
             <div 
-              className="p-4 rounded-2xl mobile-card-shadow flex flex-col gap-1" 
+              className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
               style={{ 
-                background: theme === 'dark' ? 'rgba(52, 211, 153, 0.15)' : '#ecfdf5',
-                border: `1px solid ${theme === 'dark' ? 'rgba(52, 211, 153, 0.25)' : '#d1fae5'}`,
-                color: theme === 'dark' ? '#6ee7b7' : '#065f46' 
+                background: theme === 'dark' ? 'rgba(78, 186, 135, 0.15)' : '#e8f5ee',
+                border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.25)' : '#b7e4ce'}`,
+                color: theme === 'dark' ? '#6ee7b7' : '#1d5f3f' 
               }}
             >
-              <span className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+              <span className="text-[9px] font-bold uppercase tracking-wider opacity-80">
                 Total Ingerido
               </span>
-              <div className="text-xl font-black">
+              <div className="text-lg font-black">
                 {Math.round(weekTotalConsumed).toLocaleString()} <span className="text-xs font-normal opacity-70">kcal</span>
               </div>
             </div>
           </div>
 
-          {/* Day selector (Native Mobile Calendar Strip) */}
+          {/* Day selector (Tira Calendario Mobile) */}
           <div className="history-item">
-            <span className="text-xs font-bold uppercase tracking-wider opacity-60 px-1 mb-2 block" style={{ color: secondaryText }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60 px-1 mb-1.5 block" style={{ color: secondaryText }}>
               Seleccionar día
             </span>
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+            <div className="flex gap-2 overflow-x-auto pb-1.5 no-scrollbar">
               {selected7Days.map(date => {
                 const isSelected = date === selectedDate;
                 const d = new Date(date + 'T00:00:00');
@@ -195,26 +198,26 @@ export function History() {
                   <button
                     key={date}
                     onClick={() => setSelectedDate(date)}
-                    className="flex-shrink-0 flex flex-col items-center gap-1 rounded-2xl py-3 px-3.5 min-w-[62px] transition-all duration-200 active:scale-95"
+                    className="flex-shrink-0 flex flex-col items-center gap-0.5 rounded-2xl py-2 px-3 min-w-[56px] transition-all duration-200 active:scale-95"
                     style={{
                       background: isSelected 
-                        ? (theme === 'dark' ? '#34d399' : '#10b981') 
+                        ? '#4eba87' 
                         : surfaceColor,
                       border: `1px solid ${isSelected ? 'transparent' : borderColor}`,
                       boxShadow: isSelected 
-                        ? (theme === 'dark' ? '0 8px 16px -4px rgba(52, 211, 153, 0.4)' : '0 8px 16px -4px rgba(16, 185, 129, 0.4)') 
+                        ? '0 6px 14px -3px rgba(78, 186, 135, 0.4)' 
                         : 'none',
                     }}
                   >
                     <span
-                      className="text-[10px] font-bold uppercase tracking-wider"
+                      className="text-[9px] font-bold uppercase tracking-wider"
                       style={{ color: isSelected ? '#ffffff' : secondaryText }}
                     >
                       {d.toLocaleDateString('es', { weekday: 'short' }).replace('.', '')}
                     </span>
                     <span
-                      className="text-lg font-black"
-                      style={{ color: isSelected ? '#ffffff' : (theme === 'dark' ? '#f8fafc' : '#1e293b') }}
+                      className="text-base font-black leading-tight"
+                      style={{ color: isSelected ? '#ffffff' : (theme === 'dark' ? '#f8fafc' : '#1a1e24') }}
                     >
                       {d.getDate()}
                     </span>
@@ -224,30 +227,30 @@ export function History() {
             </div>
           </div>
 
-          {/* Selected day summary widget */}
+          {/* Resumen del día seleccionado */}
           <div className="history-item">
             <div
-              className="rounded-3xl p-4 flex items-center justify-between mobile-card-shadow"
+              className="rounded-2xl p-3.5 flex items-center justify-between mobile-card-shadow"
               style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
             >
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider opacity-60 block mb-0.5" style={{ color: secondaryText }}>
-                  {isToday ? 'Balance Neto Hoy' : new Date(selectedDate + 'T00:00:00').toLocaleDateString('es', { weekday: 'long', day: 'numeric' })}
+                <span className="text-[9px] font-bold uppercase tracking-wider opacity-60 block" style={{ color: secondaryText }}>
+                  {isToday ? 'Balance Hoy' : new Date(selectedDate + 'T00:00:00').toLocaleDateString('es', { weekday: 'long', day: 'numeric' })}
                 </span>
                 <div 
-                  className="text-2xl font-black" 
-                  style={{ color: selectedStats.net_calories > goal ? '#ef4444' : (theme === 'dark' ? '#f8fafc' : '#1e293b') }}
+                  className="text-xl font-black mt-0.5" 
+                  style={{ color: selectedStats.net_calories > goal ? '#c2410c' : (theme === 'dark' ? '#f8fafc' : '#1a1e24') }}
                 >
                   {Math.round(selectedStats.net_calories).toLocaleString()} <span className="text-xs font-normal opacity-50">kcal</span>
                 </div>
               </div>
 
               {selectedStats.calories_burned > 0 ? (
-                <div className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/40">
+                <div className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#fff0e6] dark:bg-amber-950/40 text-[#c2410c] dark:text-[#fdba74] border border-[#fed7aa] dark:border-amber-800/40">
                   🔥 {Math.round(selectedStats.calories_burned)} kcal
                 </div>
               ) : (
-                <div className="px-2.5 py-1 rounded-full text-xs font-semibold opacity-60" style={{ color: secondaryText }}>
+                <div className="px-2 py-0.5 rounded-full text-[10px] font-semibold opacity-60" style={{ color: secondaryText }}>
                   Sin ejercicio
                 </div>
               )}
@@ -258,15 +261,15 @@ export function History() {
           <div 
             className="history-item flex p-1 rounded-2xl" 
             style={{ 
-              background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : '#f0f4f2',
+              background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : '#f7f4ee',
               border: `1px solid ${borderColor}`
             }}
           >
             <button
               onClick={() => setTab('foods')}
-              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
                 tab === 'foods' 
-                  ? 'bg-white dark:bg-[#1f222e] text-emerald-600 dark:text-emerald-400 shadow-sm' 
+                  ? 'bg-white dark:bg-[#202330] text-[#1d5f3f] dark:text-[#6ee7b7] shadow-xs' 
                   : 'text-slate-400 hover:text-slate-700'
               }`}
             >
@@ -274,32 +277,32 @@ export function History() {
             </button>
             <button
               onClick={() => setTab('exercises')}
-              className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
                 tab === 'exercises' 
-                  ? 'bg-white dark:bg-[#1f222e] text-amber-600 dark:text-amber-400 shadow-sm' 
+                  ? 'bg-white dark:bg-[#202330] text-[#c2410c] dark:text-[#fdba74] shadow-xs' 
                   : 'text-slate-400 hover:text-slate-700'
               }`}
             >
-              💪 Entrenamientos ({dayExercises.length})
+              💪 Actividad ({dayExercises.length})
             </button>
           </div>
 
-          {/* Entries List */}
-          <div className="history-item flex flex-col gap-2.5">
+          {/* Lista de Registros */}
+          <div className="history-item flex flex-col gap-2">
             {tab === 'foods' ? (
               dayFoods.length === 0 ? (
-                <div className="py-12 text-center opacity-40">
-                  <span className="text-4xl block mb-2">🍽️</span>
-                  <span className="text-sm font-bold">Sin comidas para este día</span>
+                <div className="py-10 text-center opacity-40">
+                  <span className="text-3xl block mb-1">🍽️</span>
+                  <span className="text-xs font-bold">Sin comidas registradas en este día</span>
                 </div>
               ) : (
                 dayFoods.map(food => <FoodCard key={food.id} entry={food} theme={theme} />)
               )
             ) : (
               dayExercises.length === 0 ? (
-                <div className="py-12 text-center opacity-40">
-                  <span className="text-4xl block mb-2">🏃</span>
-                  <span className="text-sm font-bold">Sin actividad registrada</span>
+                <div className="py-10 text-center opacity-40">
+                  <span className="text-3xl block mb-1">🏃</span>
+                  <span className="text-xs font-bold">Sin actividad física registrada</span>
                 </div>
               ) : (
                 dayExercises.map(ex => <ExerciseCard key={ex.id} entry={ex} theme={theme} />)

@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
-import { PHeading, PText, PModal, PButton, PIcon } from '@porsche-design-system/components-react';
+import { PModal, PButton, PIcon } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { CalorieRing } from '../components/CalorieRing';
@@ -9,7 +9,6 @@ import { MacroBar } from '../components/MacroBar';
 import { AddFoodModal } from '../components/AddFoodModal';
 import { ScanModal } from '../components/ScanModal';
 import { AddExerciseModal } from '../components/AddExerciseModal';
-import { formatNumber } from '../lib/calculations';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -36,11 +35,11 @@ export function Dashboard() {
 
   useGSAP(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.dash-header', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
-      gsap.fromTo('.dash-stats-card', { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.1, ease: 'power2.out' });
-      gsap.fromTo('.dash-action', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.2, stagger: 0.08, ease: 'power3.out' });
-      gsap.fromTo('.dash-section', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.25, stagger: 0.08, ease: 'power3.out' });
-      gsap.fromTo('.dash-item', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.3, stagger: 0.04, ease: 'power2.out' });
+      gsap.fromTo('.dash-header', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+      gsap.fromTo('.dash-stats-card', { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.5, delay: 0.08, ease: 'power2.out' });
+      gsap.fromTo('.dash-action', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.15, stagger: 0.05, ease: 'power2.out' });
+      gsap.fromTo('.dash-section', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.2, stagger: 0.05, ease: 'power2.out' });
+      gsap.fromTo('.dash-item', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, delay: 0.25, stagger: 0.03, ease: 'power2.out' });
     }, containerRef);
     return () => ctx.revert();
   }, { dependencies: [todayFoods, todayExercises], scope: containerRef });
@@ -58,41 +57,41 @@ export function Dashboard() {
   const [showInfo, setShowInfo] = useState(false);
   const hour = new Date().getHours();
   
-  const surfaceColor = theme === 'dark' ? '#171922' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#64748b';
+  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
+  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
+  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
 
   const visibleFoods = showAllFood ? todayFoods : todayFoods.slice(0, 3);
   const visibleExercises = showAllExercise ? todayExercises : todayExercises.slice(0, 3);
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-6 pb-24">
+    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
       
-      {/* Native Mobile Header with Dark Mode Toggle */}
+      {/* Top Mobile Bar - Proporciones estándar Play Store / App Store */}
       <header className="dash-header flex items-center justify-between pt-1">
-        <div className="flex-1 min-w-0 pr-3">
+        <div className="flex-1 min-w-0 pr-2">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm">
+            <span className="text-xs">
               {hour < 12 ? '☀️' : hour < 20 ? '⛅' : '🌙'}
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: secondaryText }}>
               {hour < 12 ? 'Buenos días' : hour < 20 ? 'Buenas tardes' : 'Buenas noches'}
             </span>
           </div>
           <h1 
-            className="text-2xl font-black tracking-tight truncate mt-0.5"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#0f172a' }}
+            className="text-lg font-black tracking-tight truncate mt-0.5"
+            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
           >
-            {profile?.name ? profile.name.split(' ')[0] : 'Campeón'} ⚡
+            {profile?.name ? profile.name.split(' ')[0] : 'Mi Balance'}
           </h1>
         </div>
 
-        {/* Header Right Actions: Dark Mode Button + Profile */}
-        <div className="flex items-center gap-2">
-          {/* Quick Dark Mode Toggle Button */}
+        {/* Header Right: Botón Dark Mode ☀️/🌙 + Avatar */}
+        <div className="flex items-center gap-1.5">
+          {/* Botón Dark Mode de 1 toque */}
           <button
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
             style={{
               background: surfaceColor,
               border: `1px solid ${borderColor}`,
@@ -101,18 +100,18 @@ export function Dashboard() {
             title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
             aria-label="Cambiar tema"
           >
-            <span className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</span>
+            <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
           </button>
 
-          {/* User Avatar / Connect Button */}
+          {/* Avatar / Cloud Status */}
           <button 
             onClick={!user ? openAuthModal : undefined}
             title={!user ? 'Conectar cuenta en la nube' : profile?.name || 'Perfil'}
-            className="h-10 w-10 rounded-2xl flex items-center justify-center text-xl overflow-hidden transition-all duration-200 active:scale-90 mobile-card-shadow"
+            className="h-9 w-9 rounded-xl flex items-center justify-center text-base overflow-hidden transition-all duration-200 active:scale-90 mobile-card-shadow"
             style={{
-              background: user ? '#10b981' : (theme === 'dark' ? 'rgba(52, 211, 153, 0.2)' : '#ecfdf5'),
-              border: `1px solid ${user ? '#059669' : '#a7f3d0'}`,
-              color: user ? '#ffffff' : '#065f46',
+              background: user ? '#4eba87' : (theme === 'dark' ? 'rgba(78, 186, 135, 0.2)' : '#e8f5ee'),
+              border: `1px solid ${user ? '#38a169' : '#b7e4ce'}`,
+              color: user ? '#ffffff' : '#1d5f3f',
             }}
           >
             {profile?.avatar ? (
@@ -124,92 +123,95 @@ export function Dashboard() {
         </div>
       </header>
 
-      {/* Main Stats Card (Calorie Ring + Equation + MacroBar) */}
+      {/* Main Stats Card (Blanco Pastel, Verde Pastel, Beige Pastel, Naranja Pastel, Celeste Pastel) */}
       <div
-        className="rounded-[2rem] p-5 flex flex-col items-center gap-5 mobile-card-shadow dash-stats-card transition-all"
+        className="rounded-3xl p-4 flex flex-col items-center gap-3.5 mobile-card-shadow dash-stats-card transition-all"
         style={{
           background: surfaceColor,
           border: `1px solid ${borderColor}`,
         }}
       >
-        {/* Industry Standard Equation in Clean Pastel Pills */}
+        {/* Ecuación Nutricional en Chips Pasteles */}
         <div className="w-full relative">
           <button 
             onClick={() => setShowInfo(true)}
-            className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center transition-all active:scale-90 opacity-60 hover:opacity-100"
-            style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#f1f5f3' }}
-            title="¿Cómo funciona el balance?"
+            className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center transition-all active:scale-90 opacity-60 hover:opacity-100"
+            style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#f7f4ee' }}
+            title="¿Cómo funciona?"
           >
-            <PIcon name="question" size="inherit" theme={theme} color="inherit" style={{ width: '12px', height: '12px' }} />
+            <PIcon name="question" size="inherit" theme={theme} color="inherit" style={{ width: '10px', height: '10px' }} />
           </button>
 
-          <div className="grid grid-cols-4 gap-1.5 text-center px-1 pt-1">
-            {/* Meta */}
+          <div className="grid grid-cols-4 gap-1 text-center px-0.5 pt-0.5">
+            {/* Meta - Beige Pastel */}
             <div 
-              className="p-2 rounded-xl flex flex-col items-center"
-              style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f8faf9' }}
+              className="py-1.5 px-1 rounded-xl flex flex-col items-center"
+              style={{ 
+                background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f7f4ee',
+                border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#e9e4d8'}`
+              }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+              <span className="text-[8px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
                 Meta
               </span>
-              <span className="text-xs font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+              <span className="text-xs font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
                 {goal}
               </span>
             </div>
 
-            {/* Ingerido - Pastel Coral */}
+            {/* Ingerido - Naranja Pastel Suave */}
             <div 
-              className="p-2 rounded-xl flex flex-col items-center"
+              className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' ? 'rgba(255, 133, 150, 0.1)' : '#fff1f2',
-                border: `1px solid ${theme === 'dark' ? 'rgba(255, 133, 150, 0.2)' : '#ffe4e6'}`
+                background: theme === 'dark' ? 'rgba(251, 164, 113, 0.12)' : '#fff0e6',
+                border: `1px solid ${theme === 'dark' ? 'rgba(251, 164, 113, 0.25)' : '#fed7aa'}`
               }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider text-rose-500">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#c2410c] dark:text-[#fdba74]">
                 Comida
               </span>
-              <span className="text-xs font-black text-rose-600 dark:text-rose-400">
+              <span className="text-xs font-black text-[#c2410c] dark:text-[#fdba74]">
                 {consumed}
               </span>
             </div>
 
-            {/* Quemado - Pastel Naranja */}
+            {/* Quemado - Celeste Pastel Suave */}
             <div 
-              className="p-2 rounded-xl flex flex-col items-center"
+              className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' ? 'rgba(251, 146, 60, 0.1)' : '#fff7ed',
-                border: `1px solid ${theme === 'dark' ? 'rgba(251, 146, 60, 0.2)' : '#ffedd5'}`
+                background: theme === 'dark' ? 'rgba(126, 200, 227, 0.12)' : '#e1f5fe',
+                border: `1px solid ${theme === 'dark' ? 'rgba(126, 200, 227, 0.25)' : '#b3e5fc'}`
               }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider text-amber-500">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#0277bd] dark:text-[#93c5fd]">
                 Ejercicio
               </span>
-              <span className="text-xs font-black text-amber-600 dark:text-amber-400">
+              <span className="text-xs font-black text-[#0277bd] dark:text-[#93c5fd]">
                 {burned}
               </span>
             </div>
 
-            {/* Restantes - Pastel Menta */}
+            {/* Restantes - Verde Pastel Suave */}
             <div 
-              className="p-2 rounded-xl flex flex-col items-center"
+              className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
                 background: theme === 'dark' 
-                  ? (overGoal ? 'rgba(248, 113, 113, 0.15)' : 'rgba(52, 211, 153, 0.1)') 
-                  : (overGoal ? '#fee2e2' : '#ecfdf5'),
+                  ? (overGoal ? 'rgba(248, 113, 113, 0.15)' : 'rgba(78, 186, 135, 0.15)') 
+                  : (overGoal ? '#fff0e6' : '#e8f5ee'),
                 border: `1px solid ${theme === 'dark' 
-                  ? (overGoal ? 'rgba(248, 113, 113, 0.25)' : 'rgba(52, 211, 153, 0.2)') 
-                  : (overGoal ? '#fecaca' : '#d1fae5')}`
+                  ? (overGoal ? 'rgba(248, 113, 113, 0.3)' : 'rgba(78, 186, 135, 0.3)') 
+                  : (overGoal ? '#fed7aa' : '#b7e4ce')}`
               }}
             >
               <span 
-                className="text-[9px] font-bold uppercase tracking-wider"
-                style={{ color: overGoal ? '#dc2626' : '#059669' }}
+                className="text-[8px] font-bold uppercase tracking-wider"
+                style={{ color: overGoal ? '#c2410c' : '#1d5f3f' }}
               >
                 {overGoal ? 'Exceso' : 'Restan'}
               </span>
               <span 
                 className="text-xs font-black"
-                style={{ color: overGoal ? '#dc2626' : '#059669' }}
+                style={{ color: overGoal ? '#c2410c' : '#1d5f3f' }}
               >
                 {Math.abs(remaining)}
               </span>
@@ -217,19 +219,11 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Circular Progress Ring */}
+        {/* Anillo de Calorías en Escala Mobile Perfecta (168px) */}
         <CalorieRing consumed={consumed} burned={burned} goal={goal} theme={theme} />
 
-        {/* Macronutrient Bars */}
-        <div className="w-full pt-1">
-          <div className="flex justify-between items-center mb-2 px-1">
-            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
-              Macronutrientes
-            </span>
-            <span className="text-[10px] font-semibold opacity-70" style={{ color: secondaryText }}>
-              {formatNumber(protein, 0)}g P · {formatNumber(carbs, 0)}g C · {formatNumber(fat, 0)}g G
-            </span>
-          </div>
+        {/* Barras de Macronutrientes (Proteínas, Carbos, Grasas en Colores Pasteles) */}
+        <div className="w-full">
           <MacroBar
             protein={protein}
             carbs={carbs}
@@ -240,109 +234,116 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* AI Scanner Hero Banner (Pastel Gradient) */}
+      {/* Escáner IA (Verde Pastel Hero) */}
       <section className="dash-item">
         <button
           onClick={() => setModal('scan')}
-          className="w-full relative overflow-hidden p-5 rounded-3xl flex items-center justify-between text-left transition-all active:scale-[0.98] group shadow-md"
+          className="w-full relative overflow-hidden p-4 rounded-2xl flex items-center justify-between text-left transition-all active:scale-[0.98] mobile-card-shadow"
           style={{ 
             background: theme === 'dark'
-              ? 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)'
-              : 'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
-            color: '#ffffff'
+              ? 'linear-gradient(135deg, #1b4d3e 0%, #16382e 100%)'
+              : 'linear-gradient(135deg, #4eba87 0%, #34d399 100%)',
+            color: '#ffffff',
+            border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.3)' : '#b7e4ce'}`
           }}
         >
-          <div className="relative z-10 flex-1 pr-3">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md mb-1.5">
-              <span className="text-xs">✨</span>
-              <span className="text-[10px] font-bold tracking-wider uppercase text-white">Escáner IA</span>
+          <div className="relative z-10 flex-1 pr-2">
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md mb-1">
+              <span className="text-[10px]">✨</span>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-white">IA Vision</span>
             </div>
-            <h2 className="text-lg font-black text-white leading-tight">
-              Reconocimiento Visual
+            <h2 className="text-sm font-black text-white leading-tight">
+              Escanear Platillo o Etiqueta
             </h2>
-            <p className="text-xs text-white/85 mt-1 leading-snug">
-              Toma una foto al platillo y la IA calculará calorías e ingredientes
+            <p className="text-[11px] text-white/90 mt-0.5 leading-snug">
+              Analiza calorías y macronutrientes al instante
             </p>
           </div>
-          <div className="w-13 h-13 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">
+          <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl flex-shrink-0">
             📸
           </div>
         </button>
       </section>
 
-      {/* Quick Action Touch Buttons */}
-      <div className="dash-action grid grid-cols-2 gap-3">
-        {/* + Comida */}
+      {/* Acciones Rápidas (Píldoras Pasteles Táctiles) */}
+      <div className="dash-action grid grid-cols-2 gap-2.5">
+        {/* + Comida (Beige Pastel) */}
         <button 
           onClick={() => setModal('addFood')}
-          className="flex items-center gap-3 p-4 rounded-2xl transition-all active:scale-95 mobile-card-shadow"
+          className="flex items-center gap-2.5 p-3 rounded-2xl transition-all active:scale-95 mobile-card-shadow"
           style={{ 
-            background: theme === 'dark' ? '#171922' : '#ffffff',
+            background: surfaceColor,
             border: `1px solid ${borderColor}` 
           }}
         >
           <div 
-            className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shadow-xs"
-            style={{ background: theme === 'dark' ? 'rgba(255, 133, 150, 0.15)' : '#fff1f2' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
+            style={{ 
+              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f7f4ee',
+              border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8'}`
+            }}
           >
             🍎
           </div>
-          <div className="text-left">
-            <div className="text-sm font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+          <div className="text-left min-w-0">
+            <div className="text-xs font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
               Comida
             </div>
-            <div className="text-[11px] font-semibold text-rose-500">
+            <div className="text-[10px] font-bold text-[#c2410c] dark:text-[#fdba74]">
               + Registrar
             </div>
           </div>
         </button>
 
-        {/* + Ejercicio */}
+        {/* + Ejercicio (Celeste Pastel) */}
         <button 
           onClick={() => setModal('addExercise')}
-          className="flex items-center gap-3 p-4 rounded-2xl transition-all active:scale-95 mobile-card-shadow"
+          className="flex items-center gap-2.5 p-3 rounded-2xl transition-all active:scale-95 mobile-card-shadow"
           style={{ 
-            background: theme === 'dark' ? '#171922' : '#ffffff',
+            background: surfaceColor,
             border: `1px solid ${borderColor}` 
           }}
         >
           <div 
-            className="w-11 h-11 rounded-2xl flex items-center justify-center text-2xl shadow-xs"
-            style={{ background: theme === 'dark' ? 'rgba(251, 146, 60, 0.15)' : '#fff7ed' }}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
+            style={{ 
+              background: theme === 'dark' ? 'rgba(126, 200, 227, 0.15)' : '#e1f5fe',
+              border: `1px solid ${theme === 'dark' ? 'rgba(126, 200, 227, 0.25)' : '#b3e5fc'}`
+            }}
           >
             💪
           </div>
-          <div className="text-left">
-            <div className="text-sm font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+          <div className="text-left min-w-0">
+            <div className="text-xs font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
               Ejercicio
             </div>
-            <div className="text-[11px] font-semibold text-amber-500">
+            <div className="text-[10px] font-bold text-[#0277bd] dark:text-[#93c5fd]">
               + Quemar
             </div>
           </div>
         </button>
       </div>
 
-      {/* Food entries list */}
+      {/* Comidas Registradas */}
       {todayFoods.length > 0 && (
-        <div className="dash-section flex flex-col gap-3">
+        <div className="dash-section flex flex-col gap-2">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm">🥗</span>
-              <h2 className="text-sm font-black tracking-tight" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
-                Comidas registradas ({todayFoods.length})
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs">🥗</span>
+              <h2 className="text-xs font-black uppercase tracking-wider opacity-70" style={{ color: secondaryText }}>
+                Comidas hoy ({todayFoods.length})
               </h2>
             </div>
             {todayFoods.length > 3 && (
               <button 
                 onClick={() => setShowAllFood(!showAllFood)}
-                className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
               >
-                {showAllFood ? 'Ver menos' : 'Ver todos'}
+                {showAllFood ? 'Ver menos' : 'Ver todas'}
               </button>
             )}
           </div>
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2">
             {visibleFoods.map(food => (
               <div key={food.id} className="dash-item">
                 <FoodCard entry={food} theme={theme} />
@@ -352,26 +353,26 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Exercise entries list */}
+      {/* Entrenamientos Registrados */}
       {todayExercises.length > 0 && (
-        <div className="dash-section flex flex-col gap-3">
+        <div className="dash-section flex flex-col gap-2">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm">🏃</span>
-              <h2 className="text-sm font-black tracking-tight" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
-                Entrenamientos de hoy ({todayExercises.length})
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs">🏃</span>
+              <h2 className="text-xs font-black uppercase tracking-wider opacity-70" style={{ color: secondaryText }}>
+                Actividad hoy ({todayExercises.length})
               </h2>
             </div>
             {todayExercises.length > 3 && (
               <button 
                 onClick={() => setShowAllExercise(!showAllExercise)}
-                className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline"
+                className="text-[11px] font-bold text-[#c2410c] dark:text-[#fdba74] hover:underline"
               >
                 {showAllExercise ? 'Ver menos' : 'Ver todos'}
               </button>
             )}
           </div>
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2">
             {visibleExercises.map(ex => (
               <div key={ex.id} className="dash-item">
                 <ExerciseCard entry={ex} theme={theme} />
@@ -381,20 +382,20 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Empty States if Nothing Logged Yet */}
+      {/* Estado vacío cuando no hay nada registrado */}
       {todayFoods.length === 0 && (
         <div 
-          className="rounded-3xl p-6 flex flex-col items-center gap-2 text-center mobile-card-shadow dash-item" 
+          className="rounded-2xl p-5 flex flex-col items-center gap-1.5 text-center mobile-card-shadow dash-item" 
           style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
         >
-          <div className="w-14 h-14 rounded-2xl bg-[#ecfdf5] dark:bg-emerald-950/40 flex items-center justify-center text-3xl mb-1">
+          <div className="w-12 h-12 rounded-2xl bg-[#e8f5ee] dark:bg-emerald-950/40 flex items-center justify-center text-2xl mb-0.5">
             🥑
           </div>
-          <span className="font-bold text-sm" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
-            Aún no has registrado comidas hoy
+          <span className="font-bold text-xs" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+            Sin comidas registradas hoy
           </span>
-          <span className="text-xs" style={{ color: secondaryText }}>
-            Toca el botón Escáner IA o "+ Comida" para iniciar tu registro diario
+          <span className="text-[11px]" style={{ color: secondaryText }}>
+            Toca el Escáner IA o "+ Comida" para iniciar
           </span>
         </div>
       )}
@@ -404,48 +405,48 @@ export function Dashboard() {
       <ScanModal open={modal === 'scan'} onDismiss={() => setModal('none')} theme={theme} />
       <AddExerciseModal open={modal === 'addExercise'} onDismiss={() => setModal('none')} />
       
-      {/* Logic Info Modal */}
+      {/* Modal explicativo */}
       <PModal 
         open={showInfo} 
         onDismiss={() => setShowInfo(false)} 
         heading="Metodología EnergyLoop" 
         theme={theme}
       >
-        <div className="flex flex-col gap-4 py-2">
-          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40">
-            <PHeading size="small" theme={theme} style={{ color: '#059669', marginBottom: 4 }}>
-              💳 Tu Presupuesto Diario
-            </PHeading>
-            <PText size="small" theme={theme}>
-              Comienzas cada día con una meta energética. Cada alimento resta de este presupuesto, mientras que el ejercicio te devuelve calorías disponibles.
-            </PText>
+        <div className="flex flex-col gap-3 py-2">
+          <div className="p-3.5 rounded-2xl bg-[#e8f5ee] dark:bg-emerald-950/30 border border-[#b7e4ce] dark:border-emerald-800/40">
+            <span className="text-xs font-bold text-[#1d5f3f] dark:text-emerald-400 block mb-1">
+              💳 Presupuesto Diario
+            </span>
+            <p className="text-xs text-slate-700 dark:text-slate-300">
+              Comienzas cada día con tu meta energética. Los alimentos restan de este presupuesto y el ejercicio te devuelve calorías disponibles.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30">
-              <span className="text-xs font-bold text-rose-600 dark:text-rose-400">🍎 Alimentos</span>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Gastan calorías de tu presupuesto diario.
+          <div className="grid grid-cols-2 gap-2">
+            <div className="p-3 rounded-2xl bg-[#fff0e6] dark:bg-amber-950/20 border border-[#fed7aa] dark:border-amber-900/30">
+              <span className="text-[11px] font-bold text-[#c2410c] dark:text-amber-400">🍎 Alimentos</span>
+              <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
+                Restan calorías de tu presupuesto.
               </p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30">
-              <span className="text-xs font-bold text-amber-600 dark:text-amber-400">💪 Ejercicio</span>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Generan bono y aumentan tus calorías restantes.
+            <div className="p-3 rounded-2xl bg-[#e1f5fe] dark:bg-sky-950/20 border border-[#b3e5fc] dark:border-sky-900/30">
+              <span className="text-[11px] font-bold text-[#0277bd] dark:text-sky-400">💪 Ejercicio</span>
+              <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
+                Generan bono y suman calorías.
               </p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl border" style={{ borderColor }}>
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block mb-1">
+          <div className="p-3.5 rounded-2xl border" style={{ borderColor }}>
+            <span className="text-xs font-bold text-[#1d5f3f] dark:text-emerald-400 block mb-0.5">
               🎯 Objetivo Diario
             </span>
-            <PText size="small" theme={theme}>
+            <p className="text-xs text-slate-700 dark:text-slate-300">
               Tu meta ideal es terminar el día lo más cerca posible de 0 calorías restantes.
-            </PText>
+            </p>
           </div>
 
-          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)' }}>
+          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)', marginTop: 4 }}>
             <PButton 
               variant="primary" 
               theme={theme} 
