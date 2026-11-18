@@ -191,42 +191,40 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
           </div>
         </div>
 
-        {/* Action Buttons: Iniciar Sesión antes que Crear Cuenta, ambos en la misma línea */}
-        <div className="welcome-actions w-full flex flex-col gap-2 pt-3">
-          <div className="grid grid-cols-2 gap-2.5 w-full">
-            {/* 1° Botón: Iniciar Sesión (Antes que Crear Cuenta) */}
-            <button
-              onClick={() => openAuthModal('login')}
-              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-1.5"
-              style={{
-                background: surfaceColor,
-                border: `1.5px solid ${borderColor}`,
-                color: textColor,
-              }}
-            >
-              <span>Iniciar Sesión</span>
-              <span className="text-xs">➔</span>
-            </button>
+        {/* Action Buttons: Uno arriba del otro */}
+        <div className="welcome-actions w-full flex flex-col gap-2.5 pt-3">
+          {/* 1° Botón: Iniciar Sesión (Arriba) */}
+          <button
+            onClick={() => openAuthModal('login')}
+            className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-2"
+            style={{
+              background: surfaceColor,
+              border: `1.5px solid ${borderColor}`,
+              color: textColor,
+            }}
+          >
+            <span>Iniciar Sesión</span>
+            <span className="text-xs">➔</span>
+          </button>
 
-            {/* 2° Botón: Crear Cuenta */}
-            <button
-              onClick={() => openAuthModal('register')}
-              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-1.5"
-              style={{
-                background: '#3BA676',
-                border: '1.5px solid #339468',
-                color: '#FFFFFF',
-              }}
-            >
-              <span>Crear Cuenta</span>
-              <span className="text-xs">✨</span>
-            </button>
-          </div>
+          {/* 2° Botón: Crear Cuenta (Abajo) */}
+          <button
+            onClick={() => openAuthModal('register')}
+            className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-2"
+            style={{
+              background: '#3BA676',
+              border: '1.5px solid #339468',
+              color: '#FFFFFF',
+            }}
+          >
+            <span>Crear Cuenta</span>
+            <span className="text-xs">✨</span>
+          </button>
 
           {/* Continuar como invitado */}
           <button
             onClick={onContinueAsGuest}
-            className="w-full py-2 text-center text-[11px] font-bold transition-all duration-200 hover:underline active:scale-95"
+            className="w-full py-2 text-center text-[11px] font-bold transition-all duration-200 hover:underline active:scale-95 mt-0.5"
             style={{ color: secondaryText }}
           >
             Continuar como invitado sin cuenta →
