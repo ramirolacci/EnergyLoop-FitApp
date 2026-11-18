@@ -89,7 +89,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
+    <div ref={containerRef} className="flex flex-col gap-4 pb-6">
       {/* Header */}
       <header className="settings-item flex items-center justify-between pt-1">
         <div>
@@ -234,7 +234,7 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             </button>
           ) : (
             <button
-              onClick={openAuthModal}
+              onClick={() => openAuthModal('login')}
               className="px-3 py-1 rounded-xl text-xs font-bold bg-[#4eba87] hover:bg-[#38a169] text-white shadow-xs transition-all active:scale-95"
             >
               Conectar

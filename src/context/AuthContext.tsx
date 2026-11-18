@@ -8,7 +8,8 @@ interface AuthState {
   session: Session | null;
   loading: boolean;
   isAuthModalOpen: boolean;
-  openAuthModal: () => void;
+  authModalMode: 'login' | 'register';
+  openAuthModal: (mode?: 'login' | 'register') => void;
   closeAuthModal: () => void;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
@@ -22,6 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
     // 1. Obtener sesión activa al cargar
@@ -45,7 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const openAuthModal = useCallback(() => setIsAuthModalOpen(true), []);
+  const openAuthModal = useCallback((mode: 'login' | 'register' = 'login') => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  }, []);
   const closeAuthModal = useCallback(() => setIsAuthModalOpen(false), []);
 
   const signInWithEmail = async (email: string, password: string): Promise<{ error: string | null }> => {
@@ -108,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
+      localStorage.removeItem('energyloop_guest');
       await supabase.auth.signOut();
     } catch (err) {
       console.error('Error al cerrar sesión:', err);
@@ -121,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         loading,
         isAuthModalOpen,
+        authModalMode,
         openAuthModal,
         closeAuthModal,
         signInWithEmail,

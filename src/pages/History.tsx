@@ -92,7 +92,7 @@ export function History() {
     : 0;
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
+    <div ref={containerRef} className="flex flex-col gap-4 pb-6">
       {/* Mobile Header */}
       <header className="history-item flex items-center justify-between pt-1">
         <div>

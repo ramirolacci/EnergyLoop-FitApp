@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   PModal,
   PHeading,
@@ -17,9 +17,15 @@ interface Props {
 
 export function AuthModal({ open, onDismiss }: Props) {
   const { theme, toast } = useApp();
-  const { signInWithEmail, signUpWithEmail } = useAuth();
+  const { signInWithEmail, signUpWithEmail, authModalMode } = useAuth();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
+
+  useEffect(() => {
+    if (open) {
+      setMode(authModalMode || 'login');
+    }
+  }, [open, authModalMode]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');

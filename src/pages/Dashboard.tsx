@@ -65,7 +65,7 @@ export function Dashboard() {
   const visibleExercises = showAllExercise ? todayExercises : todayExercises.slice(0, 3);
 
   return (
-    <div ref={containerRef} className="flex flex-col gap-4 pb-20">
+    <div ref={containerRef} className="flex flex-col gap-4 pb-6">
       
       {/* Top Mobile Bar - Proporciones estándar Play Store / App Store */}
       <header className="dash-header flex items-center justify-between pt-1">
@@ -105,7 +105,7 @@ export function Dashboard() {
 
           {/* Avatar / Cloud Status */}
           <button 
-            onClick={!user ? openAuthModal : undefined}
+            onClick={!user ? () => openAuthModal('login') : undefined}
             title={!user ? 'Conectar cuenta en la nube' : profile?.name || 'Perfil'}
             className="h-9 w-9 rounded-xl flex items-center justify-center text-base overflow-hidden transition-all duration-200 active:scale-90 mobile-card-shadow"
             style={{

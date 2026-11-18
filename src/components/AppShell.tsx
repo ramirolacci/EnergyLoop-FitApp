@@ -44,7 +44,7 @@ export function AppShell({ children }: Props) {
         <main
           className="flex-1 w-full px-4"
           style={{ 
-            paddingBottom: 'calc(84px + env(safe-area-inset-bottom))' 
+            paddingBottom: 'calc(105px + env(safe-area-inset-bottom))' 
           }}
         >
           {children}
@@ -52,9 +52,9 @@ export function AppShell({ children }: Props) {
 
         {/* Floating Bottom Navigation Bar (Play Store / App Store standard) */}
         <div 
-          className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none flex justify-center"
+          className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none flex justify-center pb-2"
           style={{ 
-            paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
+            paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
             bottom: 0 
           }}
         >

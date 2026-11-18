@@ -7,6 +7,7 @@ import { History } from './pages/History';
 import { Settings } from './pages/Settings';
 import { SetupModal } from './components/SetupModal';
 import { AuthModal } from './components/AuthModal';
+import { WelcomeScreen } from './components/WelcomeScreen';
 
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
@@ -17,8 +18,18 @@ gsap.config({ nullTargetWarn: false });
 
 function AppContent() {
   const { activePage, loading, theme, profile } = useApp();
-  const { isAuthModalOpen, closeAuthModal } = useAuth();
+  const { user, isAuthModalOpen, closeAuthModal } = useAuth();
   const pageRef = useRef<HTMLDivElement>(null);
+
+  // Manage guest state (if true, user explored without creating an account)
+  const [isGuest, setIsGuest] = useState<boolean>(() => {
+    return localStorage.getItem('energyloop_guest') === 'true';
+  });
+
+  const handleContinueAsGuest = () => {
+    localStorage.setItem('energyloop_guest', 'true');
+    setIsGuest(true);
+  };
   
   // Manage global SetupModal state
   const isConfigured = profile?.daily_calorie_goal ? profile.daily_calorie_goal > 0 : false;
@@ -38,11 +49,24 @@ function AppContent() {
     return (
       <div
         className="min-h-[100dvh] flex flex-col items-center justify-center gap-4"
-        style={{ background: theme === 'dark' ? '#0e0e12' : 'var(--bg-light)' }}
+        style={{ background: theme === 'dark' ? '#0e0e12' : '#f7f4ee' }}
       >
         <span className="text-4xl">🥗</span>
         <PSpinner size="medium" theme={theme} aria={{ 'aria-label': 'Cargando...' }} />
       </div>
+    );
+  }
+
+  // Si no hay usuario y no ha elegido continuar como invitado, mostrar la Pantalla de Bienvenida (Opción 1)
+  if (!user && !isGuest) {
+    return (
+      <>
+        <WelcomeScreen onContinueAsGuest={handleContinueAsGuest} />
+        <AuthModal
+          open={isAuthModalOpen}
+          onDismiss={closeAuthModal}
+        />
+      </>
     );
   }
 

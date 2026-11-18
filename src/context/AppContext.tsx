@@ -60,7 +60,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     setProfile(currentProfile);
-    setTheme(currentProfile.theme || 'dark');
+    setTheme(currentProfile.theme || 'light');
     await refreshToday();
     setLoading(false);
   }, [user?.id, refreshToday]);
