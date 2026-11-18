@@ -1,4 +1,3 @@
-import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -9,7 +8,6 @@ interface Props {
 }
 
 export function WelcomeScreen({ onContinueAsGuest }: Props) {
-  const { theme } = useApp();
   const { openAuthModal } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -34,12 +32,12 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
     return () => ctx.revert();
   }, { scope: containerRef });
 
-  const outerBg = theme === 'dark' ? '#0a0c0f' : '#ede8df';
-  const phoneBg = theme === 'dark' ? '#111317' : '#f7f4ee';
-  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8';
-  const textColor = theme === 'dark' ? '#f8fafc' : '#1a1e24';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#706453';
+  const outerBg = '#ede8df';
+  const phoneBg = '#f7f4ee';
+  const surfaceColor = '#ffffff';
+  const borderColor = '#e9e4d8';
+  const textColor = '#1a1e24';
+  const secondaryText = '#706453';
 
   return (
     <div
@@ -66,7 +64,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
             <div
               className="relative w-20 h-20 rounded-[26px] p-2 flex items-center justify-center mobile-card-shadow"
               style={{
-                background: theme === 'dark' ? '#181b22' : '#ffffff',
+                background: '#ffffff',
                 border: `1.5px solid ${borderColor}`,
               }}
             >
@@ -112,7 +110,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               <div
                 className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
-                  background: theme === 'dark' ? 'rgba(78, 186, 135, 0.18)' : '#e8f5ee',
+                  background: '#e8f5ee',
                   color: '#4eba87',
                 }}
               >
@@ -142,7 +140,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               <div
                 className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
-                  background: theme === 'dark' ? 'rgba(251, 164, 113, 0.18)' : '#fff0e6',
+                  background: '#fff0e6',
                   color: '#fba471',
                 }}
               >
@@ -172,7 +170,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               <div
                 className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
-                  background: theme === 'dark' ? 'rgba(126, 200, 227, 0.18)' : '#e1f5fe',
+                  background: '#e1f5fe',
                   color: '#7ec8e3',
                 }}
               >

@@ -146,15 +146,11 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
     handleDismiss();
   }
 
-  const surfaceColor = theme === 'dark' ? '#202330' : '#f7f4ee';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8';
-  const inputCls = `w-full rounded-xl px-4 py-3 text-base outline-none transition-all ${
-    theme === 'dark'
-      ? 'bg-[#181b22] border border-white/10 text-slate-100 focus:border-[#4eba87]'
-      : 'bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87] focus:shadow-xs'
-  }`;
+  const surfaceColor = '#f7f4ee';
+  const borderColor = '#e9e4d8';
+  const inputCls = 'w-full rounded-xl px-4 py-3 text-base outline-none transition-all bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87] focus:shadow-xs';
 
-  const labelCls = `text-xs font-bold mb-1.5 ml-1 block ${theme === 'dark' ? 'text-[#afb0b3]' : 'text-[#535457]'}`;
+  const labelCls = 'text-xs font-bold mb-1.5 ml-1 block text-[#535457]';
 
   return (
     <PModal

@@ -12,7 +12,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 export function History() {
-  const { profile, theme, toggleTheme, todayFoods, todayExercises } = useApp();
+  const { profile, theme, todayFoods, todayExercises } = useApp();
   const [weekStats, setWeekStats] = useState<DayStats[]>([]);
   const [selectedDate, setSelectedDate] = useState(getDateString());
   const [loading, setLoading] = useState(true);
@@ -69,9 +69,9 @@ export function History() {
   const dayFoods = useMemo(() => storage.getFoods(selectedDate), [selectedDate, todayFoods]);
   const dayExercises = useMemo(() => storage.getExercises(selectedDate), [selectedDate, todayExercises]);
 
-  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
+  const surfaceColor = '#ffffff';
+  const borderColor = '#f0ebe1';
+  const secondaryText = '#706453';
 
   const selected7Days = getLast7Days();
   const isToday = selectedDate === getDateString();
@@ -101,26 +101,11 @@ export function History() {
           </span>
           <h1 
             className="text-lg font-black tracking-tight"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
+            style={{ color: '#1a1e24' }}
           >
             Historial 📊
           </h1>
         </div>
-
-        {/* Quick Dark Mode Button */}
-        <button
-          onClick={toggleTheme}
-          className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
-          style={{
-            background: surfaceColor,
-            border: `1px solid ${borderColor}`,
-            color: theme === 'dark' ? '#fde047' : '#f59e0b',
-          }}
-          title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
-          aria-label="Cambiar tema"
-        >
-          <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
-        </button>
       </header>
 
       {loading ? (
@@ -154,14 +139,14 @@ export function History() {
             <div 
               className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
               style={{ 
-                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f7f4ee', 
-                border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#e9e4d8'}` 
+                background: '#f7f4ee', 
+                border: '1px solid #e9e4d8' 
               }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: theme === 'dark' ? secondaryText : '#706453' }}>
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#706453' }}>
                 Promedio Diario
               </span>
-              <div className="text-lg font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+              <div className="text-lg font-black" style={{ color: '#1a1e24' }}>
                 {weekAvgConsumed.toLocaleString()} <span className="text-xs font-normal opacity-50">kcal</span>
               </div>
             </div>
@@ -170,9 +155,9 @@ export function History() {
             <div 
               className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
               style={{ 
-                background: theme === 'dark' ? 'rgba(78, 186, 135, 0.15)' : '#e8f5ee',
-                border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.25)' : '#b7e4ce'}`,
-                color: theme === 'dark' ? '#6ee7b7' : '#1d5f3f' 
+                background: '#e8f5ee',
+                border: '1px solid #b7e4ce',
+                color: '#1d5f3f' 
               }}
             >
               <span className="text-[9px] font-bold uppercase tracking-wider opacity-80">
@@ -217,7 +202,7 @@ export function History() {
                     </span>
                     <span
                       className="text-base font-black leading-tight"
-                      style={{ color: isSelected ? '#ffffff' : (theme === 'dark' ? '#f8fafc' : '#1a1e24') }}
+                      style={{ color: isSelected ? '#ffffff' : '#1a1e24' }}
                     >
                       {d.getDate()}
                     </span>
@@ -239,14 +224,14 @@ export function History() {
                 </span>
                 <div 
                   className="text-xl font-black mt-0.5" 
-                  style={{ color: selectedStats.net_calories > goal ? '#c2410c' : (theme === 'dark' ? '#f8fafc' : '#1a1e24') }}
+                  style={{ color: selectedStats.net_calories > goal ? '#c2410c' : '#1a1e24' }}
                 >
                   {Math.round(selectedStats.net_calories).toLocaleString()} <span className="text-xs font-normal opacity-50">kcal</span>
                 </div>
               </div>
 
               {selectedStats.calories_burned > 0 ? (
-                <div className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#fff0e6] dark:bg-amber-950/40 text-[#c2410c] dark:text-[#fdba74] border border-[#fed7aa] dark:border-amber-800/40">
+                <div className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#fff0e6] text-[#c2410c] border border-[#fed7aa]">
                   🔥 {Math.round(selectedStats.calories_burned)} kcal
                 </div>
               ) : (
@@ -261,7 +246,7 @@ export function History() {
           <div 
             className="history-item flex p-1 rounded-2xl" 
             style={{ 
-              background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : '#f7f4ee',
+              background: '#f7f4ee',
               border: `1px solid ${borderColor}`
             }}
           >
@@ -269,8 +254,8 @@ export function History() {
               onClick={() => setTab('foods')}
               className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
                 tab === 'foods' 
-                  ? 'bg-white dark:bg-[#202330] text-[#1d5f3f] dark:text-[#6ee7b7] shadow-xs' 
-                  : 'text-slate-400 hover:text-slate-700'
+                  ? 'bg-white text-[#1d5f3f] shadow-xs' 
+                  : 'text-stone-500 hover:text-stone-800'
               }`}
             >
               🥗 Comidas ({dayFoods.length})

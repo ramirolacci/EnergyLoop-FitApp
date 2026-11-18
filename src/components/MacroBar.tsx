@@ -13,26 +13,26 @@ interface MacroBarItemProps {
   theme: 'light' | 'dark';
 }
 
-function MacroBarItem({ label, current, goal, unit, barColor, bgColor, borderColor, textColor, icon, theme }: MacroBarItemProps) {
+function MacroBarItem({ label, current, goal, unit, barColor, bgColor, borderColor, textColor, icon }: MacroBarItemProps) {
   const pct = goal ? Math.min((current / goal) * 100, 100) : 0;
-  const trackColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)';
+  const trackColor = 'rgba(0, 0, 0, 0.05)';
 
   return (
     <div 
       className="flex-1 p-2.5 rounded-2xl flex flex-col gap-1.5 transition-all"
       style={{ 
-        background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : bgColor,
-        border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.06)' : borderColor}`
+        background: bgColor,
+        border: `1px solid ${borderColor}`
       }}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <span className="text-xs">{icon}</span>
-          <span className="text-[10px] font-bold" style={{ color: theme === 'dark' ? '#94a3b8' : textColor }}>
+          <span className="text-[10px] font-bold" style={{ color: textColor }}>
             {label}
           </span>
         </div>
-        <span className="text-[10px] font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1e293b' }}>
+        <span className="text-[10px] font-black" style={{ color: '#1e293b' }}>
           {formatNumber(current, 0)}{unit}
         </span>
       </div>
@@ -52,7 +52,7 @@ function MacroBarItem({ label, current, goal, unit, barColor, bgColor, borderCol
       </div>
 
       {goal && (
-        <span className="text-[9px] font-medium text-right opacity-60" style={{ color: theme === 'dark' ? '#94a3b8' : textColor }}>
+        <span className="text-[9px] font-medium text-right opacity-60" style={{ color: textColor }}>
           de {goal}{unit}
         </span>
       )}

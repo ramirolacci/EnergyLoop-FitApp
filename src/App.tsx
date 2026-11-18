@@ -49,7 +49,7 @@ function AppContent() {
     return (
       <div
         className="min-h-[100dvh] flex flex-col items-center justify-center gap-4"
-        style={{ background: theme === 'dark' ? '#0e0e12' : '#f7f4ee' }}
+        style={{ background: '#f7f4ee' }}
       >
         <span className="text-4xl">🥗</span>
         <PSpinner size="medium" theme={theme} aria={{ 'aria-label': 'Cargando...' }} />

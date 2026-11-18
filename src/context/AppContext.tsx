@@ -36,12 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [todayFoods, setTodayFoods] = useState<FoodEntry[]>([]);
   const [todayExercises, setTodayExercises] = useState<ExerciseEntry[]>([]);
   const [activePage, setActivePage] = useState<ActivePage>('dashboard');
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (!localStorage.getItem('energyloop_theme_set_by_user')) {
-      return 'light';
-    }
-    return (localStorage.getItem('pds-theme') as 'light' | 'dark') ?? 'light';
-  });
+  const theme: 'light' = 'light';
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toastRef = useRef<any>(null);
@@ -65,11 +60,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     setProfile(currentProfile);
-    if (localStorage.getItem('energyloop_theme_set_by_user')) {
-      setTheme(currentProfile.theme || 'light');
-    } else {
-      setTheme('light');
-    }
     await refreshToday();
     setLoading(false);
   }, [user?.id, refreshToday]);
@@ -80,25 +70,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      document.documentElement.className = theme;
-      localStorage.setItem('pds-theme', theme);
+      document.documentElement.className = 'light';
+      localStorage.setItem('pds-theme', 'light');
     } catch {
       // ignore
     }
-  }, [theme]);
+  }, []);
 
   async function updateProfile(data: Partial<UserProfile>) {
-    const updated = await storage.updateProfile(data, user?.id);
+    const updated = await storage.updateProfile({ ...data, theme: 'light' }, user?.id);
     setProfile(updated);
-    if (data.theme) {
-      setTheme(data.theme);
-    }
   }
 
   function toggleTheme() {
-    const next = theme === 'light' ? 'dark' : 'light';
-    localStorage.setItem('energyloop_theme_set_by_user', 'true');
-    void updateProfile({ theme: next });
+    // Modo claro permanente solicitado por el usuario
   }
 
   async function addFoodEntry(entry: Omit<FoodEntry, 'id' | 'created_at'>) {

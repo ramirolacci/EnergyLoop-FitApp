@@ -13,7 +13,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 export function Dashboard() {
-  const { profile, todayFoods, todayExercises, theme, toggleTheme, refreshCount } = useApp();
+  const { profile, todayFoods, todayExercises, theme, refreshCount } = useApp();
   const { user, openAuthModal } = useAuth();
   const [modal, setModal] = useState<'none' | 'addFood' | 'scan' | 'addExercise' | 'setup'>('none');
   const [showAllFood, setShowAllFood] = useState(false);
@@ -57,9 +57,9 @@ export function Dashboard() {
   const [showInfo, setShowInfo] = useState(false);
   const hour = new Date().getHours();
   
-  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
+  const surfaceColor = '#ffffff';
+  const borderColor = '#f0ebe1';
+  const secondaryText = '#706453';
 
   const visibleFoods = showAllFood ? todayFoods : todayFoods.slice(0, 3);
   const visibleExercises = showAllExercise ? todayExercises : todayExercises.slice(0, 3);
@@ -80,36 +80,20 @@ export function Dashboard() {
           </div>
           <h1 
             className="text-lg font-black tracking-tight truncate mt-0.5"
-            style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}
+            style={{ color: '#1a1e24' }}
           >
             {profile?.name ? profile.name.split(' ')[0] : 'Mi Balance'}
           </h1>
         </div>
 
-        {/* Header Right: Botón Dark Mode ☀️/🌙 + Avatar */}
+        {/* Header Right: Avatar / Cloud Status */}
         <div className="flex items-center gap-1.5">
-          {/* Botón Dark Mode de 1 toque */}
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
-            style={{
-              background: surfaceColor,
-              border: `1px solid ${borderColor}`,
-              color: theme === 'dark' ? '#fde047' : '#f59e0b',
-            }}
-            title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
-            aria-label="Cambiar tema"
-          >
-            <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
-          </button>
-
-          {/* Avatar / Cloud Status */}
           <button 
             onClick={!user ? () => openAuthModal('login') : undefined}
             title={!user ? 'Conectar cuenta en la nube' : profile?.name || 'Perfil'}
             className="h-9 w-9 rounded-xl flex items-center justify-center text-base overflow-hidden transition-all duration-200 active:scale-90 mobile-card-shadow"
             style={{
-              background: user ? '#4eba87' : (theme === 'dark' ? 'rgba(78, 186, 135, 0.2)' : '#e8f5ee'),
+              background: user ? '#4eba87' : '#e8f5ee',
               border: `1px solid ${user ? '#38a169' : '#b7e4ce'}`,
               color: user ? '#ffffff' : '#1d5f3f',
             }}
@@ -147,14 +131,14 @@ export function Dashboard() {
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f7f4ee',
-                border: `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#e9e4d8'}`
+                background: '#f7f4ee',
+                border: '1px solid #e9e4d8'
               }}
             >
               <span className="text-[8px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
                 Meta
               </span>
-              <span className="text-xs font-black" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+              <span className="text-xs font-black" style={{ color: '#1a1e24' }}>
                 {goal}
               </span>
             </div>
@@ -163,14 +147,14 @@ export function Dashboard() {
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' ? 'rgba(251, 164, 113, 0.12)' : '#fff0e6',
-                border: `1px solid ${theme === 'dark' ? 'rgba(251, 164, 113, 0.25)' : '#fed7aa'}`
+                background: '#fff0e6',
+                border: '1px solid #fed7aa'
               }}
             >
-              <span className="text-[8px] font-bold uppercase tracking-wider text-[#c2410c] dark:text-[#fdba74]">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#c2410c]">
                 Comida
               </span>
-              <span className="text-xs font-black text-[#c2410c] dark:text-[#fdba74]">
+              <span className="text-xs font-black text-[#c2410c]">
                 {consumed}
               </span>
             </div>
@@ -179,14 +163,14 @@ export function Dashboard() {
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' ? 'rgba(126, 200, 227, 0.12)' : '#e1f5fe',
-                border: `1px solid ${theme === 'dark' ? 'rgba(126, 200, 227, 0.25)' : '#b3e5fc'}`
+                background: '#e1f5fe',
+                border: '1px solid #b3e5fc'
               }}
             >
-              <span className="text-[8px] font-bold uppercase tracking-wider text-[#0277bd] dark:text-[#93c5fd]">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#0277bd]">
                 Ejercicio
               </span>
-              <span className="text-xs font-black text-[#0277bd] dark:text-[#93c5fd]">
+              <span className="text-xs font-black text-[#0277bd]">
                 {burned}
               </span>
             </div>
@@ -195,12 +179,8 @@ export function Dashboard() {
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: theme === 'dark' 
-                  ? (overGoal ? 'rgba(248, 113, 113, 0.15)' : 'rgba(78, 186, 135, 0.15)') 
-                  : (overGoal ? '#fff0e6' : '#e8f5ee'),
-                border: `1px solid ${theme === 'dark' 
-                  ? (overGoal ? 'rgba(248, 113, 113, 0.3)' : 'rgba(78, 186, 135, 0.3)') 
-                  : (overGoal ? '#fed7aa' : '#b7e4ce')}`
+                background: overGoal ? '#fff0e6' : '#e8f5ee',
+                border: `1px solid ${overGoal ? '#fed7aa' : '#b7e4ce'}`
               }}
             >
               <span 
@@ -240,11 +220,9 @@ export function Dashboard() {
           onClick={() => setModal('scan')}
           className="w-full relative overflow-hidden p-4 rounded-2xl flex items-center justify-between text-left transition-all active:scale-[0.98] mobile-card-shadow"
           style={{ 
-            background: theme === 'dark'
-              ? 'linear-gradient(135deg, #1b4d3e 0%, #16382e 100%)'
-              : 'linear-gradient(135deg, #4eba87 0%, #34d399 100%)',
+            background: 'linear-gradient(135deg, #4eba87 0%, #34d399 100%)',
             color: '#ffffff',
-            border: `1px solid ${theme === 'dark' ? 'rgba(78, 186, 135, 0.3)' : '#b7e4ce'}`
+            border: '1px solid #b7e4ce'
           }}
         >
           <div className="relative z-10 flex-1 pr-2">
@@ -279,17 +257,17 @@ export function Dashboard() {
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
             style={{ 
-              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f7f4ee',
-              border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8'}`
+              background: '#f7f4ee',
+              border: '1px solid #e9e4d8'
             }}
           >
             🍎
           </div>
           <div className="text-left min-w-0">
-            <div className="text-xs font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+            <div className="text-xs font-black truncate" style={{ color: '#1a1e24' }}>
               Comida
             </div>
-            <div className="text-[10px] font-bold text-[#c2410c] dark:text-[#fdba74]">
+            <div className="text-[10px] font-bold text-[#c2410c]">
               + Registrar
             </div>
           </div>
@@ -307,17 +285,17 @@ export function Dashboard() {
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
             style={{ 
-              background: theme === 'dark' ? 'rgba(126, 200, 227, 0.15)' : '#e1f5fe',
-              border: `1px solid ${theme === 'dark' ? 'rgba(126, 200, 227, 0.25)' : '#b3e5fc'}`
+              background: '#e1f5fe',
+              border: '1px solid #b3e5fc'
             }}
           >
             💪
           </div>
           <div className="text-left min-w-0">
-            <div className="text-xs font-black truncate" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+            <div className="text-xs font-black truncate" style={{ color: '#1a1e24' }}>
               Ejercicio
             </div>
-            <div className="text-[10px] font-bold text-[#0277bd] dark:text-[#93c5fd]">
+            <div className="text-[10px] font-bold text-[#0277bd]">
               + Quemar
             </div>
           </div>
@@ -391,7 +369,7 @@ export function Dashboard() {
           <div className="w-12 h-12 rounded-2xl bg-[#e8f5ee] dark:bg-emerald-950/40 flex items-center justify-center text-2xl mb-0.5">
             🥑
           </div>
-          <span className="font-bold text-xs" style={{ color: theme === 'dark' ? '#f8fafc' : '#1a1e24' }}>
+          <span className="font-bold text-xs" style={{ color: '#1a1e24' }}>
             Sin comidas registradas hoy
           </span>
           <span className="text-[11px]" style={{ color: secondaryText }}>

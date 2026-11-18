@@ -4,18 +4,18 @@ import { formatDateLabel } from '../lib/calculations';
 interface Props {
   days: DayStats[];
   goal: number;
-  theme: 'light' | 'dark';
+  theme?: 'light' | 'dark';
 }
 
-export function WeeklyChart({ days, goal, theme }: Props) {
+export function WeeklyChart({ days, goal }: Props) {
   const chartH = 95;
   const chartW = 100;
   const barW = 7;
   const gap = (chartW - days.length * barW) / (days.length + 1);
   const maxVal = Math.max(goal * 1.25, ...days.map(d => d.calories_consumed), 100);
 
-  const goalLineColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(112, 100, 83, 0.15)';
-  const barConsumedColor = theme === 'dark' ? '#34d399' : '#4eba87';
+  const goalLineColor = 'rgba(112, 100, 83, 0.15)';
+  const barConsumedColor = '#4eba87';
   const barOverGoalColor = '#f87171'; // Coral pastel suave
 
   const goalY = chartH - (goal / maxVal) * chartH;
@@ -53,7 +53,7 @@ export function WeeklyChart({ days, goal, theme }: Props) {
                 width={barW}
                 height={chartH}
                 rx={barW / 2}
-                fill={theme === 'dark' ? 'rgba(255,255,255,0.03)' : '#f7f4ee'}
+                fill="#f7f4ee"
               />
 
               {/* Barra de consumo - Verde pastel */}
@@ -74,9 +74,7 @@ export function WeeklyChart({ days, goal, theme }: Props) {
                 textAnchor="middle"
                 fontSize="3.5"
                 fontWeight={isToday ? '800' : '600'}
-                fill={isToday 
-                  ? (theme === 'dark' ? '#34d399' : '#1d5f3f') 
-                  : (theme === 'dark' ? '#94a3b8' : '#78716c')}
+                fill={isToday ? '#1d5f3f' : '#78716c'}
               >
                 {formatDateLabel(day.date).split(' ')[0].toUpperCase()}
               </text>

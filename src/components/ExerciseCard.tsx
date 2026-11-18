@@ -22,9 +22,9 @@ export function ExerciseCard({ entry, theme }: Props) {
     setDeleting(false);
   }
 
-  const surfaceColor = theme === 'dark' ? '#181b22' : '#ffffff';
-  const borderColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#f0ebe1';
-  const secondaryText = theme === 'dark' ? '#94a3b8' : '#78716c';
+  const surfaceColor = '#ffffff';
+  const borderColor = '#f0ebe1';
+  const secondaryText = '#706453';
   const timeStr = new Date(entry.logged_at).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
 
   return (
@@ -39,10 +39,8 @@ export function ExerciseCard({ entry, theme }: Props) {
       <div
         className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 text-lg shadow-xs"
         style={{
-          background: theme === 'dark' 
-            ? 'rgba(251, 164, 113, 0.15)' 
-            : '#fff0e6',
-          border: `1px solid ${theme === 'dark' ? 'rgba(251, 164, 113, 0.3)' : '#fed7aa'}`,
+          background: '#fff0e6',
+          border: '1px solid #fed7aa',
         }}
       >
         {entry.icon || '🏃'}

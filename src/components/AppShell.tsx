@@ -22,10 +22,10 @@ interface Props {
 export function AppShell({ children }: Props) {
   const { activePage, setActivePage, theme, toastRef } = useApp();
 
-  const outerBg = theme === 'dark' ? '#0a0c0f' : '#ede8df';
-  const phoneBg = theme === 'dark' ? '#111317' : '#f7f4ee';
-  const navBg = theme === 'dark' ? 'rgba(24, 27, 34, 0.94)' : 'rgba(255, 255, 255, 0.94)';
-  const navBorder = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#e9e4d8';
+  const outerBg = '#ede8df';
+  const phoneBg = '#f7f4ee';
+  const navBg = 'rgba(255, 255, 255, 0.94)';
+  const navBorder = '#e9e4d8';
 
   return (
     <div
@@ -74,11 +74,7 @@ export function AppShell({ children }: Props) {
                   onClick={() => setActivePage(id)}
                   className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 px-2 rounded-full transition-all duration-200 active:scale-95 ${
                     isActive 
-                      ? theme === 'dark'
-                        ? 'bg-emerald-950/60 text-[#34d399]'
-                        : 'bg-[#e8f5ee] text-[#1d5f3f]'
-                      : theme === 'dark'
-                      ? 'text-slate-400 hover:text-white'
+                      ? 'bg-[#e8f5ee] text-[#1d5f3f]'
                       : 'text-[#78716c] hover:text-[#1a1e24]'
                   }`}
                   aria-label={label}

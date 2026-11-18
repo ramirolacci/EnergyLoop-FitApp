@@ -25,20 +25,11 @@ export function CalorieRing({ consumed, burned, goal, theme }: Props) {
   const overGoal = remaining < 0;
 
   // Track en tono pastel verde/beige muy sutil
-  const trackColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : '#eef5f1';
+  const trackColor = '#eef5f1';
 
   // Degradado verde pastel para salud y energía
-  const startColor = overGoal
-    ? '#f87171' // Coral pastel
-    : theme === 'dark'
-    ? '#34d399' // Menta pastel
-    : '#4eba87'; // Verde pastel natural
-
-  const endColor = overGoal
-    ? '#fba471' // Naranja pastel
-    : theme === 'dark'
-    ? '#6ee7b7'
-    : '#34d399';
+  const startColor = overGoal ? '#f87171' : '#4eba87';
+  const endColor = overGoal ? '#fba471' : '#34d399';
 
   return (
     <div className="relative flex items-center justify-center my-1" style={{ width: size, height: size }}>
