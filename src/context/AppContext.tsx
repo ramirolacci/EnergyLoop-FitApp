@@ -36,7 +36,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [todayFoods, setTodayFoods] = useState<FoodEntry[]>([]);
   const [todayExercises, setTodayExercises] = useState<ExerciseEntry[]>([]);
   const [activePage, setActivePage] = useState<ActivePage>('dashboard');
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('pds-theme') as 'light' | 'dark') ?? 'light');
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (!localStorage.getItem('energyloop_theme_set_by_user')) {
+      return 'light';
+    }
+    return (localStorage.getItem('pds-theme') as 'light' | 'dark') ?? 'light';
+  });
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toastRef = useRef<any>(null);
@@ -60,7 +65,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
 
     setProfile(currentProfile);
-    setTheme(currentProfile.theme || 'light');
+    if (localStorage.getItem('energyloop_theme_set_by_user')) {
+      setTheme(currentProfile.theme || 'light');
+    } else {
+      setTheme('light');
+    }
     await refreshToday();
     setLoading(false);
   }, [user?.id, refreshToday]);
@@ -88,6 +97,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   function toggleTheme() {
     const next = theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('energyloop_theme_set_by_user', 'true');
     void updateProfile({ theme: next });
   }
 

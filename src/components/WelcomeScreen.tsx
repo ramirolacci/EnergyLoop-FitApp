@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function WelcomeScreen({ onContinueAsGuest }: Props) {
-  const { theme, toggleTheme } = useApp();
+  const { theme } = useApp();
   const { openAuthModal } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -17,18 +17,18 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.welcome-hero',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }
       );
       gsap.fromTo(
         '.welcome-feature',
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 0.2, ease: 'power2.out' }
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, delay: 0.15, ease: 'power2.out' }
       );
       gsap.fromTo(
         '.welcome-actions',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, delay: 0.45, ease: 'power2.out' }
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.45, delay: 0.35, ease: 'power2.out' }
       );
     }, containerRef);
     return () => ctx.revert();
@@ -48,53 +48,23 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
     >
       <div
         ref={containerRef}
-        className="w-full max-w-[420px] min-h-[100dvh] flex flex-col justify-between relative shadow-2xl transition-colors duration-300 px-5 py-6"
+        className="w-full max-w-[420px] min-h-[100dvh] flex flex-col justify-between relative shadow-2xl transition-colors duration-300 px-5"
         style={{
           background: phoneBg,
-          paddingTop: 'calc(16px + env(safe-area-inset-top))',
+          paddingTop: 'calc(24px + env(safe-area-inset-top))',
           paddingBottom: 'calc(20px + env(safe-area-inset-bottom))',
         }}
       >
-        {/* Top Bar with Brand Badge & Theme Toggle */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span
-              className="text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full"
-              style={{
-                background: theme === 'dark' ? 'rgba(78, 186, 135, 0.15)' : '#e8f5ee',
-                color: theme === 'dark' ? '#34d399' : '#1d5f3f',
-                border: theme === 'dark' ? '1px solid rgba(78, 186, 135, 0.3)' : '1px solid #b7e4ce',
-              }}
-            >
-              EnergyLoop Mobile
-            </span>
-          </div>
-
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 mobile-card-shadow"
-            style={{
-              background: surfaceColor,
-              border: `1px solid ${borderColor}`,
-              color: theme === 'dark' ? '#fde047' : '#f59e0b',
-            }}
-            title={theme === 'dark' ? 'Cambiar a Modo Claro pastel' : 'Cambiar a Modo Oscuro'}
-            aria-label="Cambiar tema"
-          >
-            <span className="text-base leading-none">{theme === 'dark' ? '☀️' : '🌙'}</span>
-          </button>
-        </div>
-
         {/* Hero Section */}
-        <div className="welcome-hero flex flex-col items-center text-center my-auto pt-4">
+        <div className="welcome-hero flex flex-col items-center text-center my-auto pt-2">
           {/* Logo Squircle with Ambient Glow */}
-          <div className="relative mb-5">
+          <div className="relative mb-4">
             <div
-              className="absolute inset-0 rounded-[32px] blur-xl opacity-40 transition-opacity"
+              className="absolute inset-0 rounded-[30px] blur-xl opacity-35"
               style={{ background: '#4eba87' }}
             />
             <div
-              className="relative w-24 h-24 rounded-[28px] p-2 flex items-center justify-center mobile-card-shadow"
+              className="relative w-20 h-20 rounded-[26px] p-2 flex items-center justify-center mobile-card-shadow"
               style={{
                 background: theme === 'dark' ? '#181b22' : '#ffffff',
                 border: `1.5px solid ${borderColor}`,
@@ -103,43 +73,44 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               <img
                 src="/favicon.svg"
                 alt="EnergyLoop"
-                className="w-full h-full object-contain rounded-[22px]"
+                className="w-full h-full object-contain rounded-[20px]"
               />
             </div>
           </div>
 
           <h1
-            className="text-2xl font-black tracking-tight leading-tight mb-2"
+            className="text-2xl font-black tracking-tight leading-tight mb-1.5"
             style={{ color: textColor }}
           >
             EnergyLoop
           </h1>
 
           <p
-            className="text-xs font-semibold tracking-wide uppercase mb-3"
+            className="text-[11px] font-bold tracking-wider uppercase mb-2"
             style={{ color: '#4eba87' }}
           >
             Nutrición Inteligente & Balance Diario
           </p>
 
           <p
-            className="text-xs max-w-[290px] leading-relaxed mb-6"
+            className="text-xs max-w-[280px] leading-relaxed mb-5"
             style={{ color: secondaryText }}
           >
             Controla tus calorías, comidas y entrenamientos con diseño mobile-first y respaldo en la nube.
           </p>
 
-          {/* Feature Highlights (Pastel Cards) */}
-          <div className="w-full flex flex-col gap-2.5 text-left">
+          {/* Feature Highlights: 2 en primera línea (2x2) y la 3ra sola en segunda línea */}
+          <div className="w-full grid grid-cols-2 gap-2.5 text-left">
+            {/* Card 1: Escaneo con IA */}
             <div
-              className="welcome-feature p-3 rounded-2xl flex items-center gap-3 mobile-card-shadow"
+              className="welcome-feature p-3 rounded-2xl flex flex-col gap-1.5 mobile-card-shadow"
               style={{
-                background: theme === 'dark' ? '#181b22' : '#ffffff',
+                background: surfaceColor,
                 border: `1px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
                   background: theme === 'dark' ? 'rgba(78, 186, 135, 0.18)' : '#e8f5ee',
                   color: '#4eba87',
@@ -147,28 +118,29 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               >
                 🥗
               </div>
-              <div className="min-w-0 flex-1">
+              <div>
                 <span
                   className="text-xs font-bold block"
                   style={{ color: textColor }}
                 >
                   Escaneo con IA
                 </span>
-                <span className="text-[10px] block" style={{ color: secondaryText }}>
-                  Reconoce alimentos y macros con tu cámara al instante.
+                <span className="text-[10px] block leading-tight mt-0.5" style={{ color: secondaryText }}>
+                  Reconoce alimentos y macros con tu cámara.
                 </span>
               </div>
             </div>
 
+            {/* Card 2: Anillo de Energía */}
             <div
-              className="welcome-feature p-3 rounded-2xl flex items-center gap-3 mobile-card-shadow"
+              className="welcome-feature p-3 rounded-2xl flex flex-col gap-1.5 mobile-card-shadow"
               style={{
-                background: theme === 'dark' ? '#181b22' : '#ffffff',
+                background: surfaceColor,
                 border: `1px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
                   background: theme === 'dark' ? 'rgba(251, 164, 113, 0.18)' : '#fff0e6',
                   color: '#fba471',
@@ -176,28 +148,29 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
               >
                 ⚡
               </div>
-              <div className="min-w-0 flex-1">
+              <div>
                 <span
                   className="text-xs font-bold block"
                   style={{ color: textColor }}
                 >
                   Anillo de Energía
                 </span>
-                <span className="text-[10px] block" style={{ color: secondaryText }}>
-                  Monitorea tus calorías consumidas vs. quemadas en tiempo real.
+                <span className="text-[10px] block leading-tight mt-0.5" style={{ color: secondaryText }}>
+                  Monitorea calorías in/out en tiempo real.
                 </span>
               </div>
             </div>
 
+            {/* Card 3: Sincronización en la Nube (Segunda línea sola: col-span-2) */}
             <div
-              className="welcome-feature p-3 rounded-2xl flex items-center gap-3 mobile-card-shadow"
+              className="welcome-feature col-span-2 p-3 rounded-2xl flex items-center gap-3 mobile-card-shadow"
               style={{
-                background: theme === 'dark' ? '#181b22' : '#ffffff',
+                background: surfaceColor,
                 border: `1px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
                 style={{
                   background: theme === 'dark' ? 'rgba(126, 200, 227, 0.18)' : '#e1f5fe',
                   color: '#7ec8e3',
@@ -212,7 +185,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
                 >
                   Sincronización en la Nube
                 </span>
-                <span className="text-[10px] block" style={{ color: secondaryText }}>
+                <span className="text-[10px] block leading-tight" style={{ color: secondaryText }}>
                   Conectado a tu base de datos Supabase con respaldo seguro.
                 </span>
               </div>
@@ -220,36 +193,41 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="welcome-actions w-full flex flex-col gap-2.5 pt-4">
-          <button
-            onClick={() => openAuthModal('register')}
-            className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-md flex items-center justify-center gap-2"
-            style={{
-              background: '#4eba87',
-              color: '#ffffff',
-            }}
-          >
-            <span>Crear Cuenta</span>
-            <span>✨</span>
-          </button>
+        {/* Action Buttons: Iniciar Sesión antes que Crear Cuenta, ambos en la misma línea */}
+        <div className="welcome-actions w-full flex flex-col gap-2 pt-3">
+          <div className="grid grid-cols-2 gap-2.5 w-full">
+            {/* 1° Botón: Iniciar Sesión (Antes que Crear Cuenta) */}
+            <button
+              onClick={() => openAuthModal('login')}
+              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-1.5"
+              style={{
+                background: surfaceColor,
+                border: `1.5px solid ${borderColor}`,
+                color: textColor,
+              }}
+            >
+              <span>Iniciar Sesión</span>
+              <span className="text-xs">➔</span>
+            </button>
 
-          <button
-            onClick={() => openAuthModal('login')}
-            className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-2"
-            style={{
-              background: surfaceColor,
-              border: `1.5px solid ${borderColor}`,
-              color: textColor,
-            }}
-          >
-            <span>Iniciar Sesión</span>
-            <span>➔</span>
-          </button>
+            {/* 2° Botón: Crear Cuenta */}
+            <button
+              onClick={() => openAuthModal('register')}
+              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-md flex items-center justify-center gap-1.5"
+              style={{
+                background: '#4eba87',
+                color: '#ffffff',
+              }}
+            >
+              <span>Crear Cuenta</span>
+              <span className="text-xs">✨</span>
+            </button>
+          </div>
 
+          {/* Continuar como invitado */}
           <button
             onClick={onContinueAsGuest}
-            className="w-full py-2 text-center text-[11px] font-bold transition-all duration-200 hover:underline active:scale-95 mt-1"
+            className="w-full py-2 text-center text-[11px] font-bold transition-all duration-200 hover:underline active:scale-95"
             style={{ color: secondaryText }}
           >
             Continuar como invitado sin cuenta →
