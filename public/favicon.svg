@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4EBA87"/>
+      <stop offset="50%" stop-color="#38A169"/>
+      <stop offset="100%" stop-color="#22543D"/>
+    </linearGradient>
+
+    <!-- Loop Glow / Gradients -->
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#E8F5EE"/>
+      <stop offset="100%" stop-color="#FBA471"/>
+    </linearGradient>
+
+    <!-- Energy Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0E6"/>
+      <stop offset="100%" stop-color="#FBA471"/>
+    </linearGradient>
+
+    <!-- Shadow filter for depth -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#143B2A" flood-opacity="0.35"/>
+    </filter>
+    <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FFFFFF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- iOS / Play Store Rounded Squircle -->
+  <rect width="512" height="512" rx="118" fill="url(#bgGrad)"/>
+
+  <!-- Subtle Ambient Glow inside Icon -->
+  <circle cx="256" cy="256" r="190" fill="#FFFFFF" opacity="0.08"/>
+
+  <!-- Outer Energy Loop Ring (Track) -->
+  <circle 
+    cx="256" 
+    cy="256" 
+    r="160" 
+    fill="none" 
+    stroke="#FFFFFF" 
+    stroke-opacity="0.22" 
+    stroke-width="32" 
+    stroke-linecap="round"
+  />
+
+  <!-- Active Dynamic Energy Loop (Calorie Balance & Vitality) -->
+  <path
+    d="M 256 96 
+       A 160 160 0 1 1 120 340"
+    fill="none"
+    stroke="url(#ringGrad)"
+    stroke-width="34"
+    stroke-linecap="round"
+    filter="url(#shadow)"
+  />
+
+  <!-- Small Loop Endpoint Pulse -->
+  <circle cx="120" cy="340" r="17" fill="#FBA471" filter="url(#innerGlow)"/>
+
+  <!-- Center Vitality & Health Symbol: Dynamic Infinity Loop + Leaf / Spark -->
+  <g filter="url(#shadow)">
+    <!-- Stylized Infinity / Nutrition & Activity Balance Loop -->
+    <path 
+      d="M 195 256 
+         C 165 220 135 220 135 256 
+         C 135 292 165 292 195 256 
+         C 225 220 287 220 317 256 
+         C 347 292 377 292 377 256 
+         C 377 220 347 220 317 256 
+         C 287 292 225 292 195 256 Z" 
+      fill="none" 
+      stroke="#FFFFFF" 
+      stroke-width="20" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+    />
+
+    <!-- Central Energy Spark (Orange Accent) -->
+    <circle cx="256" cy="256" r="14" fill="url(#accentGrad)" filter="url(#innerGlow)"/>
+  </g>
+</svg>

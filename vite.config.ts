@@ -7,7 +7,6 @@ import {
   getFontLinks,
   getIconLinks,
   getInitialStyles,
-  getMetaTagsAndIconLinks,
 } from '@porsche-design-system/components-react/partials';
 
 const transformIndexHtmlPlugin = () => {
@@ -20,7 +19,6 @@ const transformIndexHtmlPlugin = () => {
         getFontLinks({ weights: ['regular', 'semi-bold', 'bold'] }),
         getComponentChunkLinks(),
         getIconLinks(),
-        getMetaTagsAndIconLinks({ appTitle: 'Porsche Design System' }),
       ].join('');
 
       return html.replace(/<\/head>/, `${headPartials}</head>`);
