@@ -71,45 +71,45 @@ interface Props {
 export function MacroBar({ protein, carbs, fat, proteinGoal, theme }: Props) {
   return (
     <div className="flex gap-2 w-full">
-      {/* Proteínas - Naranja Pastel Suave */}
+      {/* Proteínas - Naranja Pastel Mate */}
       <MacroBarItem
         label="Proteínas"
         current={protein}
         goal={proteinGoal ?? 150}
         unit="g"
         icon="🥩"
-        barColor="#fba471"
-        bgColor="#fff0e6"
-        borderColor="#fed7aa"
-        textColor="#c2410c"
+        barColor="#ea7a40"
+        bgColor="#fceee5"
+        borderColor="#f5cfbb"
+        textColor="#9a3412"
         theme={theme}
       />
 
-      {/* Carbohidratos - Beige Pastel Cálido */}
+      {/* Carbohidratos - Beige Pastel Mate */}
       <MacroBarItem
         label="Carbos"
         current={carbs}
         goal={250}
         unit="g"
         icon="🥖"
-        barColor="#e0cfb8"
-        bgColor="#f7f4ee"
-        borderColor="#e9e4d8"
-        textColor="#706453"
+        barColor="#c7bbaa"
+        bgColor="#efe9dc"
+        borderColor="#e0d5c3"
+        textColor="#5c5245"
         theme={theme}
       />
 
-      {/* Grasas - Celeste Pastel Suave */}
+      {/* Grasas - Celeste Pastel Mate */}
       <MacroBarItem
         label="Grasas"
         current={fat}
         goal={65}
         unit="g"
         icon="🥑"
-        barColor="#7ec8e3"
-        bgColor="#e1f5fe"
-        borderColor="#b3e5fc"
-        textColor="#0277bd"
+        barColor="#4fa4c7"
+        bgColor="#e5f2f7"
+        borderColor="#bcdeeb"
+        textColor="#0b5875"
         theme={theme}
       />
     </div>

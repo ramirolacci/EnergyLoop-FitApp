@@ -20,43 +20,40 @@
 
 :root {
   /* ========================================================
-     GAMA PASTEL ENERGYLOOP (Light Mode Predeterminado)
-     - Verde pastel: Salud, Energía y Calorie Ring
-     - Beige pastel: Fondo cálido, textura orgánica y avena
-     - Blanco pastel: Tarjetas y elevación
-     - Celeste pastel: Hidratación, grasas y balance
-     - Naranja pastel: Ejercicio, calorías quemadas y proteínas
+     GAMA PASTEL MATE SÓLIDA ENERGYLOOP (Light Mode Permanente)
+     - Colores opacos, densos, con textura mate / papel nórdico
+     - Cero transparencias lavadas, máxima legibilidad y solidez
   ======================================================== */
-  --pastel-green: #4eba87;
-  --pastel-green-light: #e8f5ee;
-  --pastel-green-border: #b7e4ce;
-  --pastel-green-text: #1d5f3f;
+  --pastel-green: #3ba676;
+  --pastel-green-light: #ddf0e4;
+  --pastel-green-border: #bedecb;
+  --pastel-green-text: #164e35;
 
-  --pastel-beige: #f7f4ee;
-  --pastel-beige-card: #fcfbfa;
-  --pastel-beige-border: #e9e4d8;
-  --pastel-beige-text: #706453;
+  --pastel-beige: #f4efe6;
+  --pastel-beige-card: #ffffff;
+  --pastel-beige-border: #e4dcce;
+  --pastel-beige-text: #5c5245;
 
   --pastel-white: #ffffff;
-  --pastel-white-soft: #faf9f6;
+  --pastel-white-soft: #faf8f5;
 
-  --pastel-blue: #7ec8e3;
-  --pastel-blue-light: #e1f5fe;
-  --pastel-blue-border: #b3e5fc;
-  --pastel-blue-text: #0277bd;
+  --pastel-blue: #4fa4c7;
+  --pastel-blue-light: #e5f2f7;
+  --pastel-blue-border: #bcdeeb;
+  --pastel-blue-text: #0b5875;
 
-  --pastel-orange: #fba471;
-  --pastel-orange-light: #fff0e6;
-  --pastel-orange-border: #fed7aa;
-  --pastel-orange-text: #c2410c;
+  --pastel-orange: #ea7a40;
+  --pastel-orange-light: #fceee5;
+  --pastel-orange-border: #f5cfbb;
+  --pastel-orange-text: #9a3412;
 
-  /* App Theme Variables (Light) */
-  --app-bg: #f7f4ee;
+  /* App Theme Variables (Matte Light) */
+  --app-bg: #f4efe6;
   --app-surface: #ffffff;
-  --app-surface-secondary: #fcfbfa;
-  --app-border: rgba(112, 100, 83, 0.08);
-  --app-text: #1a1e24;
-  --app-text-muted: #78716c;
+  --app-surface-secondary: #fbf9f5;
+  --app-border: #e4dcce;
+  --app-text: #1c1917;
+  --app-text-muted: #6b6357;
 }
 
 html.dark {
@@ -119,13 +116,9 @@ input, select, textarea {
   scrollbar-width: none;
 }
 
-/* Sombra suave y limpia típica de apps de iOS y Play Store */
+/* Sombra mate suave y sólida típica de diseño editorial y móvil nórdico */
 .mobile-card-shadow {
-  box-shadow: 0 4px 20px -2px rgba(112, 100, 83, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-}
-
-.dark .mobile-card-shadow {
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(60, 50, 40, 0.04), 0 1px 3px rgba(60, 50, 40, 0.03);
 }
 
 /* Animación elástica táctil */

@@ -133,38 +133,38 @@ export function History() {
             <WeeklyChart days={weekStats} goal={goal} theme={theme} />
           </div>
 
-          {/* Week summary pills (Beige Pastel & Verde Pastel) */}
+          {/* Week summary pills (Beige Pastel & Verde Pastel Mate) */}
           <div className="history-item grid grid-cols-2 gap-2.5">
-            {/* Promedio - Beige Pastel */}
+            {/* Promedio - Beige Pastel Mate */}
             <div 
               className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
               style={{ 
-                background: '#f7f4ee', 
-                border: '1px solid #e9e4d8' 
+                background: '#efe9dc', 
+                border: '1.5px solid #e0d5c3' 
               }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#706453' }}>
+              <span className="text-[9px] font-bold uppercase tracking-wider" style={{ color: '#5c5245' }}>
                 Promedio Diario
               </span>
-              <div className="text-lg font-black" style={{ color: '#1a1e24' }}>
-                {weekAvgConsumed.toLocaleString()} <span className="text-xs font-normal opacity-50">kcal</span>
+              <div className="text-lg font-black" style={{ color: '#1c1917' }}>
+                {weekAvgConsumed.toLocaleString()} <span className="text-xs font-normal opacity-60">kcal</span>
               </div>
             </div>
 
-            {/* Total Semana - Verde Pastel */}
+            {/* Total Semana - Verde Pastel Mate */}
             <div 
               className="p-3.5 rounded-2xl mobile-card-shadow flex flex-col gap-0.5" 
               style={{ 
-                background: '#e8f5ee',
-                border: '1px solid #b7e4ce',
-                color: '#1d5f3f' 
+                background: '#ddf0e4',
+                border: '1.5px solid #bedecb',
+                color: '#164e35' 
               }}
             >
-              <span className="text-[9px] font-bold uppercase tracking-wider opacity-80">
+              <span className="text-[9px] font-bold uppercase tracking-wider opacity-90">
                 Total Ingerido
               </span>
               <div className="text-lg font-black">
-                {Math.round(weekTotalConsumed).toLocaleString()} <span className="text-xs font-normal opacity-70">kcal</span>
+                {Math.round(weekTotalConsumed).toLocaleString()} <span className="text-xs font-normal opacity-75">kcal</span>
               </div>
             </div>
           </div>

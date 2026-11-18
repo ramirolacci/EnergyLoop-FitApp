@@ -32,12 +32,13 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
     return () => ctx.revert();
   }, { scope: containerRef });
 
-  const outerBg = '#ede8df';
-  const phoneBg = '#f7f4ee';
-  const surfaceColor = '#ffffff';
-  const borderColor = '#e9e4d8';
-  const textColor = '#1a1e24';
-  const secondaryText = '#706453';
+  // Paleta Pastel Mate Sólida (Opaca, cálida, sin brillos plásticos)
+  const outerBg = '#EAE4D7';
+  const phoneBg = '#F4EFE6';
+  const surfaceColor = '#FFFFFF';
+  const borderColor = '#E4DCCE';
+  const textColor = '#1C1917';
+  const secondaryText = '#5C5245';
 
   return (
     <div
@@ -55,16 +56,12 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
       >
         {/* Hero Section */}
         <div className="welcome-hero flex flex-col items-center text-center my-auto pt-2">
-          {/* Logo Squircle with Ambient Glow */}
+          {/* Logo Squircle Mate con Sombra Suave */}
           <div className="relative mb-4">
-            <div
-              className="absolute inset-0 rounded-[30px] blur-xl opacity-35"
-              style={{ background: '#4eba87' }}
-            />
             <div
               className="relative w-20 h-20 rounded-[26px] p-2 flex items-center justify-center mobile-card-shadow"
               style={{
-                background: '#ffffff',
+                background: '#FFFFFF',
                 border: `1.5px solid ${borderColor}`,
               }}
             >
@@ -85,93 +82,96 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
 
           <p
             className="text-[11px] font-bold tracking-wider uppercase mb-2"
-            style={{ color: '#4eba87' }}
+            style={{ color: '#3BA676' }}
           >
             Nutrición Inteligente & Balance Diario
           </p>
 
           <p
-            className="text-xs max-w-[280px] leading-relaxed mb-5"
+            className="text-xs max-w-[280px] leading-relaxed mb-6"
             style={{ color: secondaryText }}
           >
             Controla tus calorías, comidas y entrenamientos con diseño mobile-first y respaldo en la nube.
           </p>
 
-          {/* Feature Highlights: 2 en primera línea (2x2) y la 3ra sola en segunda línea */}
-          <div className="w-full grid grid-cols-2 gap-2.5 text-left">
+          {/* Feature Highlights: Las 3 cards apiladas una sobre otra */}
+          <div className="w-full flex flex-col gap-2.5 text-left">
             {/* Card 1: Escaneo con IA */}
             <div
-              className="welcome-feature p-3 rounded-2xl flex flex-col gap-1.5 mobile-card-shadow"
+              className="welcome-feature p-3.5 rounded-2xl flex items-center gap-3.5 mobile-card-shadow"
               style={{
                 background: surfaceColor,
-                border: `1px solid ${borderColor}`,
+                border: `1.5px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
                 style={{
-                  background: '#e8f5ee',
-                  color: '#4eba87',
+                  background: '#DDF0E4',
+                  border: '1px solid #BEDECB',
+                  color: '#164E35',
                 }}
               >
                 🥗
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <span
                   className="text-xs font-bold block"
                   style={{ color: textColor }}
                 >
                   Escaneo con IA
                 </span>
-                <span className="text-[10px] block leading-tight mt-0.5" style={{ color: secondaryText }}>
-                  Reconoce alimentos y macros con tu cámara.
+                <span className="text-[11px] block leading-snug mt-0.5" style={{ color: secondaryText }}>
+                  Reconoce alimentos y macronutrientes con tu cámara.
                 </span>
               </div>
             </div>
 
             {/* Card 2: Anillo de Energía */}
             <div
-              className="welcome-feature p-3 rounded-2xl flex flex-col gap-1.5 mobile-card-shadow"
+              className="welcome-feature p-3.5 rounded-2xl flex items-center gap-3.5 mobile-card-shadow"
               style={{
                 background: surfaceColor,
-                border: `1px solid ${borderColor}`,
+                border: `1.5px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
                 style={{
-                  background: '#fff0e6',
-                  color: '#fba471',
+                  background: '#FCEEE5',
+                  border: '1px solid #F5CFBB',
+                  color: '#9A3412',
                 }}
               >
                 ⚡
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <span
                   className="text-xs font-bold block"
                   style={{ color: textColor }}
                 >
                   Anillo de Energía
                 </span>
-                <span className="text-[10px] block leading-tight mt-0.5" style={{ color: secondaryText }}>
-                  Monitorea calorías in/out en tiempo real.
+                <span className="text-[11px] block leading-snug mt-0.5" style={{ color: secondaryText }}>
+                  Monitorea tus calorías consumidas vs. quemadas en tiempo real.
                 </span>
               </div>
             </div>
 
-            {/* Card 3: Sincronización en la Nube (Segunda línea sola: col-span-2) */}
+            {/* Card 3: Sincronización en la Nube */}
             <div
-              className="welcome-feature col-span-2 p-3 rounded-2xl flex items-center gap-3 mobile-card-shadow"
+              className="welcome-feature p-3.5 rounded-2xl flex items-center gap-3.5 mobile-card-shadow"
               style={{
                 background: surfaceColor,
-                border: `1px solid ${borderColor}`,
+                border: `1.5px solid ${borderColor}`,
               }}
             >
               <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
                 style={{
-                  background: '#e1f5fe',
-                  color: '#7ec8e3',
+                  background: '#E5F2F7',
+                  border: '1px solid #BCDEEB',
+                  color: '#0B5875',
                 }}
               >
                 ☁️
@@ -183,7 +183,7 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
                 >
                   Sincronización en la Nube
                 </span>
-                <span className="text-[10px] block leading-tight" style={{ color: secondaryText }}>
+                <span className="text-[11px] block leading-snug mt-0.5" style={{ color: secondaryText }}>
                   Conectado a tu base de datos Supabase con respaldo seguro.
                 </span>
               </div>
@@ -211,10 +211,11 @@ export function WelcomeScreen({ onContinueAsGuest }: Props) {
             {/* 2° Botón: Crear Cuenta */}
             <button
               onClick={() => openAuthModal('register')}
-              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-md flex items-center justify-center gap-1.5"
+              className="w-full py-3.5 px-3 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] mobile-card-shadow flex items-center justify-center gap-1.5"
               style={{
-                background: '#4eba87',
-                color: '#ffffff',
+                background: '#3BA676',
+                border: '1.5px solid #339468',
+                color: '#FFFFFF',
               }}
             >
               <span>Crear Cuenta</span>

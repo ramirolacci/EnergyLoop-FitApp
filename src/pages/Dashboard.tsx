@@ -58,8 +58,8 @@ export function Dashboard() {
   const hour = new Date().getHours();
   
   const surfaceColor = '#ffffff';
-  const borderColor = '#f0ebe1';
-  const secondaryText = '#706453';
+  const borderColor = '#e4dcce';
+  const secondaryText = '#5c5245';
 
   const visibleFoods = showAllFood ? todayFoods : todayFoods.slice(0, 3);
   const visibleExercises = showAllExercise ? todayExercises : todayExercises.slice(0, 3);
@@ -80,7 +80,7 @@ export function Dashboard() {
           </div>
           <h1 
             className="text-lg font-black tracking-tight truncate mt-0.5"
-            style={{ color: '#1a1e24' }}
+            style={{ color: '#1c1917' }}
           >
             {profile?.name ? profile.name.split(' ')[0] : 'Mi Balance'}
           </h1>
@@ -93,9 +93,9 @@ export function Dashboard() {
             title={!user ? 'Conectar cuenta en la nube' : profile?.name || 'Perfil'}
             className="h-9 w-9 rounded-xl flex items-center justify-center text-base overflow-hidden transition-all duration-200 active:scale-90 mobile-card-shadow"
             style={{
-              background: user ? '#4eba87' : '#e8f5ee',
-              border: `1px solid ${user ? '#38a169' : '#b7e4ce'}`,
-              color: user ? '#ffffff' : '#1d5f3f',
+              background: user ? '#3ba676' : '#ddf0e4',
+              border: `1.5px solid ${user ? '#339468' : '#bedecb'}`,
+              color: user ? '#ffffff' : '#164e35',
             }}
           >
             {profile?.avatar ? (
@@ -112,86 +112,86 @@ export function Dashboard() {
         className="rounded-3xl p-4 flex flex-col items-center gap-3.5 mobile-card-shadow dash-stats-card transition-all"
         style={{
           background: surfaceColor,
-          border: `1px solid ${borderColor}`,
+          border: `1.5px solid ${borderColor}`,
         }}
       >
-        {/* Ecuación Nutricional en Chips Pasteles */}
+        {/* Ecuación Nutricional en Chips Pasteles Mate */}
         <div className="w-full relative">
           <button 
             onClick={() => setShowInfo(true)}
             className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center transition-all active:scale-90 opacity-60 hover:opacity-100"
-            style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#f7f4ee' }}
+            style={{ background: '#efe9dc' }}
             title="¿Cómo funciona?"
           >
             <PIcon name="question" size="inherit" theme={theme} color="inherit" style={{ width: '10px', height: '10px' }} />
           </button>
 
           <div className="grid grid-cols-4 gap-1 text-center px-0.5 pt-0.5">
-            {/* Meta - Beige Pastel */}
+            {/* Meta - Beige Pastel Mate */}
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: '#f7f4ee',
-                border: '1px solid #e9e4d8'
+                background: '#efe9dc',
+                border: '1px solid #e0d5c3'
               }}
             >
-              <span className="text-[8px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
+              <span className="text-[8px] font-bold uppercase tracking-wider opacity-70" style={{ color: secondaryText }}>
                 Meta
               </span>
-              <span className="text-xs font-black" style={{ color: '#1a1e24' }}>
+              <span className="text-xs font-black" style={{ color: '#1c1917' }}>
                 {goal}
               </span>
             </div>
 
-            {/* Ingerido - Naranja Pastel Suave */}
+            {/* Ingerido - Naranja Pastel Mate */}
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: '#fff0e6',
-                border: '1px solid #fed7aa'
+                background: '#fceee5',
+                border: '1px solid #f5cfbb'
               }}
             >
-              <span className="text-[8px] font-bold uppercase tracking-wider text-[#c2410c]">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#9a3412]">
                 Comida
               </span>
-              <span className="text-xs font-black text-[#c2410c]">
+              <span className="text-xs font-black text-[#9a3412]">
                 {consumed}
               </span>
             </div>
 
-            {/* Quemado - Celeste Pastel Suave */}
+            {/* Quemado - Celeste Pastel Mate */}
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: '#e1f5fe',
-                border: '1px solid #b3e5fc'
+                background: '#e5f2f7',
+                border: '1px solid #bcdeeb'
               }}
             >
-              <span className="text-[8px] font-bold uppercase tracking-wider text-[#0277bd]">
+              <span className="text-[8px] font-bold uppercase tracking-wider text-[#0b5875]">
                 Ejercicio
               </span>
-              <span className="text-xs font-black text-[#0277bd]">
+              <span className="text-xs font-black text-[#0b5875]">
                 {burned}
               </span>
             </div>
 
-            {/* Restantes - Verde Pastel Suave */}
+            {/* Restantes - Verde Pastel Mate */}
             <div 
               className="py-1.5 px-1 rounded-xl flex flex-col items-center"
               style={{ 
-                background: overGoal ? '#fff0e6' : '#e8f5ee',
-                border: `1px solid ${overGoal ? '#fed7aa' : '#b7e4ce'}`
+                background: overGoal ? '#fceee5' : '#ddf0e4',
+                border: `1px solid ${overGoal ? '#f5cfbb' : '#bedecb'}`
               }}
             >
               <span 
                 className="text-[8px] font-bold uppercase tracking-wider"
-                style={{ color: overGoal ? '#c2410c' : '#1d5f3f' }}
+                style={{ color: overGoal ? '#9a3412' : '#164e35' }}
               >
                 {overGoal ? 'Exceso' : 'Restan'}
               </span>
               <span 
                 className="text-xs font-black"
-                style={{ color: overGoal ? '#c2410c' : '#1d5f3f' }}
+                style={{ color: overGoal ? '#9a3412' : '#164e35' }}
               >
                 {Math.abs(remaining)}
               </span>
@@ -214,30 +214,30 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Escáner IA (Verde Pastel Hero) */}
+      {/* Escáner IA (Verde Pastel Mate Sólido) */}
       <section className="dash-item">
         <button
           onClick={() => setModal('scan')}
           className="w-full relative overflow-hidden p-4 rounded-2xl flex items-center justify-between text-left transition-all active:scale-[0.98] mobile-card-shadow"
           style={{ 
-            background: 'linear-gradient(135deg, #4eba87 0%, #34d399 100%)',
+            background: '#3ba676',
             color: '#ffffff',
-            border: '1px solid #b7e4ce'
+            border: '1.5px solid #339468'
           }}
         >
           <div className="relative z-10 flex-1 pr-2">
-            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md mb-1">
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/20 mb-1">
               <span className="text-[10px]">✨</span>
               <span className="text-[9px] font-bold uppercase tracking-wider text-white">IA Vision</span>
             </div>
             <h2 className="text-sm font-black text-white leading-tight">
               Escanear Platillo o Etiqueta
             </h2>
-            <p className="text-[11px] text-white/90 mt-0.5 leading-snug">
+            <p className="text-[11px] text-white/95 mt-0.5 leading-snug">
               Analiza calorías y macronutrientes al instante
             </p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl flex-shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-2xl flex-shrink-0">
             📸
           </div>
         </button>
@@ -257,45 +257,45 @@ export function Dashboard() {
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
             style={{ 
-              background: '#f7f4ee',
-              border: '1px solid #e9e4d8'
+              background: '#fceee5',
+              border: '1px solid #f5cfbb'
             }}
           >
             🍎
           </div>
           <div className="text-left min-w-0">
-            <div className="text-xs font-black truncate" style={{ color: '#1a1e24' }}>
+            <div className="text-xs font-black truncate" style={{ color: '#1c1917' }}>
               Comida
             </div>
-            <div className="text-[10px] font-bold text-[#c2410c]">
+            <div className="text-[10px] font-bold text-[#9a3412]">
               + Registrar
             </div>
           </div>
         </button>
 
-        {/* + Ejercicio (Celeste Pastel) */}
+        {/* + Ejercicio (Celeste Pastel Mate) */}
         <button 
           onClick={() => setModal('addExercise')}
           className="flex items-center gap-2.5 p-3 rounded-2xl transition-all active:scale-95 mobile-card-shadow"
           style={{ 
             background: surfaceColor,
-            border: `1px solid ${borderColor}` 
+            border: `1.5px solid ${borderColor}` 
           }}
         >
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-xs flex-shrink-0"
             style={{ 
-              background: '#e1f5fe',
-              border: '1px solid #b3e5fc'
+              background: '#e5f2f7',
+              border: '1px solid #bcdeeb'
             }}
           >
             💪
           </div>
           <div className="text-left min-w-0">
-            <div className="text-xs font-black truncate" style={{ color: '#1a1e24' }}>
+            <div className="text-xs font-black truncate" style={{ color: '#1c1917' }}>
               Ejercicio
             </div>
-            <div className="text-[10px] font-bold text-[#0277bd]">
+            <div className="text-[10px] font-bold text-[#0b5875]">
               + Quemar
             </div>
           </div>

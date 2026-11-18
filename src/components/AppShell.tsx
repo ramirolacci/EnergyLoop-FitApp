@@ -22,10 +22,10 @@ interface Props {
 export function AppShell({ children }: Props) {
   const { activePage, setActivePage, theme, toastRef } = useApp();
 
-  const outerBg = '#ede8df';
-  const phoneBg = '#f7f4ee';
-  const navBg = 'rgba(255, 255, 255, 0.94)';
-  const navBorder = '#e9e4d8';
+  const outerBg = '#EAE4D7';
+  const phoneBg = '#F4EFE6';
+  const navBg = 'rgba(255, 255, 255, 0.96)';
+  const navBorder = '#E4DCCE';
 
   return (
     <div
@@ -74,8 +74,8 @@ export function AppShell({ children }: Props) {
                   onClick={() => setActivePage(id)}
                   className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 px-2 rounded-full transition-all duration-200 active:scale-95 ${
                     isActive 
-                      ? 'bg-[#e8f5ee] text-[#1d5f3f]'
-                      : 'text-[#78716c] hover:text-[#1a1e24]'
+                      ? 'bg-[#DDF0E4] text-[#164E35]'
+                      : 'text-[#6B6357] hover:text-[#1C1917]'
                   }`}
                   aria-label={label}
                 >
