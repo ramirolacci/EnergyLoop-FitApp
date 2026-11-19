@@ -1,5 +1,7 @@
 <div align="center">
 
+  <img src="public/favicon.svg" alt="EnergyLoop Logo" width="96" height="96" />
+
   <h1>⚡ EnergyLoop</h1>
   <p><strong>Plataforma Inteligente de Nutrición, Balance Energético y Fitness de Alto Rendimiento</strong></p>
 
