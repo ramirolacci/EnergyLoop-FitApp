@@ -731,12 +731,12 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
               </div>
 
               {/* Botones de acción */}
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2 pt-1 pb-2">
                 {!prefill && (
                   <button
                     type="button"
                     onClick={() => setStep('search')}
-                    className="px-4 py-3 rounded-2xl text-xs font-bold transition-all active:scale-95 shrink-0"
+                    className="px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 shrink-0"
                     style={{
                       background: '#FFFFFF',
                       border: '1.5px solid #E4DCCE',
@@ -750,7 +750,7 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex-1 py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
+                  className="flex-1 py-2.5 px-3 rounded-xl text-xs font-black uppercase tracking-tight transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
                   style={{
                     background: '#3BA676',
                     border: '1.5px solid #339468',

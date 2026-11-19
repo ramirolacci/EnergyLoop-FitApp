@@ -240,13 +240,13 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
   if (!shouldRender) return null;
 
   const inputCls =
-    'w-full rounded-2xl px-4 py-2.5 text-base font-semibold outline-none transition-all bg-white border border-[#E4DCCE] text-stone-900 focus:border-[#3BA676] shadow-2xs';
+    'w-full rounded-xl px-3.5 py-2 text-sm font-semibold outline-none transition-all bg-white border border-[#E4DCCE] text-stone-900 focus:border-[#3BA676] shadow-2xs';
   const labelCls = 'text-[10px] font-bold uppercase tracking-wider text-[#5C5245] flex items-center mb-1';
 
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
       style={{
         background: 'rgba(28, 25, 23, 0.45)',
         backdropFilter: 'blur(4px)',
@@ -258,7 +258,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
     >
       <div
         ref={modalBoxRef}
-        className="w-full max-w-[420px] rounded-[28px] p-5 sm:p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto no-scrollbar relative"
+        className="w-full max-w-[420px] rounded-[28px] p-4 sm:p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto no-scrollbar relative"
         style={{
           background: '#F4EFE6',
           border: '1.5px solid #E4DCCE',
@@ -495,17 +495,17 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
 
           {/* PASO 2: DETALLES, INTENSIDAD Y DURACIÓN */}
           {step === 'details' && (
-            <div className="flex flex-col gap-3.5">
+            <div className="flex flex-col gap-2.5">
               {/* Tarjeta del Ejercicio Seleccionado */}
               <div
-                className="p-3.5 rounded-2xl flex items-center justify-between shadow-2xs"
+                className="p-3 rounded-2xl flex items-center justify-between shadow-2xs"
                 style={{
                   background: '#FFFFFF',
                   border: '1.5px solid #E4DCCE',
                 }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-[#DDF0E4] border border-[#BEDECB] flex items-center justify-center text-2xl shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#DDF0E4] border border-[#BEDECB] flex items-center justify-center text-xl shrink-0">
                     {currentTemplate.icon}
                   </div>
                   <div>
@@ -538,20 +538,20 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
 
               {/* Selector de Intensidad */}
               <div
-                className="p-3.5 rounded-2xl flex flex-col gap-2 shadow-2xs"
+                className="p-3 rounded-2xl flex flex-col gap-1.5 shadow-2xs"
                 style={{
                   background: '#FFFFFF',
                   border: '1.5px solid #E4DCCE',
                 }}
               >
                 <span className={labelCls}>Intensidad del esfuerzo</span>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5">
                   {(['low', 'medium', 'high'] as const).map((v) => (
                     <button
                       key={v}
                       type="button"
                       onClick={() => setIntensity(v)}
-                      className="py-2.5 px-2 rounded-xl text-xs font-bold transition-all active:scale-95 text-center whitespace-nowrap"
+                      className="py-2 px-1 rounded-xl text-xs font-bold transition-all active:scale-95 text-center whitespace-nowrap"
                       style={{
                         background: intensity === v ? '#DDF0E4' : '#F4EFE6',
                         border:
@@ -567,7 +567,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
 
               {/* Selector de Duración */}
               <div
-                className="p-3.5 rounded-2xl flex flex-col gap-2.5 shadow-2xs"
+                className="p-3 rounded-2xl flex flex-col gap-2 shadow-2xs"
                 style={{
                   background: '#FFFFFF',
                   border: '1.5px solid #E4DCCE',
@@ -585,7 +585,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                         setDuration(d);
                         setCustomDuration('');
                       }}
-                      className="py-2.5 px-1 rounded-xl text-xs font-bold transition-all active:scale-95 text-center whitespace-nowrap"
+                      className="py-2 px-1 rounded-xl text-xs font-bold transition-all active:scale-95 text-center whitespace-nowrap"
                       style={{
                         background:
                           duration === d && !customDuration ? '#DDF0E4' : '#F4EFE6',
@@ -603,7 +603,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                 </div>
 
                 {/* Input opcional para duración personalizada */}
-                <div className="pt-1">
+                <div className="pt-0.5">
                   <input
                     type="number"
                     inputMode="numeric"
@@ -618,7 +618,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
               {/* Si es categoría de Fuerza: Series y Repeticiones */}
               {currentTemplate.category === 'strength' && (
                 <div
-                  className="p-3.5 rounded-2xl grid grid-cols-2 gap-3 shadow-2xs"
+                  className="p-3 rounded-2xl grid grid-cols-2 gap-2.5 shadow-2xs"
                   style={{
                     background: '#FFFFFF',
                     border: '1.5px solid #E4DCCE',
@@ -657,7 +657,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
 
               {/* Banner Resumen en Verde Pastel Mate */}
               <div
-                className="rounded-2xl p-4 flex items-center justify-between shadow-xs"
+                className="rounded-2xl p-3.5 flex items-center justify-between shadow-xs"
                 style={{
                   background: '#3BA676',
                   color: '#FFFFFF',
@@ -667,7 +667,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                   <div className="text-[10px] font-black uppercase tracking-wider text-[#DDF0E4]">
                     Quemarás aprox.
                   </div>
-                  <div className="text-2xl font-black tracking-tight leading-tight mt-0.5">
+                  <div className="text-xl font-black tracking-tight leading-tight mt-0.5">
                     {formatNumber(caloriesBurned)} kcal
                   </div>
                 </div>
@@ -675,18 +675,18 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                   <div className="text-[10px] font-black uppercase tracking-wider text-[#DDF0E4]">
                     Tiempo
                   </div>
-                  <div className="text-lg font-black tracking-tight leading-tight mt-0.5">
+                  <div className="text-base font-black tracking-tight leading-tight mt-0.5">
                     {activeDuration} min
                   </div>
                 </div>
               </div>
 
-              {/* Botones de acción al pie */}
-              <div className="flex gap-2 pt-1">
+              {/* Botones de acción al pie con buen padding inferior */}
+              <div className="flex gap-2 pt-1 pb-2">
                 <button
                   type="button"
                   onClick={() => setStep('search')}
-                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all active:scale-95 shrink-0"
+                  className="px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 shrink-0"
                   style={{
                     background: '#FFFFFF',
                     border: '1.5px solid #E4DCCE',
@@ -699,7 +699,7 @@ export function AddExerciseModal({ open, onDismiss }: Props) {
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex-1 py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
+                  className="flex-1 py-2.5 px-3 rounded-xl text-xs font-black uppercase tracking-tight transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
                   style={{
                     background: '#3BA676',
                     border: '1.5px solid #339468',
