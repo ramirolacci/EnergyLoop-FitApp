@@ -602,26 +602,21 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
 
               {/* Selector de Porciones Rápidas */}
               <div
-                className="p-3.5 rounded-2xl flex flex-col gap-2 shadow-2xs"
+                className="p-3.5 rounded-2xl flex flex-col gap-2.5 shadow-2xs"
                 style={{
                   background: '#FFFFFF',
                   border: '1.5px solid #E4DCCE',
                 }}
               >
-                <div className="flex items-center justify-between">
-                  <span className={labelCls}>Porciones consumidas</span>
-                  <span className="text-xs font-black text-[#164E35]">
-                    {servingsConsumed} {servingsConsumed === 1 ? 'porción' : 'porciones'}
-                  </span>
-                </div>
+                <span className={labelCls}>Porciones consumidas</span>
 
-                <div className="grid grid-cols-4 gap-1.5">
-                  {[0.5, 1, 1.5, 2].map((v) => (
+                <div className="grid grid-cols-3 gap-2">
+                  {[0.5, 1, 1.5, 2, 2.5, 3].map((v) => (
                     <button
                       key={v}
                       type="button"
                       onClick={() => update('servings_consumed', String(v))}
-                      className="py-2 px-1 rounded-xl text-xs font-bold transition-all active:scale-95 text-center"
+                      className="py-2.5 px-2 rounded-xl text-xs font-bold transition-all active:scale-95 text-center whitespace-nowrap"
                       style={{
                         background:
                           form.servings_consumed === String(v) ? '#DDF0E4' : '#F4EFE6',
@@ -636,18 +631,6 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                       {v === 1 ? '1 porción' : `${v} porc.`}
                     </button>
                   ))}
-                </div>
-
-                {/* Input manual de porción */}
-                <div className="pt-1">
-                  <input
-                    type="number"
-                    step="0.1"
-                    placeholder="O ingresa cantidad manual..."
-                    value={form.servings_consumed}
-                    onChange={(e) => update('servings_consumed', e.target.value)}
-                    className={inputCls}
-                  />
                 </div>
               </div>
 
@@ -680,7 +663,10 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                   }}
                 >
                   <div>
-                    <label className={labelCls}>🥩 Proteína (g)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-tight text-[#5C5245] flex items-center gap-1 mb-1 whitespace-nowrap">
+                      <span>🥩</span>
+                      <span>Proteína (g)</span>
+                    </label>
                     <input
                       type="number"
                       step="0.5"
@@ -690,7 +676,10 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>🍞 Carbos (g)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-tight text-[#5C5245] flex items-center gap-1 mb-1 whitespace-nowrap">
+                      <span>🍞</span>
+                      <span>Carbos (g)</span>
+                    </label>
                     <input
                       type="number"
                       step="0.5"
@@ -700,7 +689,10 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>🥑 Grasas (g)</label>
+                    <label className="text-[9px] font-bold uppercase tracking-tight text-[#5C5245] flex items-center gap-1 mb-1 whitespace-nowrap">
+                      <span>🥑</span>
+                      <span>Grasas (g)</span>
+                    </label>
                     <input
                       type="number"
                       step="0.5"
