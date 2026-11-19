@@ -217,7 +217,7 @@ export function AuthModal({ open, onDismiss }: Props) {
               </label>
               <input
                 type="text"
-                placeholder="Ej. Martín Gómez"
+                placeholder="Ingresa tu nombre y apellido"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className={inputCls}
