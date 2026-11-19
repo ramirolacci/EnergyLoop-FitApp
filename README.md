@@ -5,6 +5,7 @@
 
   <p>
     <a href="#-acerca-de-energyloop">Acerca de</a> •
+    <a href="#-capturas-de-pantalla">Galería</a> •
     <a href="#-características-principales">Características</a> •
     <a href="#-stack-tecnológico">Tecnología</a> •
     <a href="#-pilares-de-experiencia">Experiencia</a> •
@@ -30,6 +31,61 @@
 **EnergyLoop** transforma la gestión de la nutrición y el entrenamiento físico mediante una interfaz vanguardista y asistencia de Inteligencia Artificial. Diseñada bajo los estándares visuales de **Porsche Design System**, la plataforma ofrece una visión completa, precisa y elegante del ciclo de energía corporal diario.
 
 Permite a los usuarios tomar control total sobre sus objetivos metabólicos, registrar comidas mediante visión computacional, monitorear la hidratación y analizar la evolución de sus entrenamientos en tiempo real.
+
+---
+
+## 📱 Capturas de Pantalla
+
+<div align="center">
+  <table align="center" width="100%">
+    <tr>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost.png" width="380" alt="Inicio & Autenticación" /><br />
+        <sub><b>Inicio & Bienvenida</b></sub>
+      </td>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(1).png" width="380" alt="Dashboard Principal" /><br />
+        <sub><b>Dashboard & Balance Calórico</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(2).png" width="380" alt="Historial y Métricas" /><br />
+        <sub><b>Historial & Métricas Semanales</b></sub>
+      </td>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(3).png" width="380" alt="Ajustes de Perfil" /><br />
+        <sub><b>Ajustes & Metas Nutricionales</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(4).png" width="380" alt="Asistente TMB - Wizard" /><br />
+        <sub><b>Asistente TMB (Wizard)</b></sub>
+      </td>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(5).png" width="380" alt="Cálculo del Plan Metabólico" /><br />
+        <sub><b>Cálculo del Plan Metabólico</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(6).png" width="380" alt="Registro de Comidas" /><br />
+        <sub><b>Registro de Comidas (Selección)</b></sub>
+      </td>
+      <td align="center" width="50%">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(7).png" width="380" alt="Detalles de Comida y Porciones" /><br />
+        <sub><b>Porciones y Macronutrientes</b></sub>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="2">
+        <img src="public/screenshots/iPhone-13-PRO-localhost%20(8).png" width="380" alt="Registro de Ejercicios e Intensidad" /><br />
+        <sub><b>Registro de Ejercicios & Quema Calórica</b></sub>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ---
 
