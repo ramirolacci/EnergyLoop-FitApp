@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { PButton, PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
+import { PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
@@ -269,48 +269,60 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
             </div>
           </div>
 
-          {/* Protein goal */}
-          <div>
-            <label htmlFor="protein-goal" className={labelCls}>Meta de Proteína (g)</label>
-            <input
-              id="protein-goal"
-              className={inputCls}
-              type="text"
-              inputMode="numeric"
-              placeholder="Ej: 150"
-              value={formatThousands(proteinGoal)}
-              onChange={e => {
-                const raw = e.target.value.replace(/\D/g, '');
-                setProteinGoal(raw);
-              }}
-            />
+          {/* Fila: Meta de Proteína y Peso Corporal en la misma línea */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Protein goal */}
+            <div>
+              <label htmlFor="protein-goal" className={labelCls}>Meta de Proteína (g)</label>
+              <input
+                id="protein-goal"
+                className={inputCls}
+                type="text"
+                inputMode="numeric"
+                placeholder="Ej: 150"
+                value={formatThousands(proteinGoal)}
+                onChange={e => {
+                  const raw = e.target.value.replace(/\D/g, '');
+                  setProteinGoal(raw);
+                }}
+              />
+            </div>
+
+            {/* Weight */}
+            <div>
+              <label htmlFor="body-weight" className={labelCls}>Peso Corporal (kg)</label>
+              <input
+                id="body-weight"
+                className={inputCls}
+                type="number"
+                step="0.1"
+                value={weight}
+                onChange={e => setWeight(e.target.value)}
+              />
+            </div>
           </div>
 
-          {/* Weight */}
-          <div>
-            <label htmlFor="body-weight" className={labelCls}>Peso Corporal (kg)</label>
-            <input
-              id="body-weight"
-              className={inputCls}
-              type="number"
-              step="0.1"
-              value={weight}
-              onChange={e => setWeight(e.target.value)}
-            />
-          </div>
-
-          <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)', marginTop: 4 }}>
-            <PButton
-              variant="primary"
-              onClick={handleSave}
-              loading={saving}
-              icon="check"
-              theme={theme}
-              style={{ width: '100%', margin: 0 }}
-            >
-              Guardar Cambios
-            </PButton>
-          </div>
+          {/* Botón Guardar Cambios en verde pastel mate */}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 mt-1"
+            style={{
+              background: '#3ba676',
+              border: '1.5px solid #339468',
+              color: '#ffffff',
+            }}
+          >
+            {saving ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <span>✓</span>
+                <span>Guardar Cambios</span>
+              </>
+            )}
+          </button>
         </div>
       </section>
 
