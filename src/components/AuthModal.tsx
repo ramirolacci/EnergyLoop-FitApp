@@ -3,7 +3,6 @@ import {
   PModal,
   PHeading,
   PText,
-  PButton,
   PInlineNotification,
   PSpinner,
 } from '@porsche-design-system/components-react';
@@ -24,8 +23,11 @@ export function AuthModal({ open, onDismiss }: Props) {
   useEffect(() => {
     if (open) {
       setMode(authModalMode || 'login');
+      setErrorMsg('');
+      setInfoMsg('');
     }
   }, [open, authModalMode]);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -93,9 +95,8 @@ export function AuthModal({ open, onDismiss }: Props) {
     }
   };
 
-  const surfaceColor = '#f7f4ee';
-  const borderColor = '#e9e4d8';
-  const inputCls = 'w-full rounded-2xl px-4 py-3 text-base outline-none transition-all bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87]';
+  const inputCls = 'w-full rounded-2xl px-4 py-3 text-base outline-none transition-all bg-white border border-[#E4DCCE] text-stone-900 focus:border-[#3BA676] shadow-2xs';
+  const labelCls = 'text-[11px] font-bold uppercase tracking-wider text-[#5C5245]';
 
   return (
     <PModal
@@ -105,60 +106,24 @@ export function AuthModal({ open, onDismiss }: Props) {
       dismissButton={true}
       fullscreen={{ base: true, s: false }}
     >
+      {/* Header específico para cada pantalla (sin switches redundantes) */}
       <div slot="header" className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-[#4eba87] flex items-center justify-center text-lg shadow-sm">
-          ⚡
+        <div className="w-10 h-10 rounded-xl bg-[#3BA676] text-white flex items-center justify-center text-lg shadow-xs">
+          {mode === 'login' ? '🔑' : '✨'}
         </div>
         <div>
           <PHeading size="small" tag="h2" theme={theme}>
             {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
           </PHeading>
-          <PText size="xx-small" theme={theme} style={{ color: theme === 'dark' ? '#94a3b8' : '#78716c' }}>
-            {mode === 'login' ? 'Sincroniza tus registros en la nube' : 'Empieza a transformar tu rendimiento'}
+          <PText size="xx-small" theme={theme} style={{ color: '#5C5245' }}>
+            {mode === 'login' 
+              ? 'Accede a tu cuenta de EnergyLoop' 
+              : 'Empieza a registrar tu nutrición y entrenamientos'}
           </PText>
         </div>
       </div>
 
-      <div className="flex flex-col gap-5 py-2">
-        {/* Toggle Mode Pills */}
-        <div
-          className="flex p-1 rounded-2xl"
-          style={{ background: surfaceColor, border: `1px solid ${borderColor}` }}
-        >
-          <button
-            type="button"
-            onClick={() => {
-              setMode('login');
-              setErrorMsg('');
-            }}
-            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
-              mode === 'login'
-                ? 'bg-[#4eba87] text-white shadow-xs'
-                : theme === 'dark'
-                ? 'text-[#94a3b8] hover:text-white'
-                : 'text-[#706453] hover:text-black'
-            }`}
-          >
-            Iniciar Sesión
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode('register');
-              setErrorMsg('');
-            }}
-            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
-              mode === 'register'
-                ? 'bg-[#4eba87] text-white shadow-xs'
-                : theme === 'dark'
-                ? 'text-[#94a3b8] hover:text-white'
-                : 'text-[#706453] hover:text-black'
-            }`}
-          >
-            Crear Cuenta
-          </button>
-        </div>
-
+      <div className="flex flex-col gap-4 py-2">
         {errorMsg && (
           <PInlineNotification
             state="error"
@@ -177,10 +142,11 @@ export function AuthModal({ open, onDismiss }: Props) {
           />
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+          {/* Solo en Crear Cuenta */}
           {mode === 'register' && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-[#afb0b3]">
+              <label className={labelCls}>
                 Nombre completo
               </label>
               <input
@@ -195,8 +161,9 @@ export function AuthModal({ open, onDismiss }: Props) {
             </div>
           )}
 
+          {/* Campo Correo Electrónico */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#afb0b3]">
+            <label className={labelCls}>
               Correo Electrónico
             </label>
             <input
@@ -208,11 +175,13 @@ export function AuthModal({ open, onDismiss }: Props) {
               disabled={submitting}
               autoCapitalize="none"
               autoCorrect="off"
+              autoFocus={mode === 'login'}
             />
           </div>
 
+          {/* Campo Contraseña */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-[#afb0b3]">
+            <label className={labelCls}>
               Contraseña
             </label>
             <input
@@ -225,39 +194,69 @@ export function AuthModal({ open, onDismiss }: Props) {
             />
           </div>
 
+          {/* Botón de acción principal */}
           <div className="pt-2">
-            <div
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3.5 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
               style={{
-                borderRadius: '9999px',
-                overflow: 'hidden',
-                width: '100%',
-                transform: 'translateZ(0)',
+                background: '#3BA676',
+                border: '1.5px solid #339468',
+                color: '#FFFFFF',
               }}
             >
-              <PButton
-                variant="primary"
-                type="submit"
-                theme={theme}
-                disabled={submitting}
-                style={{ width: '100%', margin: 0 }}
-              >
-                {submitting ? (
-                  <PSpinner size="small" theme={theme} />
-                ) : mode === 'login' ? (
-                  'Ingresar'
-                ) : (
-                  'Registrarme'
-                )}
-              </PButton>
-            </div>
+              {submitting ? (
+                <PSpinner size="small" theme={theme} />
+              ) : mode === 'login' ? (
+                <>
+                  <span>Iniciar Sesión</span>
+                  <span>➔</span>
+                </>
+              ) : (
+                <>
+                  <span>Crear Cuenta</span>
+                  <span>✨</span>
+                </>
+              )}
+            </button>
           </div>
         </form>
 
-        <div className="text-center">
+        {/* Enlace sutil para alternar si se equivocó de botón en la bienvenida */}
+        <div className="text-center pt-1">
+          {mode === 'login' ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMode('register');
+                setErrorMsg('');
+                setInfoMsg('');
+              }}
+              className="text-[11px] font-bold text-[#5C5245] hover:text-[#1C1917] hover:underline transition-all"
+            >
+              ¿No tienes cuenta aún? <span className="text-[#3BA676]">Crear cuenta</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setMode('login');
+                setErrorMsg('');
+                setInfoMsg('');
+              }}
+              className="text-[11px] font-bold text-[#5C5245] hover:text-[#1C1917] hover:underline transition-all"
+            >
+              ¿Ya tienes una cuenta? <span className="text-[#3BA676]">Iniciar sesión</span>
+            </button>
+          )}
+        </div>
+
+        <div className="text-center pt-2">
           <PText
             size="xx-small"
             theme={theme}
-            style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}
+            style={{ color: '#8C8273' }}
           >
             Tus datos de salud y nutrición están protegidos con cifrado y seguridad RLS de extremo a extremo.
           </PText>
