@@ -212,14 +212,9 @@ export function SetupModal({ open, onDismiss }: Props) {
               ⚡
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base font-black text-[#1C1917] tracking-tight leading-tight">
-                  Asistente TMB
-                </h2>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#DDF0E4] text-[#164E35] border border-[#BEDECB]">
-                  Paso {stepMeta.index} de 4
-                </span>
-              </div>
+              <h2 className="text-base font-black text-[#1C1917] tracking-tight leading-tight">
+                Asistente TMB
+              </h2>
               <p className="text-xs text-[#5C5245] font-medium leading-none mt-1">
                 {stepMeta.desc}
               </p>
@@ -413,11 +408,11 @@ export function SetupModal({ open, onDismiss }: Props) {
               ))}
 
               {/* Botones de navegación */}
-              <div className="grid grid-cols-2 gap-2 pt-2">
+              <div className="flex gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setStep('physical')}
-                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all active:scale-95 shrink-0"
                   style={{
                     background: '#FFFFFF',
                     border: '1.5px solid #E4DCCE',
@@ -429,7 +424,7 @@ export function SetupModal({ open, onDismiss }: Props) {
                 <button
                   type="button"
                   onClick={() => setStep('goal')}
-                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
                   style={{
                     background: '#3BA676',
                     border: '1.5px solid #339468',
@@ -484,11 +479,11 @@ export function SetupModal({ open, onDismiss }: Props) {
               ))}
 
               {/* Botones de navegación */}
-              <div className="grid grid-cols-2 gap-2 pt-2">
+              <div className="flex gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setStep('activity')}
-                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all active:scale-95 shrink-0"
                   style={{
                     background: '#FFFFFF',
                     border: '1.5px solid #E4DCCE',
@@ -500,7 +495,7 @@ export function SetupModal({ open, onDismiss }: Props) {
                 <button
                   type="button"
                   onClick={calculateTDEE}
-                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
                   style={{
                     background: '#3BA676',
                     border: '1.5px solid #339468',
@@ -544,30 +539,32 @@ export function SetupModal({ open, onDismiss }: Props) {
                   border: '1.5px solid #E4DCCE',
                 }}
               >
-                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs">
-                  <span className="text-[#5C5245] font-semibold">Meta de Proteína recomendada:</span>
-                  <span className="font-black text-[#164E35] bg-[#DDF0E4] px-2 py-0.5 rounded-lg border border-[#BEDECB]">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs gap-2">
+                  <span className="text-[#5C5245] font-semibold">Meta de Proteína:</span>
+                  <span className="font-black text-[#164E35] bg-[#DDF0E4] px-2.5 py-1 rounded-lg border border-[#BEDECB] whitespace-nowrap shrink-0">
                     {Math.round((parseFloat(weight) || 70) * 1.8)}g / día
                   </span>
                 </div>
-                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs gap-2">
                   <span className="text-[#5C5245] font-semibold">Tasa Metabólica Basal (TMB):</span>
-                  <span className="font-black text-[#1C1917]">{bmrValue} kcal en reposo</span>
+                  <span className="font-black text-[#1C1917] whitespace-nowrap shrink-0">
+                    {String(bmrValue).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} kcal en reposo
+                  </span>
                 </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-[#5C5245] font-semibold">Enfoque seleccionado:</span>
-                  <span className="font-bold text-[#3BA676]">
+                <div className="flex items-center justify-between text-xs gap-2">
+                  <span className="text-[#5C5245] font-semibold">Enfoque:</span>
+                  <span className="font-bold text-[#3BA676] whitespace-nowrap shrink-0">
                     {objective === 'lose' ? '📉 Déficit (-500 kcal)' : objective === 'gain' ? '📈 Superávit (+300 kcal)' : '⚖️ Mantenimiento'}
                   </span>
                 </div>
               </div>
 
               {/* Botones de acción */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="flex gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setStep('physical')}
-                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all active:scale-95 shrink-0"
                   style={{
                     background: '#FFFFFF',
                     border: '1.5px solid #E4DCCE',
@@ -579,7 +576,7 @@ export function SetupModal({ open, onDismiss }: Props) {
                 <button
                   type="button"
                   onClick={handleFinish}
-                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
+                  className="flex-1 py-3 px-4 rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap"
                   style={{
                     background: '#3BA676',
                     border: '1.5px solid #339468',
