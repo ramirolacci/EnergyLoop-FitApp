@@ -243,8 +243,24 @@ export function Dashboard() {
         </button>
       </section>
 
-      {/* Acciones Rápidas (Píldoras Pasteles Táctiles) */}
-      <div className="dash-action grid grid-cols-2 gap-2.5">
+      {/* Acciones Rápidas (Registro Manual) */}
+      <div className="dash-action flex flex-col gap-1.5">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs">✍️</span>
+            <span 
+              className="text-[10px] font-bold uppercase tracking-wider opacity-70" 
+              style={{ color: secondaryText }}
+            >
+              Registro Manual
+            </span>
+          </div>
+          <span className="text-[10px] font-semibold text-[#8C8273]">
+            Toca para agregar
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2.5">
         {/* + Comida (Beige Pastel) */}
         <button 
           onClick={() => setModal('addFood')}
@@ -301,6 +317,7 @@ export function Dashboard() {
           </div>
         </button>
       </div>
+    </div>
 
       {/* Comidas Registradas */}
       {todayFoods.length > 0 && (

@@ -212,26 +212,13 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
               Cerrar sesión
             </button>
           ) : (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  localStorage.removeItem('energyloop_guest');
-                  window.location.reload();
-                }}
-                className="px-2.5 py-1 rounded-xl text-xs font-bold text-[#706453] hover:text-[#1C1917] hover:bg-[#EAE4D7] transition-all"
-                title="Volver a la pantalla de bienvenida"
-              >
-                Volver a bienvenida
-              </button>
-              <button
-                type="button"
-                onClick={() => openAuthModal('login')}
-                className="px-3 py-1 rounded-xl text-xs font-bold bg-[#3BA676] hover:bg-[#339468] text-white shadow-xs transition-all active:scale-95"
-              >
-                Conectar
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => openAuthModal('login')}
+              className="px-3 py-1 rounded-xl text-xs font-bold bg-[#3BA676] hover:bg-[#339468] text-white shadow-xs transition-all active:scale-95"
+            >
+              Conectar
+            </button>
           )}
         </div>
       </div>
