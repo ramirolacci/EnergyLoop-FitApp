@@ -1,4 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useApp } from '../context/AppContext';
 import { CountUp } from './CountUp';
 
@@ -13,6 +15,15 @@ export function SetupModal({ open, onDismiss }: Props) {
   const { profile, updateProfile, toast } = useApp();
   const [step, setStep] = useState<Step>('physical');
 
+  // Control de renderizado para permitir animación GSAP de salida
+  const [shouldRender, setShouldRender] = useState(open);
+  const isClosing = useRef(false);
+
+  // Referencias para animaciones GSAP
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const modalBoxRef = useRef<HTMLDivElement>(null);
+  const stepContentRef = useRef<HTMLDivElement>(null);
+
   // Form State precargado con el perfil actual si existe
   const [weight, setWeight] = useState(String(profile?.weight_kg || '70'));
   const [height, setHeight] = useState('175');
@@ -23,16 +34,98 @@ export function SetupModal({ open, onDismiss }: Props) {
   const [calculatedGoal, setCalculatedGoal] = useState(2200);
   const [bmrValue, setBmrValue] = useState(1700);
 
-  // Manejar tecla Escape para cerrar
+  // Sincronizar apertura
+  useEffect(() => {
+    if (open) {
+      setShouldRender(true);
+      isClosing.current = false;
+      setStep('physical');
+    } else if (!isClosing.current) {
+      setShouldRender(false);
+    }
+  }, [open]);
+
+  // Animación GSAP de entrada (aparición sutil y suave)
+  useGSAP(() => {
+    if (shouldRender && !isClosing.current && backdropRef.current && modalBoxRef.current) {
+      gsap.killTweensOf([backdropRef.current, modalBoxRef.current]);
+      
+      // Backdrop suave
+      gsap.fromTo(
+        backdropRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.32, ease: 'power2.out' }
+      );
+
+      // Modal con elevación y micro-escala
+      gsap.fromTo(
+        modalBoxRef.current,
+        { opacity: 0, y: 18, scale: 0.96 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.38, ease: 'power3.out', clearProps: 'transform' }
+      );
+    }
+  }, { dependencies: [shouldRender] });
+
+  // Animación GSAP de transición suave entre pasos del Wizard
+  useGSAP(() => {
+    if (stepContentRef.current && shouldRender && !isClosing.current) {
+      gsap.killTweensOf(stepContentRef.current);
+      gsap.fromTo(
+        stepContentRef.current,
+        { opacity: 0, y: 12, filter: 'blur(2px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 0.32,
+          ease: 'power2.out',
+          clearProps: 'all',
+        }
+      );
+    }
+  }, { dependencies: [step] });
+
+  // Animación GSAP de salida (desaparición sutil y suave)
+  const handleClose = () => {
+    if (isClosing.current) return;
+    isClosing.current = true;
+
+    if (backdropRef.current && modalBoxRef.current) {
+      gsap.killTweensOf([backdropRef.current, modalBoxRef.current]);
+
+      gsap.to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.22,
+        ease: 'power2.in',
+      });
+
+      gsap.to(modalBoxRef.current, {
+        opacity: 0,
+        y: 14,
+        scale: 0.97,
+        duration: 0.22,
+        ease: 'power2.in',
+        onComplete: () => {
+          isClosing.current = false;
+          setShouldRender(false);
+          onDismiss();
+        },
+      });
+    } else {
+      onDismiss();
+    }
+  };
+
+  // Manejar tecla Escape para cerrar con animación suave
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && open) {
-        onDismiss();
+      if (e.key === 'Escape' && shouldRender) {
+        handleClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [open, onDismiss]);
+  }, [shouldRender]);
 
   const stepMeta = useMemo(() => {
     switch (step) {
@@ -82,10 +175,10 @@ export function SetupModal({ open, onDismiss }: Props) {
     });
 
     toast('¡Plan nutricional aplicado con éxito!', 'success');
-    onDismiss();
+    handleClose();
   }
 
-  if (!open) return null;
+  if (!shouldRender) return null;
 
   const inputCls =
     'w-full rounded-2xl px-4 py-2.5 text-base font-semibold outline-none transition-all bg-white border border-[#E4DCCE] text-stone-900 focus:border-[#3BA676] shadow-2xs';
@@ -93,18 +186,20 @@ export function SetupModal({ open, onDismiss }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-200"
+      ref={backdropRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{
         background: 'rgba(28, 25, 23, 0.45)',
         backdropFilter: 'blur(4px)',
         WebkitBackdropFilter: 'blur(4px)',
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onDismiss();
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
-        className="w-full max-w-[420px] rounded-[28px] p-5 sm:p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto no-scrollbar relative animate-in fade-in zoom-in-95 duration-200"
+        ref={modalBoxRef}
+        className="w-full max-w-[420px] rounded-[28px] p-5 sm:p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto no-scrollbar relative"
         style={{
           background: '#F4EFE6',
           border: '1.5px solid #E4DCCE',
@@ -133,7 +228,7 @@ export function SetupModal({ open, onDismiss }: Props) {
 
           <button
             type="button"
-            onClick={onDismiss}
+            onClick={handleClose}
             aria-label="Cerrar"
             className="w-8 h-8 rounded-full flex items-center justify-center text-[#5C5245] hover:text-[#1C1917] hover:bg-[#EAE4D7] transition-all duration-150 active:scale-90 shrink-0"
           >
@@ -167,11 +262,11 @@ export function SetupModal({ open, onDismiss }: Props) {
           ))}
         </div>
 
-        {/* Contenido dinámico del Wizard según el paso */}
-        <div className="flex flex-col gap-3 py-1">
+        {/* Contenido dinámico del Wizard con ref animada por GSAP */}
+        <div ref={stepContentRef} className="flex flex-col gap-3 py-1">
           {/* PASO 1: DATOS FÍSICOS */}
           {step === 'physical' && (
-            <div className="flex flex-col gap-3.5 animate-in fade-in duration-200">
+            <div className="flex flex-col gap-3.5">
               {/* Selector de Género */}
               <div>
                 <label className={labelCls}>
@@ -278,7 +373,7 @@ export function SetupModal({ open, onDismiss }: Props) {
 
           {/* PASO 2: NIVEL DE ACTIVIDAD */}
           {step === 'activity' && (
-            <div className="flex flex-col gap-2.5 animate-in fade-in duration-200">
+            <div className="flex flex-col gap-2.5">
               {[
                 { val: 1.2, label: 'Sedentario', desc: 'Trabajo de escritorio, poco movimiento', icon: '🛋️' },
                 { val: 1.375, label: 'Ligero', desc: 'Ejercicio suave 1 a 3 veces por semana', icon: '🚶' },
@@ -350,7 +445,7 @@ export function SetupModal({ open, onDismiss }: Props) {
 
           {/* PASO 3: OBJETIVO NUTRICIONAL */}
           {step === 'goal' && (
-            <div className="flex flex-col gap-2.5 animate-in fade-in duration-200">
+            <div className="flex flex-col gap-2.5">
               {[
                 { val: 'lose', label: 'Perder peso', desc: 'Déficit calórico seguro (-500 kcal) para quemar grasa', icon: '📉' },
                 { val: 'maintain', label: 'Mantener peso', desc: 'Equilibrio de energía para mantener tu peso actual', icon: '⚖️' },
@@ -421,7 +516,7 @@ export function SetupModal({ open, onDismiss }: Props) {
 
           {/* PASO 4: RESULTADO Y PLAN DIARIO */}
           {step === 'result' && (
-            <div className="flex flex-col gap-3 animate-in fade-in duration-200">
+            <div className="flex flex-col gap-3">
               {/* Banner de Calorías Recomendadas */}
               <div
                 className="w-full rounded-2xl p-5 text-center flex flex-col items-center gap-1 shadow-sm"
