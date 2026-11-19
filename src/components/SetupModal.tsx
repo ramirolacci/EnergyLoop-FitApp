@@ -1,8 +1,5 @@
-import { useState, useRef } from 'react';
-import { PModal, PHeading, PText, PButton } from '@porsche-design-system/components-react';
+import { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import { CountUp } from './CountUp';
 
 interface Props {
@@ -10,237 +7,498 @@ interface Props {
   onDismiss: () => void;
 }
 
-type Step = 'welcome' | 'physical' | 'activity' | 'goal' | 'result';
+type Step = 'physical' | 'activity' | 'goal' | 'result';
 
 export function SetupModal({ open, onDismiss }: Props) {
-  const { updateProfile, theme } = useApp();
-  const [step, setStep] = useState<Step>('welcome');
-  const contentRef = useRef<HTMLDivElement>(null);
+  const { profile, updateProfile, toast } = useApp();
+  const [step, setStep] = useState<Step>('physical');
 
-  useGSAP(() => {
-    if (contentRef.current) {
-      // Clear any ongoing animations to prevent DOM conflicts
-      gsap.killTweensOf(contentRef.current);
-      
-      gsap.fromTo(contentRef.current, 
-        { opacity: 0, y: 10 }, 
-        { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', clearProps: 'all' }
-      );
-    }
-  }, { dependencies: [step] });
-  
-  // Form State
-  const [weight, setWeight] = useState('70');
-  const [height, setHeight] = useState('170');
-  const [age, setAge] = useState('25');
+  // Form State precargado con el perfil actual si existe
+  const [weight, setWeight] = useState(String(profile?.weight_kg || '70'));
+  const [height, setHeight] = useState('175');
+  const [age, setAge] = useState('28');
   const [gender, setGender] = useState<'male' | 'female'>('male');
-  const [activity, setActivity] = useState<number>(1.2); 
+  const [activity, setActivity] = useState<number>(1.375); // Ligero por defecto
   const [objective, setObjective] = useState<'lose' | 'maintain' | 'gain'>('maintain');
-  
-  const [calculatedGoal, setCalculatedGoal] = useState(2000);
+  const [calculatedGoal, setCalculatedGoal] = useState(2200);
+  const [bmrValue, setBmrValue] = useState(1700);
+
+  // Manejar tecla Escape para cerrar
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        onDismiss();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, onDismiss]);
+
+  const stepMeta = useMemo(() => {
+    switch (step) {
+      case 'physical':
+        return { index: 1, title: 'Datos Corporales', desc: 'Ingresa tu sexo, peso, altura y edad' };
+      case 'activity':
+        return { index: 2, title: 'Nivel de Actividad', desc: '¿Cuánto movimiento tienes en tu día a día?' };
+      case 'goal':
+        return { index: 3, title: 'Tu Objetivo', desc: 'Define qué meta quieres alcanzar' };
+      case 'result':
+        return { index: 4, title: 'Tu Plan Diario', desc: 'Presupuesto calórico y de macronutrientes' };
+    }
+  }, [step]);
 
   function calculateTDEE() {
-    const w = parseFloat(weight);
-    const h = parseFloat(height);
-    const a = parseInt(age);
-    
+    const w = parseFloat(weight) || 70;
+    const h = parseFloat(height) || 170;
+    const a = parseInt(age) || 25;
+
+    // Fórmula Harris-Benedict revisada
     let bmr = 0;
     if (gender === 'male') {
-      bmr = 88.362 + (13.397 * w) + (4.799 * h) - (5.677 * a);
+      bmr = 88.362 + 13.397 * w + 4.799 * h - 5.677 * a;
     } else {
-      bmr = 447.593 + (9.247 * w) + (3.098 * h) - (4.330 * a);
+      bmr = 447.593 + 9.247 * w + 3.098 * h - 4.33 * a;
     }
-    
+
+    setBmrValue(Math.round(bmr));
     const tdee = bmr * activity;
-    
+
     let target = tdee;
     if (objective === 'lose') target -= 500;
     if (objective === 'gain') target += 300;
-    
-    setCalculatedGoal(Math.round(target));
+
+    setCalculatedGoal(Math.max(1200, Math.round(target)));
     setStep('result');
   }
 
   async function handleFinish() {
+    const w = parseFloat(weight) || 70;
+    const proteinTarget = Math.round(w * 1.8);
+
     await updateProfile({
       daily_calorie_goal: calculatedGoal,
-      daily_protein_goal: Math.round(parseFloat(weight) * 1.8),
-      weight_kg: parseFloat(weight),
+      daily_protein_goal: proteinTarget,
+      weight_kg: w,
     });
+
+    toast('¡Plan nutricional aplicado con éxito!', 'success');
     onDismiss();
   }
 
-  const surfaceColor = '#f7f4ee';
-  const borderColor = '#e9e4d8';
-  const inputCls = 'w-full rounded-2xl px-4 py-3 text-base font-bold outline-none transition-all bg-white border border-[#e9e4d8] text-slate-900 focus:border-[#4eba87]';
+  if (!open) return null;
+
+  const inputCls =
+    'w-full rounded-2xl px-4 py-2.5 text-base font-semibold outline-none transition-all bg-white border border-[#E4DCCE] text-stone-900 focus:border-[#3BA676] shadow-2xs';
+  const labelCls = 'text-[10px] font-bold uppercase tracking-wider text-[#5C5245] flex items-center mb-1';
 
   return (
-    <PModal
-      open={open}
-      onDismiss={onDismiss}
-      theme={theme}
-      dismissButton={step !== 'welcome'}
-      fullscreen={{ base: true, s: false }}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-200"
+      style={{
+        background: 'rgba(28, 25, 23, 0.45)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onDismiss();
+      }}
     >
-      <PHeading slot="header" size="medium" tag="h2" theme={theme}>
-        {step === 'welcome' ? 'Bienvenido' : 
-         step === 'physical' ? 'Tus datos' : 
-         step === 'activity' ? 'Actividad' : 
-         step === 'goal' ? 'Objetivo' : 'Tu Plan'}
-      </PHeading>
-
-      <div className="flex flex-col gap-6 py-4" ref={contentRef} key={step}>
-        
-        {step === 'welcome' && (
-          <div className="flex flex-col items-center text-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-[#4eba87] flex items-center justify-center text-4xl shadow-md">
-              🥗
-            </div>
-            <div className="space-y-2">
-              <PHeading size="large" theme={theme}>¡Personaliza tu meta!</PHeading>
-              <PText theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                Para darte resultados precisos, necesitamos conocerte un poco mejor.
-              </PText>
-            </div>
-            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)' }}>
-              <PButton variant="primary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%', margin: 0 }}>
-                Comenzar configuración
-              </PButton>
-            </div>
-          </div>
-        )}
-
-        {step === 'physical' && (
-          <div className="flex flex-col gap-5">
-            <div className="grid grid-cols-2 gap-4">
-              <button 
-                onClick={() => setGender('male')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'male' ? 'border-[#4eba87] bg-[#4eba8722]' : 'border-transparent'}`}
-                style={{ 
-                  background: gender === 'male' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
-                  borderColor: gender === 'male' ? undefined : borderColor 
-                }}
-              >
-                <span className="text-3xl">👨</span>
-                <PText weight="bold" theme={theme}>Hombre</PText>
-              </button>
-              <button 
-                onClick={() => setGender('female')}
-                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 flex-1 ${gender === 'female' ? 'border-[#4eba87] bg-[#4eba8722]' : 'border-transparent'}`}
-                style={{ 
-                  background: gender === 'female' ? undefined : (theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'), 
-                  borderColor: gender === 'female' ? undefined : borderColor 
-                }}
-              >
-                <span className="text-3xl">👩</span>
-                <PText weight="bold" theme={theme}>Mujer</PText>
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="setup-weight" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>PESO (KG)</label>
-                <input id="setup-weight" name="weight" className={inputCls} type="number" value={weight} onChange={e => setWeight(e.target.value)} />
-              </div>
-              <div>
-                <label htmlFor="setup-height" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>ALTURA (CM)</label>
-                <input id="setup-height" name="height" className={inputCls} type="number" value={height} onChange={e => setHeight(e.target.value)} />
-              </div>
+      <div
+        className="w-full max-w-[420px] rounded-[28px] p-5 sm:p-6 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto no-scrollbar relative animate-in fade-in zoom-in-95 duration-200"
+        style={{
+          background: '#F4EFE6',
+          border: '1.5px solid #E4DCCE',
+        }}
+      >
+        {/* Encabezado con Ícono, Título y Botón Cerrar */}
+        <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#3BA676] text-white flex items-center justify-center text-lg shadow-xs shrink-0">
+              ⚡
             </div>
             <div>
-              <label htmlFor="setup-age" style={{ fontSize: '10px', fontWeight: 'bold', color: theme === 'dark' ? '#afb0b3' : '#535457', marginLeft: 8, marginBottom: 4, display: 'block' }}>EDAD</label>
-              <input id="setup-age" name="age" className={inputCls} type="number" value={age} onChange={e => setAge(e.target.value)} />
-            </div>
-            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', transform: 'translateZ(0)' }}>
-              <PButton variant="primary" onClick={() => setStep('activity')} theme={theme} style={{ width: '100%', margin: 0 }}>Siguiente</PButton>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-black text-[#1C1917] tracking-tight leading-tight">
+                  Asistente TMB
+                </h2>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#DDF0E4] text-[#164E35] border border-[#BEDECB]">
+                  Paso {stepMeta.index} de 4
+                </span>
+              </div>
+              <p className="text-xs text-[#5C5245] font-medium leading-none mt-1">
+                {stepMeta.desc}
+              </p>
             </div>
           </div>
-        )}
 
-        {step === 'activity' && (
-          <div className="flex flex-col gap-4">
-            <PHeading size="small" theme={theme}>¿Qué tan activo eres?</PHeading>
-            {[
-              { label: 'Sedentario', desc: 'Trabajo de oficina, poco movimiento', val: 1.2, icon: '🛋️' },
-              { label: 'Ligero', desc: 'Actividad física 1-3 veces/semana', val: 1.375, icon: '🚶' },
-              { label: 'Moderado', desc: 'Actividad física 3-5 veces/semana', val: 1.55, icon: '🏃' },
-              { label: 'Muy Activo', desc: 'Entrenamiento diario intenso', val: 1.725, icon: '🏋️' },
-            ].map(a => (
-              <button 
-                key={a.val}
-                onClick={() => setActivity(a.val)}
-                className={`p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all ${activity === a.val ? 'border-[#018a16] bg-[#018a1611]' : 'border-transparent'}`}
-                style={{ background: activity === a.val ? undefined : surfaceColor, borderColor: activity === a.val ? undefined : borderColor }}
+          <button
+            type="button"
+            onClick={onDismiss}
+            aria-label="Cerrar"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[#5C5245] hover:text-[#1C1917] hover:bg-[#EAE4D7] transition-all duration-150 active:scale-90 shrink-0"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Wizard Progress Bar con pasos visuales */}
+        <div className="grid grid-cols-4 gap-1.5 pt-0.5 pb-1">
+          {[
+            { id: 'physical', label: '1. Físico', stepNum: 1 },
+            { id: 'activity', label: '2. Actividad', stepNum: 2 },
+            { id: 'goal', label: '3. Objetivo', stepNum: 3 },
+            { id: 'result', label: '4. Tu Plan', stepNum: 4 },
+          ].map((item) => (
+            <div key={item.id} className="flex flex-col gap-1 items-center">
+              <div
+                className="w-full h-1.5 rounded-full transition-all duration-300"
+                style={{
+                  background: stepMeta.index >= item.stepNum ? '#3BA676' : '#E4DCCE',
+                }}
+              />
+              <span
+                className={`text-[9px] font-bold tracking-tight text-center ${
+                  stepMeta.index >= item.stepNum ? 'text-[#164E35]' : 'text-[#8C8273]'
+                }`}
               >
-                <span className="text-3xl">{a.icon}</span>
-                <div className="flex-1">
-                  <PText weight="bold" theme={theme}>{a.label}</PText>
-                  <PText size="x-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>{a.desc}</PText>
-                </div>
-              </button>
-            ))}
-            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', marginTop: 8, transform: 'translateZ(0)' }}>
-              <PButton variant="primary" onClick={() => setStep('goal')} theme={theme} style={{ width: '100%', margin: 0 }}>Siguiente</PButton>
+                {item.label}
+              </span>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
 
-        {step === 'goal' && (
-          <div className="flex flex-col gap-4">
-            <PHeading size="small" theme={theme}>¿Cuál es tu meta?</PHeading>
-            {[
-              { label: 'Perder peso', desc: 'Déficit calórico saludable', val: 'lose', icon: '📉' },
-              { label: 'Mantener peso', desc: 'Equilibrio de energía', val: 'maintain', icon: '⚖️' },
-              { label: 'Ganar músculo', desc: 'Superávit para fuerza', val: 'gain', icon: '📈' },
-            ].map(o => (
-              <button 
-                key={o.val}
-                onClick={() => setObjective(o.val as 'lose' | 'maintain' | 'gain')}
-                className={`p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all ${objective === o.val ? 'border-[#4eba87] bg-[#4eba8711]' : 'border-transparent'}`}
-                style={{ background: objective === o.val ? undefined : surfaceColor, borderColor: objective === o.val ? undefined : borderColor }}
+        {/* Contenido dinámico del Wizard según el paso */}
+        <div className="flex flex-col gap-3 py-1">
+          {/* PASO 1: DATOS FÍSICOS */}
+          {step === 'physical' && (
+            <div className="flex flex-col gap-3.5 animate-in fade-in duration-200">
+              {/* Selector de Género */}
+              <div>
+                <label className={labelCls}>
+                  <span>Sexo biológico</span>
+                  <span className="text-red-500 font-bold ml-0.5">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setGender('male')}
+                    className="p-3 rounded-2xl border transition-all flex items-center justify-center gap-2 font-bold text-xs active:scale-[0.98]"
+                    style={{
+                      background: gender === 'male' ? '#DDF0E4' : '#FFFFFF',
+                      border: gender === 'male' ? '2px solid #3BA676' : '1.5px solid #E4DCCE',
+                      color: gender === 'male' ? '#164E35' : '#5C5245',
+                    }}
+                  >
+                    <span className="text-lg">👨</span>
+                    <span>Hombre</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGender('female')}
+                    className="p-3 rounded-2xl border transition-all flex items-center justify-center gap-2 font-bold text-xs active:scale-[0.98]"
+                    style={{
+                      background: gender === 'female' ? '#DDF0E4' : '#FFFFFF',
+                      border: gender === 'female' ? '2px solid #3BA676' : '1.5px solid #E4DCCE',
+                      color: gender === 'female' ? '#164E35' : '#5C5245',
+                    }}
+                  >
+                    <span className="text-lg">👩</span>
+                    <span>Mujer</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Fila de Peso y Altura */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label htmlFor="w-input" className={labelCls}>
+                    <span>Peso (kg)</span>
+                    <span className="text-red-500 font-bold ml-0.5">*</span>
+                  </label>
+                  <input
+                    id="w-input"
+                    type="number"
+                    step="0.5"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    placeholder="70"
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="h-input" className={labelCls}>
+                    <span>Altura (cm)</span>
+                    <span className="text-red-500 font-bold ml-0.5">*</span>
+                  </label>
+                  <input
+                    id="h-input"
+                    type="number"
+                    value={height}
+                    onChange={(e) => setHeight(e.target.value)}
+                    placeholder="175"
+                    className={inputCls}
+                  />
+                </div>
+              </div>
+
+              {/* Campo de Edad */}
+              <div>
+                <label htmlFor="a-input" className={labelCls}>
+                  <span>Edad (años)</span>
+                  <span className="text-red-500 font-bold ml-0.5">*</span>
+                </label>
+                <input
+                  id="a-input"
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="28"
+                  className={inputCls}
+                />
+              </div>
+
+              {/* Botón Siguiente */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('activity')}
+                  className="w-full py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+                  style={{
+                    background: '#3BA676',
+                    border: '1.5px solid #339468',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  <span>Continuar</span>
+                  <span>➔</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* PASO 2: NIVEL DE ACTIVIDAD */}
+          {step === 'activity' && (
+            <div className="flex flex-col gap-2.5 animate-in fade-in duration-200">
+              {[
+                { val: 1.2, label: 'Sedentario', desc: 'Trabajo de escritorio, poco movimiento', icon: '🛋️' },
+                { val: 1.375, label: 'Ligero', desc: 'Ejercicio suave 1 a 3 veces por semana', icon: '🚶' },
+                { val: 1.55, label: 'Moderado', desc: 'Entrenamiento activo 3 a 5 veces/semana', icon: '🏃' },
+                { val: 1.725, label: 'Muy Activo', desc: 'Deporte intenso diario o trabajo físico', icon: '🏋️' },
+              ].map((item) => (
+                <button
+                  key={item.val}
+                  type="button"
+                  onClick={() => setActivity(item.val)}
+                  className="p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all duration-150 active:scale-[0.98]"
+                  style={{
+                    background: activity === item.val ? '#DDF0E4' : '#FFFFFF',
+                    border: activity === item.val ? '2px solid #3BA676' : '1.5px solid #E4DCCE',
+                  }}
+                >
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-xs font-black"
+                        style={{ color: activity === item.val ? '#164E35' : '#1C1917' }}
+                      >
+                        {item.label}
+                      </span>
+                      {activity === item.val && (
+                        <span className="w-5 h-5 rounded-full bg-[#3BA676] text-white flex items-center justify-center text-[10px] font-bold">
+                          ✓
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-[#5C5245] leading-tight mt-0.5">
+                      {item.desc}
+                    </p>
+                  </div>
+                </button>
+              ))}
+
+              {/* Botones de navegación */}
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('physical')}
+                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid #E4DCCE',
+                    color: '#5C5245',
+                  }}
+                >
+                  ← Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep('goal')}
+                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+                  style={{
+                    background: '#3BA676',
+                    border: '1.5px solid #339468',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  <span>Siguiente</span>
+                  <span>➔</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* PASO 3: OBJETIVO NUTRICIONAL */}
+          {step === 'goal' && (
+            <div className="flex flex-col gap-2.5 animate-in fade-in duration-200">
+              {[
+                { val: 'lose', label: 'Perder peso', desc: 'Déficit calórico seguro (-500 kcal) para quemar grasa', icon: '📉' },
+                { val: 'maintain', label: 'Mantener peso', desc: 'Equilibrio de energía para mantener tu peso actual', icon: '⚖️' },
+                { val: 'gain', label: 'Ganar masa muscular', desc: 'Superávit estratégico (+300 kcal) para fuerza', icon: '📈' },
+              ].map((item) => (
+                <button
+                  key={item.val}
+                  type="button"
+                  onClick={() => setObjective(item.val as 'lose' | 'maintain' | 'gain')}
+                  className="p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all duration-150 active:scale-[0.98]"
+                  style={{
+                    background: objective === item.val ? '#DDF0E4' : '#FFFFFF',
+                    border: objective === item.val ? '2px solid #3BA676' : '1.5px solid #E4DCCE',
+                  }}
+                >
+                  <span className="text-2xl shrink-0">{item.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-xs font-black"
+                        style={{ color: objective === item.val ? '#164E35' : '#1C1917' }}
+                      >
+                        {item.label}
+                      </span>
+                      {objective === item.val && (
+                        <span className="w-5 h-5 rounded-full bg-[#3BA676] text-white flex items-center justify-center text-[10px] font-bold">
+                          ✓
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-[#5C5245] leading-tight mt-0.5">
+                      {item.desc}
+                    </p>
+                  </div>
+                </button>
+              ))}
+
+              {/* Botones de navegación */}
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('activity')}
+                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid #E4DCCE',
+                    color: '#5C5245',
+                  }}
+                >
+                  ← Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={calculateTDEE}
+                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"
+                  style={{
+                    background: '#3BA676',
+                    border: '1.5px solid #339468',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  <span>Calcular Plan</span>
+                  <span>✨</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* PASO 4: RESULTADO Y PLAN DIARIO */}
+          {step === 'result' && (
+            <div className="flex flex-col gap-3 animate-in fade-in duration-200">
+              {/* Banner de Calorías Recomendadas */}
+              <div
+                className="w-full rounded-2xl p-5 text-center flex flex-col items-center gap-1 shadow-sm"
+                style={{
+                  background: '#3BA676',
+                  color: '#FFFFFF',
+                }}
               >
-                <span className="text-3xl">{o.icon}</span>
-                <div className="flex-1">
-                  <PText weight="bold" theme={theme}>{o.label}</PText>
-                  <PText size="x-small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>{o.desc}</PText>
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#DDF0E4]">
+                  Tu Presupuesto Diario Recomendado
+                </span>
+                <div className="text-4xl sm:text-5xl font-black tracking-tight my-1">
+                  <CountUp value={calculatedGoal} />
                 </div>
-              </button>
-            ))}
-            <div style={{ borderRadius: '9999px', overflow: 'hidden', width: '100%', marginTop: 8, transform: 'translateZ(0)' }}>
-              <PButton variant="primary" onClick={calculateTDEE} theme={theme} style={{ width: '100%', margin: 0 }}>Ver mi plan</PButton>
-            </div>
-          </div>
-        )}
-
-        {step === 'result' && (
-          <div className="flex flex-col items-center text-center gap-6">
-            <div className="w-full rounded-3xl p-8 flex flex-col items-center gap-2" style={{ background: '#4eba87', color: '#fff' }}>
-              <PText size="small" weight="bold" style={{ color: 'rgba(255,255,255,0.7)', letterSpacing: '0.1em' }}>OBJETIVO DIARIO</PText>
-              <div className="text-5xl font-black">
-                <CountUp value={calculatedGoal} />
+                <span className="text-xs font-bold text-[#EAE4D7]">
+                  kcal / día
+                </span>
               </div>
-              <PText size="large" weight="bold" style={{ color: '#fff' }}>kcal</PText>
-            </div>
-            
-            <div className="w-full text-left p-4 rounded-2xl border" style={{ borderColor }}>
-              <PText size="small" theme={theme} style={{ color: theme === 'dark' ? '#afb0b3' : '#535457' }}>
-                Tu plan ha sido calculado con éxito. Para <span className="font-bold text-[#4eba87]">
-                  {objective === 'lose' ? 'bajar de peso' : objective === 'gain' ? 'ganar músculo' : 'mantenerte'}
-                </span> de forma saludable, esta es tu meta recomendada.
-              </PText>
-            </div>
 
-            <div className="flex gap-2 w-full">
-              <div style={{ flex: 1, borderRadius: '9999px', overflow: 'hidden', transform: 'translateZ(0)' }}>
-                <PButton variant="secondary" onClick={() => setStep('physical')} theme={theme} style={{ width: '100%', margin: 0 }}>Corregir</PButton>
+              {/* Tarjeta de desglose de datos calculados */}
+              <div
+                className="rounded-2xl p-3.5 flex flex-col gap-2.5"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1.5px solid #E4DCCE',
+                }}
+              >
+                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs">
+                  <span className="text-[#5C5245] font-semibold">Meta de Proteína recomendada:</span>
+                  <span className="font-black text-[#164E35] bg-[#DDF0E4] px-2 py-0.5 rounded-lg border border-[#BEDECB]">
+                    {Math.round((parseFloat(weight) || 70) * 1.8)}g / día
+                  </span>
+                </div>
+                <div className="flex items-center justify-between pb-2 border-b border-[#E4DCCE]/60 text-xs">
+                  <span className="text-[#5C5245] font-semibold">Tasa Metabólica Basal (TMB):</span>
+                  <span className="font-black text-[#1C1917]">{bmrValue} kcal en reposo</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#5C5245] font-semibold">Enfoque seleccionado:</span>
+                  <span className="font-bold text-[#3BA676]">
+                    {objective === 'lose' ? '📉 Déficit (-500 kcal)' : objective === 'gain' ? '📈 Superávit (+300 kcal)' : '⚖️ Mantenimiento'}
+                  </span>
+                </div>
               </div>
-              <div style={{ flex: 2, borderRadius: '9999px', overflow: 'hidden', transform: 'translateZ(0)' }}>
-                <PButton variant="primary" onClick={handleFinish} theme={theme} style={{ width: '100%', margin: 0 }}>¡Comenzar!</PButton>
+
+              {/* Botones de acción */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setStep('physical')}
+                  className="py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95"
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid #E4DCCE',
+                    color: '#5C5245',
+                  }}
+                >
+                  ← Modificar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleFinish}
+                  className="py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
+                  style={{
+                    background: '#3BA676',
+                    border: '1.5px solid #339468',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  <span>¡Aplicar Plan!</span>
+                  <span>✓</span>
+                </button>
               </div>
             </div>
-          </div>
-        )}
-
+          )}
+        </div>
       </div>
-    </PModal>
+    </div>
   );
 }

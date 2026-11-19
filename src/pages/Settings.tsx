@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { PInlineNotification, PButtonPure } from '@porsche-design-system/components-react';
+import { PInlineNotification } from '@porsche-design-system/components-react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import gsap from 'gsap';
@@ -228,9 +228,20 @@ export function Settings({ onOpenSetup }: { onOpenSetup?: () => void }) {
           <span className="text-[10px] font-bold uppercase tracking-wider opacity-60" style={{ color: secondaryText }}>
             Metas Nutricionales
           </span>
-          <PButtonPure icon="configurate" theme={theme} size="small" onClick={() => onOpenSetup?.()}>
-            Asistente TMB
-          </PButtonPure>
+          <button
+            type="button"
+            onClick={() => onOpenSetup?.()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-black transition-all duration-200 active:scale-95 shadow-2xs hover:opacity-90"
+            style={{
+              background: '#DDF0E4',
+              border: '1.5px solid #BEDECB',
+              color: '#164E35',
+            }}
+          >
+            <span className="text-xs">⚡</span>
+            <span>Asistente TMB</span>
+            <span className="text-[10px] opacity-70">➔</span>
+          </button>
         </div>
 
         <div 
