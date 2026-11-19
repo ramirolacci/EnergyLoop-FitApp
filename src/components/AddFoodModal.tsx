@@ -288,7 +288,7 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
       style={{
         background: 'rgba(28, 25, 23, 0.45)',
         backdropFilter: 'blur(4px)',
@@ -377,28 +377,44 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
           {/* PASO 1: BÚSQUEDA Y SELECCIÓN DE ALIMENTOS */}
           {step === 'search' && (
             <div className="flex flex-col gap-3.5">
-              {/* Buscador */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Buscar alimento (ej: Huevo, Pollo, Avena...)"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className={`${inputCls} pl-10 pr-9`}
-                  autoFocus
-                />
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C8273]">
-                  🔍
-                </span>
-                {search && (
-                  <button
-                    type="button"
-                    onClick={() => setSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 text-xs p-1"
-                  >
-                    ✕
-                  </button>
-                )}
+              {/* Buscador y botón '+' para cargar alimento personalizado */}
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    placeholder="Buscar alimento (ej: Huevo, Pollo...)"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className={`${inputCls} pl-10 pr-9`}
+                    autoFocus
+                  />
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-[#8C8273]">
+                    🔍
+                  </span>
+                  {search && (
+                    <button
+                      type="button"
+                      onClick={() => setSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 text-xs p-1"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setStep('form')}
+                  title="Cargar alimento personalizado desde cero"
+                  className="w-11 h-11 rounded-2xl flex items-center justify-center text-lg font-black transition-all active:scale-90 shadow-2xs shrink-0"
+                  style={{
+                    background: '#3BA676',
+                    border: '1.5px solid #339468',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  ➕
+                </button>
               </div>
 
               {/* Resultados filtrados de la búsqueda */}
@@ -519,23 +535,6 @@ export function AddFoodModal({ open, onDismiss, prefill }: Props) {
                         </button>
                       ))}
                     </div>
-                  </div>
-
-                  {/* Botón para carga manual desde cero */}
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={() => setStep('form')}
-                      className="w-full py-3 px-4 rounded-2xl text-xs font-bold transition-all active:scale-95 flex items-center justify-center gap-2"
-                      style={{
-                        background: '#FFFFFF',
-                        border: '1.5px solid #E4DCCE',
-                        color: '#5C5245',
-                      }}
-                    >
-                      <span>➕ Cargar alimento personalizado desde cero</span>
-                      <span>➔</span>
-                    </button>
                   </div>
                 </>
               )}

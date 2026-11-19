@@ -52,7 +52,7 @@ export function AppShell({ children }: Props) {
 
         {/* Floating Bottom Navigation Bar (Play Store / App Store standard) */}
         <div 
-          className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none flex justify-center pb-2"
+          className="fixed bottom-0 left-0 right-0 z-30 pointer-events-none flex justify-center pb-2"
           style={{ 
             paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
             bottom: 0 

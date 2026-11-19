@@ -187,7 +187,7 @@ export function SetupModal({ open, onDismiss }: Props) {
   return (
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
       style={{
         background: 'rgba(28, 25, 23, 0.45)',
         backdropFilter: 'blur(4px)',
