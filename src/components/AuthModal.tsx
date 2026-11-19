@@ -235,7 +235,7 @@ export function AuthModal({ open, onDismiss }: Props) {
             </label>
             <input
               type="email"
-              placeholder="tu@email.com"
+              placeholder="Ingresa tu correo"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={inputCls}
@@ -280,12 +280,12 @@ export function AuthModal({ open, onDismiss }: Props) {
               border: '1.5px solid #E4DCCE',
             }}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#5C5245]">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-bold text-[#5C5245] whitespace-nowrap">
                 Recomendaciones de seguridad
               </span>
               <span
-                className="text-[10px] font-black uppercase tracking-wider"
+                className="text-[9px] font-bold uppercase tracking-wider shrink-0"
                 style={{ color: strengthMeta.color }}
               >
                 {password.length > 0 ? `${strengthMeta.label} (${fulfilledCount}/4)` : '4 requisitos'}
